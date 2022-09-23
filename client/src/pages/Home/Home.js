@@ -12,8 +12,8 @@ import "./style.css";
 const Home = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
   var [advancedOptionsOpen, setAdvancedOptionsOpen] = useState(false);
-  var [minPE, setMinPE] = useInput(10);
-  var [maxPE, setMaxPE] = useInput(15);
+  var [minPE, setMinPE] = useState(5);
+  var [maxPE, setMaxPE] = useState(15);
   var [minDebtEquity, setMinDebtEquity] = useInput(0.0);
   var [maxDebtEquity, setMaxDebtEquity] = useInput(2.0);
   var [minPriceSales, setMinPriceSales] = useInput(0.0);
@@ -28,63 +28,24 @@ const Home = () => {
   var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
   var [currentSort, setCurrentSort] = useState("");
   var [loading, setLoading] = useState(true);
-  
-  const setMarketCapSize = (event) => {};
-  const selectedInvestmentType = (event) => {};
 
-  /*
-    const renderMessages = () => {
-        API.findAllMessages().then(
-            (res) => {
-                setMessages(messages => res.data);
-            }
-        );
-    }
+  const setMarketCapSize = (event) => { };
+  const selectedInvestmentType = (event) => { };
 
-    const saveMessage = (event) => {
-        if (newMessage !== "") {
-            API.createMessage(newMessage, new Date()).then(
-                (res) => {
-                    renderMessages();
-                    document.getElementById('messageInput').value = "";
-                }
-            );
-        }
-    };
-
-    const deleteMessage = (event) => {
-        let messageDeletionID = event.currentTarget.dataset.message_id;
-        API.deleteOneMessage(messageDeletionID).then(
-            (res) => {
-                renderMessages();
-            }
-        );
-    }*/
+  const renderSearchResults = () => {
+    API.findSearchResults(minPE, maxPE).then(res => { setValueSearchData(valueSearchData => res.data) });
+  }
 
   useEffect(() => {
-    //renderMessages();
+    renderSearchResults();
   }, []);
 
   return (
     <div>
       <div className="App">
-        <header className="App-header p-4">
-          <h1>Value Search</h1>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/pages/Home/Home.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <div className="container">
+        <div className="container text-center">
           <div>
+            <h2>Value Search</h2>
             <div className="accordion" id="accordionExample">
               <div>
                 <a
@@ -97,13 +58,13 @@ const Home = () => {
                   onClick={
                     advancedOptionsOpen === false
                       ? () => {
-                          setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                        }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                       : () => {
-                          setAdvancedOptionsOpen(
-                            (advancedOptionsOpen) => false
-                          );
-                        }
+                        setAdvancedOptionsOpen(
+                          (advancedOptionsOpen) => false
+                        );
+                      }
                   }
                 >
                   Search Parameters{" "}
@@ -359,6 +320,24 @@ const Home = () => {
                   </strong>
                 </p>
               </div>
+            </div>
+            <div className="col-md-12">
+              {
+                valueSearchData.map((stock, i) =>
+                  <div className="card mb-1">
+                    <div className="card-body">
+                      <h5 className="card-title"><a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a></h5>
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{width: Math.round(stock.quote.latestPrice/stock.quote.week52High * 100) + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{"$" + stock.quote.latestPrice}</div>
+                      </div>
+                      This is some text within a card body.
+                    </div>
+                  </div>
+
+
+
+                )
+              }
             </div>
           </div>
         </div>
