@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
@@ -12,8 +13,8 @@ import "./style.css";
 const Home = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
   var [advancedOptionsOpen, setAdvancedOptionsOpen] = useState(false);
-  var [minPE, setMinPE] = useState(5);
-  var [maxPE, setMaxPE] = useState(15);
+  var [minPE, setMinPE] = useInput(5);
+  var [maxPE, setMaxPE] = useInput(15);
   var [minDebtEquity, setMinDebtEquity] = useInput(0.0);
   var [maxDebtEquity, setMaxDebtEquity] = useInput(2.0);
   var [minPriceSales, setMinPriceSales] = useInput(0.0);
@@ -33,7 +34,8 @@ const Home = () => {
   const selectedInvestmentType = (event) => { };
 
   const renderSearchResults = () => {
-    API.findSearchResults(minPE, maxPE).then(res => { setValueSearchData(valueSearchData => res.data) });
+    setLoading(loading => true);
+    API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false) });
   }
 
   useEffect(() => {
@@ -102,7 +104,7 @@ const Home = () => {
                                 aria-describedby="minPEInput"
                                 placeholder="Minimum PE Ratio"
                                 defaultValue={10}
-                                onChange={setMinPE}
+                                onChange={Number(setMinPE)}
                               />
                             </div>
                           </div>
@@ -284,6 +286,11 @@ const Home = () => {
                             </div>
                           </div>
                         </div>
+                        <div className="row">
+                          <div className="col-md-12">
+                            <button type="button" className="btn btn-sm btn-primary" onClick={renderSearchResults}>Search</button>
+                          </div>
+                        </div>
                       </form>
                     </div>
                   </div>
@@ -322,21 +329,55 @@ const Home = () => {
               </div>
             </div>
             <div className="col-md-12">
-              {
+              {loading ?
+                <div className="row h-100">
+                  <BarLoader className="my-auto mx-auto" width="100%" height="8px" color="#007bff" /> </div> : ""
+
+              }
+              {!loading ?
+                <p>{valueSearchData.length} Results Found</p> : ""
+              }
+              {!loading ?
                 valueSearchData.map((stock, i) =>
                   <div className="card mb-1">
                     <div className="card-body">
                       <h5 className="card-title"><a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a></h5>
-                      <div className="progress">
-                        <div className="progress-bar" role="progressbar" style={{width: Math.round(stock.quote.latestPrice/stock.quote.week52High * 100) + "%"}} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{"$" + stock.quote.latestPrice}</div>
+                      <div className="row">
+                        <div className="col-md-4">
+                          <p><strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}</p>
+                        </div>
+                        <div className="col-md-4">
+                          <p><strong>Target Price: </strong> ${Number(stock.fundamentals['Target Price']).toFixed(2)}</p>
+                        </div>
+                        <div className="col-md-4">
+                          {stock.fundamentals['Target Price'] >= stock.quote.latestPrice ?
+                            <p className="badge badge-success py-1 px-1">{((1 - (stock.quote.latestPrice / stock.fundamentals['Target Price'])) * 100).toFixed(2) + "% Undervalued"}</p>
+                            : <p className="badge badge-danger py-1 px-1">{(((stock.quote.latestPrice / stock.fundamentals['Target Price']) - 1) * 100).toFixed(2) + "% Overvalued"}</p>}
+                        </div>
                       </div>
-                      This is some text within a card body.
+                      <div className="progress">
+                        <div className="progress-bar" role="progressbar" style={{ width: Math.round(stock.quote.latestPrice / stock.quote.week52High * 100) + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{"$" + stock.quote.latestPrice}</div>
+                      </div>
+                      <div className="row mt-2">
+                        <div className="col-md-4">
+                          <p><strong>Index: </strong>{stock.symbolData.exchangeName}</p>
+                        </div>
+                        <div className="col-md-4">
+                          <p><strong>P/E: </strong>{stock.quote.peRatio}</p>
+                        </div>
+                        <div className="col-md-4">
+                          <p><strong>Profit Margin: </strong>{Number(stock.fundamentals['Profit Margin (%)']).toFixed(2)}%</p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-4">
+                          <p><strong>Market Cap: </strong>${(stock.quote.marketCap / 1000000000).toFixed(2)} billion</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-
-
                 )
+                : ""
               }
             </div>
           </div>
