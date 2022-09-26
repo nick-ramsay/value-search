@@ -381,11 +381,6 @@ const Home = () => {
                           <p><strong>Market Cap: </strong>${(stock.quote.marketCap / 1000000000).toFixed(2)} billion</p>
                         </div>
                       </div>
-                      <div className="row">
-                        <div className="col-md-12">
-                        <iframe src="https://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )
