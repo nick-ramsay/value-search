@@ -343,7 +343,14 @@ const Home = () => {
                     <div className="card-body">
                       <h5 className="card-title"><a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a></h5>
                       <div className="row">
-                        <div className="col-md-4">
+                        {stock.fundamentals.country && stock.fundamentals.country !== null ? 
+                        <div className="col-md-12">
+                          <p><strong>Sector:</strong> {stock.fundamentals.sector} | <strong>Industry:</strong> {stock.fundamentals.industry} | <strong>Country:</strong> {stock.fundamentals.country}</p>
+                        </div>
+                        :""}
+                      </div>
+                      <div className="row">
+                        <div className="col-md-4"> 
                           <p><strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}</p>
                         </div>
                         <div className="col-md-4">
@@ -372,6 +379,11 @@ const Home = () => {
                       <div className="row">
                         <div className="col-md-4">
                           <p><strong>Market Cap: </strong>${(stock.quote.marketCap / 1000000000).toFixed(2)} billion</p>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                        <iframe src="https://www.w3schools.com" title="W3Schools Free Online Web Tutorials"></iframe>
                         </div>
                       </div>
                     </div>
