@@ -46,8 +46,22 @@ const Home = () => {
     <div>
       <div className="App">
         <div className="container text-center">
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Value Search</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto"> 
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                  <button type="button" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+              </form>
+            </div>
+          </nav>
           <div>
-            <h2>Value Search</h2>
             <div className="accordion" id="accordionExample">
               <div>
                 <a
@@ -343,14 +357,14 @@ const Home = () => {
                     <div className="card-body">
                       <h5 className="card-title"><a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a></h5>
                       <div className="row">
-                        {stock.fundamentals.country && stock.fundamentals.country !== null ? 
-                        <div className="col-md-12">
-                          <p><strong>Sector:</strong> {stock.fundamentals.sector} | <strong>Industry:</strong> {stock.fundamentals.industry} | <strong>Country:</strong> {stock.fundamentals.country}</p>
-                        </div>
-                        :""}
+                        {stock.fundamentals.country && stock.fundamentals.country !== null ?
+                          <div className="col-md-12">
+                            <p><strong>Sector:</strong> {stock.fundamentals.sector} | <strong>Industry:</strong> {stock.fundamentals.industry} | <strong>Country:</strong> {stock.fundamentals.country}</p>
+                          </div>
+                          : ""}
                       </div>
                       <div className="row">
-                        <div className="col-md-4"> 
+                        <div className="col-md-4">
                           <p><strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}</p>
                         </div>
                         <div className="col-md-4">
