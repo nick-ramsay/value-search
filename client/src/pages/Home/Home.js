@@ -28,6 +28,7 @@ const Home = () => {
   var [investmentType, setInvestmentType] = useState("cs");
   var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
   var [currentSort, setCurrentSort] = useState("");
+  var [searchSymbol, setSearchSymbol] = useInput("")
   var [loading, setLoading] = useState(true);
 
   const setMarketCapSize = (event) => { };
@@ -37,6 +38,14 @@ const Home = () => {
     setLoading(loading => true);
     API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false) });
   }
+
+  const findSingleStock = () => {
+    console.log("Current Symbol: " + searchSymbol);
+    if (searchSymbol !== "") {
+      setLoading(loading => true);
+      API.findSingleStock(searchSymbol.toUpperCase()).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false); });
+    };
+  };
 
   useEffect(() => {
     renderSearchResults();
@@ -53,15 +62,20 @@ const Home = () => {
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto"> 
+              <ul class="navbar-nav mr-auto">
               </ul>
               <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                  <button type="button" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+                <input id="searchSymbol" aria-describedby="searchSymbol" class="form-control mr-sm-2" type="text" placeholder="Ticker Symbol" defaultValue={""} onChange={setSearchSymbol} aria-label="Search" />
+                <button type="button" class="btn btn-outline-success my-2 my-sm-0" onClick={findSingleStock}>Search</button>
               </form>
             </div>
           </nav>
           <div>
+            <div className="row m-1">
+              <div className="col-md-12">
+                <button type="button" className="btn btn-sm btn-primary" onClick={renderSearchResults}>Run Value Search</button>
+              </div>
+            </div>
             <div className="accordion" id="accordionExample">
               <div>
                 <a
@@ -83,7 +97,7 @@ const Home = () => {
                       }
                   }
                 >
-                  Search Parameters{" "}
+                  Value Search Parameters {" "}
                   {advancedOptionsOpen === true ? (
                     <img
                       className="text-icon"
@@ -300,11 +314,6 @@ const Home = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-12">
-                            <button type="button" className="btn btn-sm btn-primary" onClick={renderSearchResults}>Search</button>
-                          </div>
-                        </div>
                       </form>
                     </div>
                   </div>
@@ -393,6 +402,17 @@ const Home = () => {
                       <div className="row">
                         <div className="col-md-4">
                           <p><strong>Market Cap: </strong>${(stock.quote.marketCap / 1000000000).toFixed(2)} billion</p>
+                        </div>
+                        <div className="col-md-4">
+                          <p><strong>Debt/Equity: </strong>{(stock.fundamentals['Debt/Eq'])} </p>
+                        </div>
+                        <div className="col-md-4">
+                          <p><strong>Price-to-Sales: </strong>{(stock.fundamentals['P/S'])} </p>
+                        </div>
+                      </div>
+                      <div className="row">
+                      <div className="col-md-12">
+                          <p><strong>Price-to-Book: </strong>{(stock.fundamentals['P/B'])} </p>
                         </div>
                       </div>
                     </div>
