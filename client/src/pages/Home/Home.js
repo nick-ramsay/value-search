@@ -58,12 +58,7 @@ const Home = () => {
   };
 
   const updatePortfolioStatus = (symbol, status) => {
-    if (status !== "noOpinion") {
-      console.log(symbol)
-      console.log(status);
-      API.updatePortfolioStatus(symbol, status).then(res => console.log(res.config.data))
-    }
-
+    API.updatePortfolioStatus(symbol, status).then(res => console.log(res.config.data))
   };
 
   useEffect(() => {
@@ -400,12 +395,16 @@ const Home = () => {
                     </div>
                     <div className="row">
                       <div className="col-md-12">
-                      <span class="badge badge-dark mt-1 mb-1">
-                        {portfolio.forEach(el => {
-                        "Test"
-              
-                          
-                        })}
+                        <span class="badge badge-dark mt-1 mb-1">
+                          {
+                            portfolio.findIndex(position => {
+                              return (position.symbol === stock.symbol)
+                            }) !== -1 ?
+                              portfolio[portfolio.findIndex(position => {
+                                return (position.symbol === stock.symbol)
+                              })].status : ""
+
+                          }
                         </span>
                       </div>
                     </div>
@@ -464,12 +463,12 @@ const Home = () => {
                         </div>
                         <div class="modal-body">
                           <select id={stock.symbol + "-current-status"} class="form-select" aria-label="Default select example">
-                            <option value="noOpinion" selected>No Opinion</option>
-                            <option value="watch">Watch</option>
-                            <option value="own">Own</option>
-                            <option value="hold">Hold</option>
-                            <option value="speculative">Speculative</option>
-                            <option value="icebox">Icebox</option>
+                            <option value="" selected>No Opinion</option>
+                            <option value="Watch">Watch</option>
+                            <option value="Own">Own</option>
+                            <option value="Hold">Hold</option>
+                            <option value="Speculative">Speculative</option>
+                            <option value="Icebox">Icebox</option>
                           </select>
                         </div>
                         <div class="modal-footer">
