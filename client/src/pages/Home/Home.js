@@ -59,6 +59,7 @@ const Home = () => {
 
   const updatePortfolioStatus = (symbol, status) => {
     API.updatePortfolioStatus(symbol, status).then(res => console.log(res.config.data))
+    
   };
 
   useEffect(() => {
