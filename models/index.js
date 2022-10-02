@@ -1,5 +1,6 @@
 module.exports = {
     StockSymbols: require("./StockSymbols"),
-    StockData: require("./StockData")
+    StockData: require("./StockData"),
+    Portfolio: require("./Portfolio")
   };
   

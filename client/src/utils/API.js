@@ -8,5 +8,11 @@ export default {
     },
     findSingleStock: (searchSymbol) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-single-stock", data: { searchSymbol } });
+    },
+    updatePortfolioStatus: (symbol, status) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/update-portfolio-status", data: { symbol: symbol, status: status } });
+    },
+    findPortfolioResults: () => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio-results", data: {} });
     }
 };

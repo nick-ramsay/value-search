@@ -13,10 +13,21 @@ module.exports = {
             .catch(err => console.log(err))
     },
     findSingleStock: (req, res) => {
-        console.log(req.body);
+        console.log("Find Single Stock")
         db.StockData.find({ "symbol": req.body.searchSymbol })
-        .then(dbModel => res.json(dbModel))
-        .catch(err => console.log(err))
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
+    updatePortfolioStatus: (req, res) => {
+        db.Portfolio.updateOne({ "symbol": req.body.symbol }, { "status": req.body.status }, { "upsert": true })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
+    findPortfolioResults: (req, res) => {
+        console.log("Find Portfolio results")
+        db.Portfolio.find({})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
     }
 };
 
