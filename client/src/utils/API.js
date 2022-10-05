@@ -14,5 +14,8 @@ export default {
     },
     findPortfolioResults: () => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio-results", data: {} });
+    },
+    returnPortfolio: (symbols) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/return-portfolio", data: { symbols } });
     }
 };

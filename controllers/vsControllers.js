@@ -28,7 +28,12 @@ module.exports = {
         db.Portfolio.find({})
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
+    },
+    returnPortfolio: (req, res) => {
+        console.log(req.body.symbols);
+        db.StockData.find({"symbol" : { $in : req.body.symbols}})
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+        
     }
 };
-
-//minPriceToBook,maxPriceToBook

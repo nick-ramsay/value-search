@@ -30,6 +30,7 @@ const Home = () => {
   var [currentSort, setCurrentSort] = useState("");
   var [portfolio, setPortfolio] = useState([])
   var [searchSymbol, setSearchSymbol] = useInput("")
+  var [currentView, setCurrentView] = useState("valueSearch")
   var [loading, setLoading] = useState(true);
 
   const setMarketCapSize = (event) => { };
@@ -58,9 +59,25 @@ const Home = () => {
   };
 
   const updatePortfolioStatus = (symbol, status) => {
-    API.updatePortfolioStatus(symbol, status).then(res => console.log(res.config.data))
-    
+    API.updatePortfolioStatus(symbol, status).then(res => {
+      if (currentView === "valueSearch"){
+        renderSearchResults();
+    } else if (currentView === "portfolio") {
+      renderPortfolio();
+    }})
   };
+
+  const renderPortfolio = () => {
+    let symbols = [];
+
+    for (let i = 0; i < portfolio.length; i++) {
+      if (portfolio[i].status === "Own" || portfolio[i].status === "Hold" || portfolio[i].status === "Speculative") {
+        symbols.push(portfolio[i].symbol);
+      }
+    };
+
+    API.returnPortfolio(symbols).then(res => {setValueSearchData(valueSearchData => res.data); renderPortfolioResults(); setLoading(loading => false);})
+  }
 
   useEffect(() => {
     renderSearchResults();
@@ -68,7 +85,6 @@ const Home = () => {
 
   return (
     <div>
-
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Value Search</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,8 +103,11 @@ const Home = () => {
       <div className="container text-center">
         <div>
           <div className="row m-1">
-            <div className="col-md-12">
-              <button type="button" className="btn btn-sm btn-primary" onClick={renderSearchResults}>Run Value Search</button>
+            <div className="col-md-6">
+              <button type="button" className="btn btn-sm btn-primary" onClick={() => {renderSearchResults(); setCurrentView(currentView => "valueSearch")}}>Run Value Search</button>
+            </div>
+            <div className="col-md-6">
+              <button type="button" className="btn btn-sm btn-primary" onClick={() => {renderPortfolio(); setCurrentView(currentView => "portfolio")}}>Portfolio</button>
             </div>
           </div>
           <div className="accordion" id="accordionExample">
@@ -474,7 +493,7 @@ const Home = () => {
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-sm btn-primary" onClick={() => updatePortfolioStatus(stock.symbol, document.getElementById(stock.symbol + "-current-status").value)}>Save changes</button>
+                          <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onClick={() => updatePortfolioStatus(stock.symbol, document.getElementById(stock.symbol + "-current-status").value)}>Save changes</button>
                         </div>
                       </div>
                     </div>

@@ -18,4 +18,8 @@ router
   .route("/find-portfolio-results")
   .post(vsControllers.findPortfolioResults);
 
+router
+  .route("/return-portfolio")
+  .post(vsControllers.returnPortfolio);
+
 module.exports = router;
