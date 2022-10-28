@@ -488,7 +488,8 @@ const Home = () => {
                             <option value="Own">Own</option>
                             <option value="Hold">Hold</option>
                             <option value="Speculative">Speculative</option>
-                            <option value="Icebox">Icebox</option>
+                            <option value="Icebox" title="Not a good pick in the current market">Icebox</option>
+                            <option value="Disregard" title="Bad fit for portfolio, not a good investment">Disregard</option>
                           </select>
                         </div>
                         <div class="modal-footer">
