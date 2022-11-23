@@ -1,3 +1,25 @@
 body {
-  background-color: whitesmoke;
+  background-color: #192e2e;
+  color: white;
+  font-family: Montserrat;
+}
+
+.card {
+  background-color: #202124;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+a {
+  color: white;
+  text-decoration:none;
+}
+
+a:hover {
+  color:#007bff;
+  text-decoration: none;
+}
+
+.form-control, .form-control:focus {
+  background-color: #202124;
+  color: white;
 }

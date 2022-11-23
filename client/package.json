@@ -9,12 +9,13 @@
     "axios": "^0.20.0",
     "if-env": "^1.0.4",
     "moment": "^2.27.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
     "react-spinners": "^0.13.4",
-    "yarn": "^1.22.10"
+    "yarn": "^1.22.10",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

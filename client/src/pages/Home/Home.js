@@ -28,7 +28,6 @@ const Home = () => {
   var [investmentType, setInvestmentType] = useState("cs");
   var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
   var [currentSort, setCurrentSort] = useState("");
-  var [portfolio, setPortfolio] = useState([])
   var [searchSymbol, setSearchSymbol] = useInput("")
   var [currentView, setCurrentView] = useState("valueSearch")
   var [loading, setLoading] = useState(true);
@@ -40,14 +39,9 @@ const Home = () => {
     API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false) });
   };
 
-  const renderPortfolioResults = () => {
-    API.findPortfolioResults().then(res => setPortfolio(Portfolio => res.data));
-  };
-
   const renderSearchResults = () => {
     setLoading(loading => true);
     renderValueSearchResults()
-    renderPortfolioResults();
   }
 
   const findSingleStock = () => {
@@ -58,34 +52,13 @@ const Home = () => {
     };
   };
 
-  const updatePortfolioStatus = (symbol, status) => {
-    API.updatePortfolioStatus(symbol, status).then(res => {
-      if (currentView === "valueSearch"){
-        renderSearchResults();
-    } else if (currentView === "portfolio") {
-      renderPortfolio();
-    }})
-  };
-
-  const renderPortfolio = () => {
-    let symbols = [];
-
-    for (let i = 0; i < portfolio.length; i++) {
-      if (portfolio[i].status === "Own" || portfolio[i].status === "Hold" || portfolio[i].status === "Speculative") {
-        symbols.push(portfolio[i].symbol);
-      }
-    };
-
-    API.returnPortfolio(symbols).then(res => {setValueSearchData(valueSearchData => res.data); renderPortfolioResults(); setLoading(loading => false);})
-  }
-
   useEffect(() => {
     renderSearchResults();
   }, []);
 
   return (
     <div>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark pl-3 pr-3">
         <a class="navbar-brand" href="#">Value Search</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -96,20 +69,12 @@ const Home = () => {
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input id="searchSymbol" aria-describedby="searchSymbol" class="form-control mr-sm-2" type="text" placeholder="Ticker Symbol" defaultValue={""} onChange={setSearchSymbol} aria-label="Search" />
-            <button type="button" class="btn btn-outline-success my-2 my-sm-0" onClick={findSingleStock}>Search</button>
+            <button type="button" class="btn btn-outline-primary my-2 my-sm-0" onClick={findSingleStock}>Search</button>
           </form>
         </div>
       </nav>
       <div className="container text-center">
         <div>
-          <div className="row m-1">
-            <div className="col-md-6">
-              <button type="button" className="btn btn-sm btn-primary" onClick={() => {renderSearchResults(); setCurrentView(currentView => "valueSearch")}}>Run Value Search</button>
-            </div>
-            <div className="col-md-6">
-              <button type="button" className="btn btn-sm btn-primary" onClick={() => {renderPortfolio(); setCurrentView(currentView => "portfolio")}}>Portfolio</button>
-            </div>
-          </div>
           <div className="accordion" id="accordionExample">
             <div>
               <a
@@ -394,16 +359,18 @@ const Home = () => {
             {!loading ?
               <p>{valueSearchData.length} Results Found</p> : ""
             }
+            <div className="row mb-1">
+              <div className="col-md-12">
+                <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => { renderSearchResults(); setCurrentView(currentView => "valueSearch") }}>Run Value Search</button>
+              </div>
+            </div>
             {!loading ?
               valueSearchData.map((stock, i) =>
-                <div className="card mb-1">
+                <div className="card mb-3">
                   <div className="card-body">
                     <h5 className="card-title row">
                       <div className="col-md-12">
                         <a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a>
-                        <button type="button" class="btn btn-sm btn-primary ml-3" data-toggle="modal" data-target={"#" + stock.symbol + "-portfolio-status-modal"}>
-                          Edit
-                        </button>
                       </div>
                     </h5>
                     <div className="row">
@@ -412,21 +379,6 @@ const Home = () => {
                           <span><strong>Sector:</strong> {stock.fundamentals.sector} | <strong>Industry:</strong> {stock.fundamentals.industry} | <strong>Country:</strong> {stock.fundamentals.country}</span>
                         </div>
                         : ""}
-                    </div>
-                    <div className="row">
-                      <div className="col-md-12">
-                        <span class="badge badge-dark mt-1 mb-1">
-                          {
-                            portfolio.findIndex(position => {
-                              return (position.symbol === stock.symbol)
-                            }) !== -1 ?
-                              portfolio[portfolio.findIndex(position => {
-                                return (position.symbol === stock.symbol)
-                              })].status : ""
-
-                          }
-                        </span>
-                      </div>
                     </div>
                     <div className="row">
                       <div className="col-md-4">
@@ -441,7 +393,7 @@ const Home = () => {
                           : <p className="badge badge-danger py-1 px-1">{(((stock.quote.latestPrice / stock.fundamentals['Target Price']) - 1) * 100).toFixed(2) + "% Overvalued"}</p>}
                       </div>
                     </div>
-                    <div className="progress">
+                    <div className="progress bg-dark">
                       <div className="progress-bar" role="progressbar" style={{ width: Math.round(stock.quote.latestPrice / stock.quote.week52High * 100) + "%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{"$" + stock.quote.latestPrice}</div>
                     </div>
                     <div className="row mt-2">
@@ -469,33 +421,6 @@ const Home = () => {
                     <div className="row">
                       <div className="col-md-12">
                         <p><strong>Price-to-Book: </strong>{(stock.fundamentals['P/B'])} </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" id={stock.symbol + "-portfolio-status-modal"} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="exampleModalLabel">{stock.quote.companyName + " (" + stock.symbol + ")"}</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <select id={stock.symbol + "-current-status"} class="form-select" aria-label="Default select example">
-                            <option value="" selected>No Opinion</option>
-                            <option value="Watch">Watch</option>
-                            <option value="Own">Own</option>
-                            <option value="Hold">Hold</option>
-                            <option value="Speculative">Speculative</option>
-                            <option value="Icebox" title="Not a good pick in the current market">Icebox</option>
-                            <option value="Disregard" title="Bad fit for portfolio, not a good investment">Disregard</option>
-                          </select>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onClick={() => updatePortfolioStatus(stock.symbol, document.getElementById(stock.symbol + "-current-status").value)}>Save changes</button>
-                        </div>
                       </div>
                     </div>
                   </div>
