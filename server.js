@@ -51,14 +51,14 @@ app.get("/auth/google",
 );
 
 app.get("/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "http://localhost:3000" }),
+  passport.authenticate("google", { failureRedirect: process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com" }),
   function (req, res) {
     // Successful a, redirect secrets.
-    res.redirect("http://localhost:3000");
+    res.redirect(process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com");
   });
 
 app.get("/logout", function (req, res) {
-  res.redirect("http://localhost:3000/");
+  res.redirect(process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com");
 });
 
 
