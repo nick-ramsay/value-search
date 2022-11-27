@@ -385,7 +385,7 @@ const Home = () => {
                   <div className="card-body">
                     <h5 className="card-title row">
                       <div className="col-md-12">
-                        <a href={"https://finviz.com/quote.ashx?t=" + stock.symbol} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a>
+                        <a  href={"https://finviz.com/quote.ashx?t=" + stock.symbol + "&ty=l&ta=0&p=m&tas=0"} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a>
                       </div>
                     </h5>
                     <div className="row">
