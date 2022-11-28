@@ -13,54 +13,8 @@ const keys = require('./keys');
 
 const routes = require("./routes");
 
-const db = require("./models");
-
-passport.use(db.Users.createStrategy());
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(function (id, done) {
-  db.Users.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3001/auth/google/callback",
-  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-},
-  function (accessToken, refreshToken, profile, cb) {
-    db.Users.findOrCreate({ googleId: profile.id, givenName:profile.name.givenName, familyName:profile.name.familyName, displayName: profile.displayName, photos: profile.photos[0].value }, function (err, user) {
-      return cb(err, user);
-    });
-  }
-));
-
 const PORT = process.env.PORT || 3001;
 const app = express();
-app.use(session({
-  secret: process.env.GOOGLE_CLIENT_SECRET,
-  resave: false,
-  saveUninitialized: false
-}));
-
-
-app.get("/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
-);
-
-app.get("/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com" }),
-  function (req, res) {
-    // Successful a, redirect secrets.
-    res.redirect(process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com");
-  });
-
-app.get("/logout", function (req, res) {
-  res.redirect(process.env.NODE_ENV === "dev" ? "http://localhost:3000":"https://value-search.herokuapp.com");
-});
-
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -82,9 +36,6 @@ app.use(function (req, res, next) {
 
 // Add routes, both API and view 
 app.use(routes);
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Connect to the Mongo DB
 

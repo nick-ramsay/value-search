@@ -24,6 +24,11 @@ a:hover {
   color: white;
 }
 
+.modal-content {
+  background-color: black;
+  backdrop-filter: blur(100px);
+}
+
 .google-button {
   height: 40px;
   border-width: 0;
