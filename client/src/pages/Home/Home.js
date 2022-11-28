@@ -69,7 +69,7 @@ const Home = () => {
               <li className="nav-item mt-auto">
                 <form className="d-flex pt-1" role="search">
                   <input id="searchSymbol" aria-describedby="searchSymbol" className="form-control form-control-sm mr-sm-2" type="text" placeholder="Ticker Symbol" defaultValue={""} onChange={setSearchSymbol} aria-label="Search" />
-                  <button type="button" className="btn btn-sm btn-outline-dark my-2 my-sm-0" onClick={findSingleStock}>&#128270;</button>
+                  <button type="button" className="btn btn-sm btn-outline-primary my-2 my-sm-0" onClick={findSingleStock}>Search</button>
                 </form>
               </li>
             </ul>
