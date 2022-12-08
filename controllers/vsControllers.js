@@ -1,6 +1,178 @@
 const db = require("../models");
+const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+const axios = require("axios");
 
 module.exports = {
+    //START: User Account Controllers...
+    sendEmail: function (req, res) {
+        console.log("Called send test e-mail controller...");
+        //SENDGRID LOGIC BELOW...
+
+        let messageParameters = req.body[0];
+
+        let msg = {
+            to: messageParameters.recipientEmail,
+            from: 'applications.nickramsay@gmail.com',
+            subject: '"' + messageParameters.subject + '" from ' + messageParameters.senderName + ' via SendGrid',
+            text: messageParameters.message,
+            html: '<strong>' + messageParameters.message + '</strong>'
+        };
+
+        if (useSendgrid) {
+            sgMail.send(msg);
+        }
+
+        //GMAIL CREDENTIALS BELOW...
+
+        let mailOptions = {
+            from: 'applications.nickramsay@gmail.com',
+            to: messageParameters.recipientEmail,
+            subject: '"' + messageParameters.subject + '" from ' + messageParameters.senderName,
+            text: messageParameters.message
+        };
+
+        if (useGmail) {
+            smtpTransport.sendMail(mailOptions, (error, response) => {
+                error ? console.log(error) : console.log(response);
+                smtpTransport.close();
+            });
+        }
+    },
+    createAccount: function (req, res) {
+        console.log("Called Create Account controller");
+        db.Accounts
+            .create(req.body)
+            .then(dbModel => res.json(dbModel))
+            .then(console.log(req.body))
+            .catch(err => res.status(422).json(err));
+    },
+    checkExistingAccountEmails: function (req, res) {
+        console.log("Called check accounts controller...");
+        db.Accounts
+            .find({ email: req.body[0] }, { email: 1, _id: 0 }).sort({})
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    setEmailVerficationToken: function (req, res) {
+        console.log("Called check set e-mail verification token controller...");
+        let email = req.body.email;
+        let emailVerificationToken = Math.floor((Math.random() * 999999) + 100000).toString();
+
+        db.AccountCreationRequests
+            .replaceOne({ email: email }, { email: email, emailVerificationToken: emailVerificationToken }, { upsert: true })
+            .then(dbModel => {
+                //res.json(dbModel[0]),
+                    smtpTransport.sendMail({
+                        from: 'applications.nickramsay@gmail.com',
+                        to: email,
+                        subject: "Your Email Verification Code",
+                        text: "Your e-mail verification code is: " + emailVerificationToken
+                    }, (error, response) => {
+                        error ? console.log(error) : console.log(response);
+                        smtpTransport.close();
+                    })
+            })
+            .catch(err => res.status(422).json(err));
+    },
+    checkEmailVerificationToken: function (req, res) {
+        console.log("Called checkEmailVerificationController controller...");
+
+        db.AccountCreationRequests
+            .find({ email: req.body.email, emailVerificationToken: req.body.emailVerificationToken }, { email: 1 })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => res.status(422).json(err))
+    },
+    deleteEmailVerificationToken: function (req, res) {
+        console.log("Called deleteEmailVerificationController controller...");
+
+        db.AccountCreationRequests
+            .remove({ email: req.body.email })
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err))
+    },
+    resetPasswordRequest: function (req, res) {
+        console.log("Called reset password request controller...");
+        let resetToken = Math.floor((Math.random() * 999999) + 100000).toString();
+
+        db.Accounts
+            .updateOne({ email: req.body[0] }, { passwordResetToken: sha256(resetToken) })
+            .then(dbModel => {
+                res.json(dbModel[0]),
+                    smtpTransport.sendMail({
+                        from: 'applications.nickramsay@gmail.com',
+                        to: req.body[0],
+                        subject: "Your Password Reset Code",
+                        text: "Your password reset code is: " + resetToken
+                    }, (error, response) => {
+                        error ? console.log(error) : console.log(response);
+                        smtpTransport.close();
+                    })
+            })
+            .catch(err => res.status(422).json(err));
+    },
+    checkEmailAndToken: function (req, res) {
+        console.log("Called check email and token controller...");
+
+        db.Accounts
+            .find({ email: req.body.email, passwordResetToken: req.body.resetToken }, { email: 1 })
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    resetPassword: function (req, res) {
+        console.log("Called reset password controller...");
+
+        db.Accounts
+            .updateOne({ email: req.body.email }, { password: req.body.newPassword, passwordResetToken: null })
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    login: function (req, res) {
+        console.log("Called login controller...");
+
+        db.Accounts
+            .find({ email: req.body.email, password: req.body.password }, { _id: 1 })
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    findUserName: (req, res) => {
+        db.Accounts
+            .find({ _id: req.body.account_id }, { _id: -1, firstname: 1, lastname: 1 })
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    setSessionAccessToken: function (req, res) {
+        console.log("Called session token set controller...");
+
+        let sessionAccessToken = Math.floor((Math.random() * 999999) + 100000).toString();
+
+        db.Accounts
+            .updateOne({ _id: req.body.id }, { sessionAccessToken: sha256(sessionAccessToken) })
+            .then(dbModel => {
+                res.json({
+                    dbModel: dbModel[0],
+                    sessionAccessToken: sha256(sessionAccessToken)
+                });
+            })
+            .catch(err => res.status(422).json(err));
+    },
+    fetchAccountDetails: function (req, res) {
+        console.log("Called fetch account details controller...");
+
+        db.Accounts
+            .find({ _id: req.body.id }, { password: 0, sessionAccessToken: 0, passwordResetToken: 0, _id: 0 }).sort({})
+            .then(dbModel => res.json(dbModel[0]))
+            .catch(err => res.status(422).json(err));
+    },
+    testBackendToken: function (req, res) {
+        console.log("Called test token controller...");
+        var testToken;
+        testToken = Math.floor(Math.random() * 100000);
+        var testJSON = { body: testToken };
+        res.json(testJSON);
+    },
+    //END: User Account Controllers...
     findSearchResults: (req, res) => {
         db.StockData.find({
             "quote.peRatio": { $gte: Number(req.body.minPE), $lte: Number(req.body.maxPE) },

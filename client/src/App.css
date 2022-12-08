@@ -23,3 +23,7 @@ a:hover {
   background-color: #202124;
   color: white;
 }
+
+.modal-content {
+  background-color: black;
+}

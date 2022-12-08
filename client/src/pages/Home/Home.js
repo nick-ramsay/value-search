@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getCookie, logout } from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
@@ -8,6 +9,7 @@ import GithubLogo from "../../images/github_logos/GitHub_Logo_White.png";
 import mongoLogo from "../../images/mongo_logo.png";
 import expandMoreIcon from "../../images/baseline_expand_more_black_48dp.png";
 import expandLessIcon from "../../images/baseline_expand_less_black_48dp.png";
+import { sha256 } from 'js-sha256';
 import "./style.css";
 
 const Home = () => {
@@ -35,8 +37,25 @@ const Home = () => {
   const setMarketCapSize = (event) => { };
   const selectedInvestmentType = (event) => { };
 
+
+  var [loginEmail, setLoginEmail] = useInput("");
+  var [loginPassword, setLoginPassword] = useInput("");
+  var [submissionMessage, setSubmissionMessage] = useState("");
+
+  var [email, setEmail] = useInput("");
+  var [submissionMessage, setSubmissionMessage] = useState("");
+
+  var [firstname, setFirstname] = useState("");
+  var [lastname, setLastname] = useState("");
+  var [phone, setPhone] = useInput("");
+  var [email, setEmail] = useInput("");
+  var [emailVerificationToken, setEmailVerficationToken] = useInput("");
+  var [password, setPassword] = useInput("");
+  var [confirmPassword, setConfirmPassword] = useInput("");
+  var [submissionMessage, setSubmissionMessage] = useState("");
+
   const renderValueSearchResults = () => {
-    API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false) });
+    API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false); });
   };
 
   const renderSearchResults = () => {
@@ -52,8 +71,111 @@ const Home = () => {
     };
   };
 
+  //START: Account Creation Functions
+  const checkEmailAvailability = () => {
+    if (email !== "") {
+      API.checkExistingAccountEmails(email.toLowerCase())
+        .then(res => {
+          console.log("Check Existing: " + res);
+          if (res.data !== "") {
+            setSubmissionMessage(submissionMessage => ("Looks like an account already exists with this e-mail. Try logging in."));
+          } else {
+            API.setEmailVerificationToken(email)
+              .then(res => {
+                console.log(res.data);
+              })
+          }
+        }
+        );
+    } else {
+      setSubmissionMessage(submissionMessage => "Please enter an email address")
+    }
+  }
+
+  const createNewAccount = () => {
+
+    let currentAccountInfo = {
+      email: email,
+      phone: phone,
+      firstname: firstname,
+      lastname: lastname,
+      password: sha256(password),
+      sessionAccessToken: null,
+      passwordResetToken: null
+    }
+
+    if (firstname !== "" && lastname !== "" && email !== "" && password !== "" && emailVerificationToken !== "" && confirmPassword !== "" && password === confirmPassword) {
+      setSubmissionMessage(submissionMessage => "");
+      API.checkEmailVerificationToken(email, emailVerificationToken).then(
+        res => {
+          if (res.data !== "") {
+            console.log(res.data)
+            API.checkExistingAccountEmails(currentAccountInfo.email)
+              .then(res => {
+                if (res.data === "") {
+                  API.createAccount(currentAccountInfo).then(res => {
+                    API.deleteEmailVerificationToken(email).then(res =>
+                      window.location.href = "/"
+                    )
+                  });
+                } else {
+                  setSubmissionMessage(submissionMessage => ("Sorry... an account already exists for this email."));
+                }
+              }
+              );
+          } else {
+            setSubmissionMessage(submissionMessage => "Hmm... reset code doesn't appear correct for email. Please make sure you've properly entered the email and reset code.")
+          }
+        });
+
+    } else if (password !== confirmPassword) {
+      setSubmissionMessage(submissionMessage => ("Password and confirm password fields don't match..."));
+    }
+    else {
+      setSubmissionMessage(submissionMessage => ("Not enough info entered..."));
+    }
+  }
+  //END: User Account Creation Functions
+
+  //START: Login functions
+
+  const renderAccountName = () => {
+    API.findUserName(getCookie("account_id")).then(
+      (res) => {
+        console.log(res.data);
+        setFirstname(firstname => res.data.firstname);
+        setLastname(lastname => res.data.lastname);
+      }
+    );
+  };
+
+  const login = () => {
+
+    let cookieExpiryDate = moment().add("60", "minutes").format();
+
+    if (loginEmail && loginPassword) {
+      API.login(loginEmail, sha256(loginPassword)).then(
+        res => {
+          if (res.data) {
+            setSubmissionMessage(submissionMessage => "");
+            document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+            document.cookie = "account_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+            renderAccountName();
+          } else {
+            setSubmissionMessage(submissionMessage => "Hmm... this is incorrect. Enter your username and password again.");
+          }
+        }
+      )
+    } else {
+      setSubmissionMessage(submissionMessage => "Please complete all fields");
+    }
+  }
+
+  //END: Login functions
+
   useEffect(() => {
     renderSearchResults();
+    renderAccountName();
   }, []);
 
   return (
@@ -76,9 +198,24 @@ const Home = () => {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mt-auto">
                 <form className="d-flex pt-1" role="search">
-                  <button type="button" className="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signInModal">
-                    Sign In
-                  </button>
+                  {getCookie("account_id") !== "" && getCookie("account_id") !== undefined ?
+                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                      <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {firstname + " " + lastname}
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end text-center">
+                            <li><button type="button" className="btn btn-sm btn-outline-danger" onClick={logout}>Logout</button></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                    :
+                    <button type="button" className="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signInModal">
+                      Sign In
+                    </button>
+                  }
                 </form>
               </li>
             </ul>
@@ -93,15 +230,94 @@ const Home = () => {
                 <form>
                   <div className="mb-3">
                     <label for="exampleInputEmail1" className="form-label">Email address</label>
-                    <input type="email" className="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                    <input type="email" className="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={setLoginEmail} />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                   </div>
                   <div className="mb-3">
                     <label for="exampleInputPassword1" className="form-label">Password</label>
-                    <input type="password" className="form-control form-control-sm" id="exampleInputPassword1" />
+                    <input type="password" className="form-control form-control-sm" id="exampleInputPassword1" onChange={setLoginPassword} />
                   </div>
-                  <button type="submit" className="btn btn-sm btn-primary">Sign In</button>
+                  <button type="button" className="btn btn-sm btn-primary" onClick={login}>Sign In</button>
+                  <div className="row mt-2">
+                    <a className="link-primary" href="#" data-bs-toggle="modal" data-bs-target="#createAccountRequestModal">Create Account</a>
+                  </div>
+                  <div className="row">
+                    <a className="link-primary" href="#">Reset Password</a>
+                  </div>
                 </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div className="container">
+                  <div className="col-md-12 mt-2">
+                    <h5 className="text-center mb-3 mt-3"><strong>Create Account</strong></h5>
+                    <p className="text-center">Please check your e-mail for your verification token.</p>
+                    <form className="p-3">
+                      <div className="row mb-3">
+                        <div className="col">
+                          <label htmlFor="createAccountFirstName">First Name</label>
+                          <input type="text" className="form-control" id="createAccountFirstName" name="createAccountFirstName" onChange={setFirstname} aria-describedby="createAccountFirstnameHelp" />
+                        </div>
+                        <div className="col">
+                          <label htmlFor="createAccountFirstName">Last Name</label>
+                          <input type="text" className="form-control" id="createAccountLastName" name="createAccountLastName" onChange={setLastname} aria-describedby="createAccountLastnameHelp" />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="createAccountEmail">Email address</label>
+                        <input type="email" className="form-control" id="createAccountEmail" name="createAccountEmail" onChange={setEmail} aria-describedby="createAccountEmailHelp" />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="createAccountPhone">Phone Number</label>
+                        <input type="text" className="form-control" id="createAccountPhone" name="createAccountPhone" onChange={setPhone} aria-describedby="createAccountPhoneHelp" />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="createAccountEmailVerificationToken">Email Verification Token</label>
+                        <input type="password" className="form-control" id="createAccountEmailVerificationToken" onChange={setEmailVerficationToken} name="createAccountEmailVerificationToken" />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="createAccountPassword">Password</label>
+                        <input type="password" className="form-control" id="createAccountPassword" onChange={setPassword} name="createAccountPassword" />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="createAccountPasswordConfirm">Confirm Password</label>
+                        <input type="password" className="form-control" id="createAccountPasswordConfirm" name="createAccountPasswordConfirm" onChange={setConfirmPassword} />
+                      </div>
+                      <button type="button" className="btn btn-sm btn-primary" onClick={createNewAccount}>Create</button>
+                      <div className="form-group text-center">
+                        <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal fade" id="createAccountRequestModal" tabindex="-1" aria-labelledby="createAccountRequestModalLabel" aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div className="container">
+                  <div className="col-md-12 mt-2">
+                    <h5 className="text-center mb-3 mt-3"><strong>What e-mail would you like to use for your account?</strong></h5>
+                    <form className="p-3">
+                      <div className="form-group">
+                        <label htmlFor="createAccountEmailAddress">Email address</label>
+                        <input type="email" className="form-control" id="createAccountEmailAddress" name="createAccountEmailAddress" onChange={setEmail} aria-describedby="emailHelp" />
+                      </div>
+                      <button type="button" className="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createAccountModal" onClick={checkEmailAvailability}>Submit</button>
+                      <div className="form-group text-center">
+                        <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
