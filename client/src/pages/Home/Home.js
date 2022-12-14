@@ -112,6 +112,7 @@ const Home = () => {
             console.log(res.data)
             API.checkExistingAccountEmails(currentAccountInfo.email)
               .then(res => {
+                console.log("Matching Emails at Creation??? -> " + res.data);
                 if (res.data === "") {
                   API.createAccount(currentAccountInfo).then(res => {
                     API.deleteEmailVerificationToken(email).then(res =>
