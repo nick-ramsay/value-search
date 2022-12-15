@@ -4,6 +4,42 @@ const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 const axios = require("axios");
 
+const keys = require("../keys");
+
+const gmailClientId = keys.gmail_credentials.gmailClientId;
+const gmailClientSecret = keys.gmail_credentials.gmailClientSecret;
+const gmailRefreshToken = keys.gmail_credentials.gmailRefreshToken;
+
+const oauth2Client = new OAuth2(
+    gmailClientId, // ClientID
+    gmailClientSecret, // Client Secret
+    "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+    refresh_token: gmailRefreshToken
+});
+
+const accessToken = oauth2Client.getAccessToken();
+
+const smtpTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        type: "OAuth2",
+        user: "applications.nickramsay@gmail.com",
+        //user: gmailUserId,
+        //pass: gmailPassword,
+        clientId: gmailClientId,
+        clientSecret: gmailClientSecret,
+        refreshToken: gmailRefreshToken,
+        accessToken: accessToken
+    }
+});
+
+let useGmail = true;
+
 module.exports = {
     //START: User Account Controllers...
     sendEmail: function (req, res) {
