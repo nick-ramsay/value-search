@@ -1,4 +1,5 @@
 const db = require("../models");
+const sha256 = require('js-sha256').sha256;
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;

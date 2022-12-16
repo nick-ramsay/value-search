@@ -32,12 +32,12 @@ const CreateAccountRequest = () => {
             <div className="container">
                 <div className="col-md-12 mt-2">
                     <h5 className="text-center mb-3 mt-3"><strong>What e-mail would you like to use for your account?</strong></h5>
-                    <form className="p-3">
+                    <form className="p-3 text-center">
                         <div className="form-group">
                             <label htmlFor="createAccountEmailAddress">Email address</label>
                             <input type="email" className="form-control" id="createAccountEmailAddress" name="createAccountEmailAddress" onChange={setEmail} aria-describedby="emailHelp" />
                         </div>
-                        <button type="button" className="btn btn-sm btn-custom-blue" onClick={checkEmailAvailability}>Submit</button>
+                        <button type="button" className="btn btn-sm btn-outline-primary" onClick={checkEmailAvailability}>Submit</button>
                         <div className="form-group text-center">
                             <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
                         </div>

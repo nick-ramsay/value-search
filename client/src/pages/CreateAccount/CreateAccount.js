@@ -75,7 +75,7 @@ return (
             <div className="col-md-12 mt-2">
                 <h5 className="text-center mb-3 mt-3"><strong>Create Account</strong></h5>
                 <p className="text-center">Please check your e-mail for your verification token.</p>
-                <form className="p-3">
+                <form className="p-3 text-center">
                     <div className="row mb-3">
                         <div className="col">
                             <label htmlFor="createAccountFirstName">First Name</label>
@@ -106,7 +106,7 @@ return (
                         <label htmlFor="createAccountPasswordConfirm">Confirm Password</label>
                         <input type="password" className="form-control" id="createAccountPasswordConfirm" name="createAccountPasswordConfirm" onChange={setConfirmPassword} />
                     </div>
-                    <button type="button" className="btn btn-sm btn-custom-blue" onClick={createNewAccount}>Create</button>
+                    <button type="button" className="btn btn-sm btn-outline-primary" onClick={createNewAccount}>Create</button>
                     <div className="form-group text-center">
                         <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
                     </div>

@@ -161,6 +161,7 @@ const Home = () => {
             setSubmissionMessage(submissionMessage => "");
             document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
             document.cookie = "account_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+            document.location = "/"
             renderAccountName();
           } else {
             setSubmissionMessage(submissionMessage => "Hmm... this is incorrect. Enter your username and password again.");
@@ -230,95 +231,22 @@ const Home = () => {
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
-                    <label for="exampleInputEmail1" className="form-label">Email address</label>
+                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
                     <input type="email" className="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={setLoginEmail} />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                   </div>
                   <div className="mb-3">
-                    <label for="exampleInputPassword1" className="form-label">Password</label>
+                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                     <input type="password" className="form-control form-control-sm" id="exampleInputPassword1" onChange={setLoginPassword} />
                   </div>
                   <button type="button" className="btn btn-sm btn-primary" onClick={login}>Sign In</button>
                   <div className="row mt-2">
-                    <a className="link-primary" href="#" data-bs-toggle="modal" data-bs-target="#createAccountRequestModal">Create Account</a>
+                    <a className="link-primary" href="./create-account-request" data-bs-toggle="modal">Create Account</a>
                   </div>
                   <div className="row">
-                    <a className="link-primary" href="#">Reset Password</a>
+                    <a className="link-primary" href="./reset-password-request">Reset Password</a>
                   </div>
                 </form>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-body">
-                <div className="container">
-                  <div className="col-md-12 mt-2">
-                    <h5 className="text-center mb-3 mt-3"><strong>Create Account</strong></h5>
-                    <p className="text-center">Please check your e-mail for your verification token.</p>
-                    <form className="p-3">
-                      <div className="row mb-3">
-                        <div className="col">
-                          <label htmlFor="createAccountFirstName">First Name</label>
-                          <input type="text" className="form-control" id="createAccountFirstName" name="createAccountFirstName" onChange={setFirstname} aria-describedby="createAccountFirstnameHelp" />
-                        </div>
-                        <div className="col">
-                          <label htmlFor="createAccountFirstName">Last Name</label>
-                          <input type="text" className="form-control" id="createAccountLastName" name="createAccountLastName" onChange={setLastname} aria-describedby="createAccountLastnameHelp" />
-                        </div>
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="createAccountEmail">Email address</label>
-                        <input type="email" className="form-control" id="createAccountEmail" name="createAccountEmail" onChange={setEmail} aria-describedby="createAccountEmailHelp" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="createAccountPhone">Phone Number</label>
-                        <input type="text" className="form-control" id="createAccountPhone" name="createAccountPhone" onChange={setPhone} aria-describedby="createAccountPhoneHelp" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="createAccountEmailVerificationToken">Email Verification Token</label>
-                        <input type="password" className="form-control" id="createAccountEmailVerificationToken" onChange={setEmailVerficationToken} name="createAccountEmailVerificationToken" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="createAccountPassword">Password</label>
-                        <input type="password" className="form-control" id="createAccountPassword" onChange={setPassword} name="createAccountPassword" />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="createAccountPasswordConfirm">Confirm Password</label>
-                        <input type="password" className="form-control" id="createAccountPasswordConfirm" name="createAccountPasswordConfirm" onChange={setConfirmPassword} />
-                      </div>
-                      <button type="button" className="btn btn-sm btn-primary" onClick={createNewAccount}>Create</button>
-                      <div className="form-group text-center">
-                        <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="modal fade" id="createAccountRequestModal" tabindex="-1" aria-labelledby="createAccountRequestModalLabel" aria-hidden="true">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-body">
-                <div className="container">
-                  <div className="col-md-12 mt-2">
-                    <h5 className="text-center mb-3 mt-3"><strong>What e-mail would you like to use for your account?</strong></h5>
-                    <form className="p-3">
-                      <div className="form-group">
-                        <label htmlFor="createAccountEmailAddress">Email address</label>
-                        <input type="email" className="form-control" id="createAccountEmailAddress" name="createAccountEmailAddress" onChange={setEmail} aria-describedby="emailHelp" />
-                      </div>
-                      <button type="button" className="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createAccountModal" onClick={checkEmailAvailability}>Submit</button>
-                      <div className="form-group text-center">
-                        <p className="submission-message" name="submissionMessage">{submissionMessage}</p>
-                      </div>
-                    </form>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
