@@ -7,13 +7,15 @@ import moment from "moment";
 import logo from "../../../src/logo.svg";
 import GithubLogo from "../../images/github_logos/GitHub_Logo_White.png";
 import mongoLogo from "../../images/mongo_logo.png";
-import expandMoreIcon from "../../images/baseline_expand_more_black_48dp.png";
-import expandLessIcon from "../../images/baseline_expand_less_black_48dp.png";
+import editIcon from "../../images/outline_edit_white_24dp.png";
+import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
+import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
 import { sha256 } from 'js-sha256';
 import "./style.css";
 
 const Home = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
+  var [userID, setUserID] = useState("");
   var [advancedOptionsOpen, setAdvancedOptionsOpen] = useState(false);
   var [minPE, setMinPE] = useInput(5);
   var [maxPE, setMaxPE] = useInput(15);
@@ -141,9 +143,9 @@ const Home = () => {
   //START: Login functions
 
   const renderAccountName = () => {
-    API.findUserName(getCookie("account_id")).then(
+    setUserID(userID => getCookie("vs_id"));
+    API.findUserName(getCookie("vs_id")).then(
       (res) => {
-        console.log(res.data);
         setFirstname(firstname => res.data.firstname);
         setLastname(lastname => res.data.lastname);
       }
@@ -160,7 +162,8 @@ const Home = () => {
           if (res.data) {
             setSubmissionMessage(submissionMessage => "");
             document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-            document.cookie = "account_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+            document.cookie = "vs_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+            setUserID(userID => res.data._id);
             document.location = "/"
             renderAccountName();
           } else {
@@ -200,7 +203,7 @@ const Home = () => {
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mt-auto">
                 <form className="d-flex pt-1" role="search">
-                  {getCookie("account_id") !== "" && getCookie("account_id") !== undefined ?
+                  {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ?
                     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                       <ul class="navbar-nav">
                         <li class="nav-item dropdown">
@@ -225,7 +228,7 @@ const Home = () => {
         </div>
       </nav>
       <div className="container text-center">
-        <div className="modal fade" id="signInModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="signInModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-body">
@@ -446,8 +449,9 @@ const Home = () => {
                               onClick={(event) => {
                                 setMarketCapSize(event);
                               }}
+                              defaultValue="all"
                             >
-                              <option value="all" selected>
+                              <option value="all">
                                 All
                               </option>
                               <option value="small">Small Cap</option>
@@ -548,6 +552,13 @@ const Home = () => {
                     <h5 className="card-title row">
                       <div className="col-md-12">
                         <a href={"https://finviz.com/quote.ashx?t=" + stock.symbol + "&ty=l&ta=0&p=m&tas=0"} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a>
+                        {userID !== undefined && userID !== "" ?
+                          <span><img
+                            className="ml-3 text-icon"
+                            src={editIcon}
+                            alt="editIcon"
+                          /></span>:""
+                        }
                       </div>
                     </h5>
                     <div className="row">
