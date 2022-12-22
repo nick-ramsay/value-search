@@ -56,4 +56,9 @@ export default {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-user-name", data: { account_id: account_id } });
     },
     //END: Account APIs...
-};
+    updatePortfolio: (symbol, status, account_id) => {
+        console.log(status)
+        return axios({ method: "post", url: apiURL + "/api/value-search/update-portfolio", data: { symbol: symbol, status: status, account_id: account_id } });
+    }
+
+}

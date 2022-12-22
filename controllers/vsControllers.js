@@ -6,6 +6,7 @@ const OAuth2 = google.auth.OAuth2;
 const axios = require("axios");
 
 const keys = require("../keys");
+const { Portfolio } = require("../models");
 
 const gmailClientId = keys.gmail_credentials.gmailClientId;
 const gmailClientSecret = keys.gmail_credentials.gmailClientSecret;
@@ -101,15 +102,15 @@ module.exports = {
             .replaceOne({ email: email }, { email: email, emailVerificationToken: emailVerificationToken }, { upsert: true })
             .then(dbModel => {
                 //res.json(dbModel[0]),
-                    smtpTransport.sendMail({
-                        from: 'applications.nickramsay@gmail.com',
-                        to: email,
-                        subject: "Your Email Verification Code",
-                        text: "Your e-mail verification code is: " + emailVerificationToken
-                    }, (error, response) => {
-                        error ? console.log(error) : console.log(response);
-                        smtpTransport.close();
-                    })
+                smtpTransport.sendMail({
+                    from: 'applications.nickramsay@gmail.com',
+                    to: email,
+                    subject: "Your Email Verification Code",
+                    text: "Your e-mail verification code is: " + emailVerificationToken
+                }, (error, response) => {
+                    error ? console.log(error) : console.log(response);
+                    smtpTransport.close();
+                })
             })
             .catch(err => res.status(422).json(err));
     },
@@ -240,9 +241,14 @@ module.exports = {
     },
     returnPortfolio: (req, res) => {
         console.log(req.body.symbols);
-        db.StockData.find({"symbol" : { $in : req.body.symbols}})
+        db.StockData.find({ "symbol": { $in: req.body.symbols } })
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
-        
+
+    },
+    updatePortfolio: (req, res) => {
+        db.Portfolio.updateOne({ "account_id": req.body.account_id, "portfolio.symbol": req.body.symbol }, { $set: { "portfolio.$.status": req.body.newStatus }}, { "upsert": true })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
     }
 };

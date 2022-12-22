@@ -70,8 +70,8 @@ router
   .post(vsControllers.findSingleStock);
 
 router
-  .route("/update-portfolio-status")
-  .post(vsControllers.updatePortfolioStatus);
+  .route("/update-portfolio")
+  .post(vsControllers.updatePortfolio);
 
 router
   .route("/find-portfolio-results")

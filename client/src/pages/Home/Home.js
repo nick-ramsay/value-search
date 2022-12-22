@@ -140,6 +140,13 @@ const Home = () => {
   }
   //END: User Account Creation Functions
 
+  const updatePortfolio = (symbol, userID) => {
+    console.log(symbol);
+    console.log(userID);
+    console.log(document.getElementById(symbol + "PortfolioStatusInput").value);
+    API.updatePortfolio(symbol, document.getElementById(symbol + "PortfolioStatusInput").value, userID).then(res => console.log(res.data))
+  }
+
   //START: Login functions
 
   const renderAccountName = () => {
@@ -557,9 +564,40 @@ const Home = () => {
                             className="ml-3 text-icon"
                             src={editIcon}
                             alt="editIcon"
-                          /></span>:""
+                            data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "editModal"}
+                          /></span> : ""
                         }
                       </div>
+                      {/*Start: Edit Symbol Modal*/}
+                      <div class="modal fade" id={stock.symbol + "editModal"} tabindex="-1" role="dialog" aria-labelledby={stock.symbol + "editModalLabel"} aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id={stock.symbol + "editModalLabel"}>Edit {stock.quote.companyName + " (" + stock.symbol + ")"}</h5>
+                              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <form>
+                                <select id={stock.symbol + "PortfolioStatusInput"} class="form-select" aria-label="Default select example">
+                                  <option value="undefined" selected>Pick a status for this stock</option>
+                                  <option value="watch">Watch</option>
+                                  <option value="own">Own</option>
+                                  <option value="hold">Hold</option>
+                                  <option value="icebox">Icebox</option>
+                                  <option value="speculative">Speculative</option>
+                                </select>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary" onClick={() => updatePortfolio(stock.symbol, userID)}>Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/*Start: Edit Symbol Modal*/}
                     </h5>
                     <div className="row">
                       {stock.fundamentals.country && stock.fundamentals.country !== null ?
