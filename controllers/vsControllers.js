@@ -247,7 +247,13 @@ module.exports = {
 
     },
     updatePortfolio: (req, res) => {
-        db.Portfolio.updateOne({ "account_id": req.body.account_id, "portfolio.symbol": req.body.symbol }, { $set: { "portfolio.$.status": req.body.newStatus }}, { "upsert": true })
+        db.Portfolio.updateOne({ "account_id": req.body.account_id }, { "portfolio": req.body.portfolio }, { "upsert": true })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
+    findPortfolio: (req, res) => {
+        console.log(req.body);
+        db.Portfolio.findOne({ "account_id": req.body.account_id })
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
     }

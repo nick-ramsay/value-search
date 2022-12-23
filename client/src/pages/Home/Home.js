@@ -35,6 +35,7 @@ const Home = () => {
   var [searchSymbol, setSearchSymbol] = useInput("")
   var [currentView, setCurrentView] = useState("valueSearch")
   var [loading, setLoading] = useState(true);
+  var [portfolio, setPortfolio] = useState([]);
 
   const setMarketCapSize = (event) => { };
   const selectedInvestmentType = (event) => { };
@@ -140,11 +141,23 @@ const Home = () => {
   }
   //END: User Account Creation Functions
 
+  const findPortfolio = (user) => {
+    API.findPortfolio(user).then(res => {console.log(res.data); setPortfolio(portfolio => res.data.portfolio)});
+  };
+
   const updatePortfolio = (symbol, userID) => {
-    console.log(symbol);
-    console.log(userID);
-    console.log(document.getElementById(symbol + "PortfolioStatusInput").value);
-    API.updatePortfolio(symbol, document.getElementById(symbol + "PortfolioStatusInput").value, userID).then(res => console.log(res.data))
+    let newStatus = document.getElementById(symbol + "PortfolioStatusInput").value;
+    let tempPortfolio = portfolio;
+    let symbolIndex = portfolio.map(object => object.symbol).indexOf(symbol);
+    if (symbolIndex !== -1) {
+      tempPortfolio[symbolIndex].status = newStatus;
+    } else {
+      tempPortfolio.push({
+        symbol: symbol,
+        status: newStatus
+      })
+    }
+    API.updatePortfolio(userID, tempPortfolio).then(res => console.log(res.data))
   }
 
   //START: Login functions
@@ -155,6 +168,7 @@ const Home = () => {
       (res) => {
         setFirstname(firstname => res.data.firstname);
         setLastname(lastname => res.data.lastname);
+        findPortfolio(getCookie("vs_id"));
       }
     );
   };
@@ -581,7 +595,7 @@ const Home = () => {
                             <div class="modal-body">
                               <form>
                                 <select id={stock.symbol + "PortfolioStatusInput"} class="form-select" aria-label="Default select example">
-                                  <option value="undefined" selected>Pick a status for this stock</option>
+                                  <option value="-" selected>-</option>
                                   <option value="watch">Watch</option>
                                   <option value="own">Own</option>
                                   <option value="hold">Hold</option>

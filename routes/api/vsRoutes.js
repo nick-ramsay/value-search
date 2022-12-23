@@ -78,6 +78,10 @@ router
   .post(vsControllers.findPortfolioResults);
 
 router
+  .route("/find-portfolio")
+  .post(vsControllers.findPortfolio);
+
+router
   .route("/return-portfolio")
   .post(vsControllers.returnPortfolio);
 
