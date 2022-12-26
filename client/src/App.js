@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Switch } from "react-router-dom
 import './App.css';
 
 import Home from "../src/pages/Home/Home";
+import Portfolio from "../src/pages/Portfolio/Portfolio";
 import Login from '../src/pages/Login/Login';
 import CreateAccountRequest from '../src/pages/CreateAccountRequest/CreateAccountRequest';
 import CreateAccount from '../src/pages/CreateAccount/CreateAccount';
@@ -16,8 +17,9 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route exact path="/portfolio" element={<Portfolio />} />
         <Route exact path="/login" element={<Login />} />
-        <Route exact path="/create-account-request" element={<CreateAccountRequest />}/>
+        <Route exact path="/create-account-request" element={<CreateAccountRequest />} />
         <Route exact path="/create-account" element={<CreateAccount />} />
         <Route exact path="/reset-password-request" element={<ResetPasswordRequest />} />
         <Route exact path="/reset-password" element={<ResetPassword />} />
