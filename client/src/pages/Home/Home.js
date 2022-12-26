@@ -566,7 +566,7 @@ const Home = () => {
             </div>
             {!loading ?
               valueSearchData.map((stock, i) =>
-                <QuoteCard stock={stock} userID={userID} updatePortfolio={updatePortfolio} />
+                <QuoteCard stock={stock} userID={userID} updatePortfolio={updatePortfolio} portfolio={portfolio} />
               )
               : ""
             }
