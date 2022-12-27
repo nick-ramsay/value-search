@@ -85,4 +85,12 @@ router
   .route("/return-portfolio")
   .post(vsControllers.returnPortfolio);
 
+router
+  .route("/find-portfolio-quotes")
+  .post(vsControllers.findPortfolioQuotes);
+
+router
+  .route("/sync-portfolio-with-etrade")
+  .post(vsControllers.syncPortfolioWithEtrade)
+
 module.exports = router;

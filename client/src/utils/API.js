@@ -18,6 +18,9 @@ export default {
     returnPortfolio: (symbols) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/return-portfolio", data: { symbols } });
     },
+    findPortfolioQuotes: (symbols, selectedStatus) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio-quotes", data: { symbols, selectedStatus } });
+    },
     //START: Account APIs...
     sendEmail: function (messageInfo) {
         return axios({ method: "post", url: apiURL + "/api/value-search/send-email", data: [messageInfo] });
@@ -61,6 +64,8 @@ export default {
     },
     findPortfolio: (account_id) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio", data: { account_id: account_id } });
+    },
+    syncPortfolioWithEtrade: (symbols, status) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/sync-portfolio-with-etrade", data: { symbols: symbols, status:status } });
     }
-
 }

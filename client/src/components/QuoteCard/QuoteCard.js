@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import editIcon from "../../images/outline_edit_white_24dp.png";
+import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 
 const QuoteCard = (props) => {
     let portfolio = props.portfolio;
@@ -14,6 +15,7 @@ const QuoteCard = (props) => {
             <div className="card-body">
                 <h5 className="card-title row">
                     <div className="col-md-12">
+
                         <a href={"https://finviz.com/quote.ashx?t=" + stock.symbol + "&ty=l&ta=0&p=m&tas=0"} target="_blank">{stock.quote.companyName + " (" + stock.symbol + ")"}</a>
                         {userID !== undefined && userID !== "" ?
                             <span><img
@@ -22,6 +24,12 @@ const QuoteCard = (props) => {
                                 alt="editIcon"
                                 data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "editModal"}
                             /></span> : ""
+                        }
+                    </div>
+                    <div className="col-md-12 mt-1">
+                        {portfolioEntry.status !== "-" ?
+                            <span class="badge bg-primary"> {toTitleCase(portfolioEntry.status)}</span>
+                            : ""
                         }
                     </div>
                     {/*Start: Edit Symbol Modal*/}
@@ -48,7 +56,7 @@ const QuoteCard = (props) => {
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onClick={() => updatePortfolio(stock.symbol, userID)}>Save changes</button>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={() => updatePortfolio(stock.symbol, userID)}>Save changes</button>
                                 </div>
                             </div>
                         </div>

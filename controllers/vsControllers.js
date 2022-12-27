@@ -256,5 +256,18 @@ module.exports = {
         db.Portfolio.findOne({ "account_id": req.body.account_id })
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
+    },
+    findPortfolioQuotes: (req, res) => {
+        console.log(req.body.symbols);
+        db.StockData.find({ "symbol": { $in: req.body.symbols } })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
+    syncPortfolioWithEtrade: (req, res) => {
+        /*
+        db.Portfolio.updateMany({ "symbol": { $in: req.body.symbols } }, { "status": req.body.status }, { "upsert": true })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+            */
     }
 };

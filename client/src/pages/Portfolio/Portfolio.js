@@ -33,6 +33,9 @@ const Portfolio = () => {
   var [password, setPassword] = useInput("");
   var [confirmPassword, setConfirmPassword] = useInput("");
   var [submissionMessage, setSubmissionMessage] = useState("");
+  var [portfolio, setPortfolio] = useState([]);
+
+  var [selectedStatus, setSelectedStatus] = useState("watch");
 
 
   const findSingleStock = () => {
@@ -110,8 +113,22 @@ const Portfolio = () => {
   }
   //END: User Account Creation Functions
 
-  const findPortfolio = (user) => {
-    API.findPortfolio(user).then(res => { console.log(res.data); setPortfolio(portfolio => res.data.portfolio) });
+  const findPortfolio = (user, selectedStatus) => {
+    console.log(selectedStatus);
+    let symbolList = [];
+    API.findPortfolio(user, selectedStatus).then(res => {
+      console.log(res.data);
+      setPortfolio(portfolio => res.data.portfolio);
+      for (let i = 0; i < res.data.portfolio.length; i++) {
+        console.log(res.data.portfolio[i].status);
+        if (res.data.portfolio[i].status !== "-" && res.data.portfolio[i].status === selectedStatus) {
+          symbolList.push(res.data.portfolio[i].symbol);
+        };
+      };
+      renderValueSearchResults(symbolList, selectedStatus);
+    }
+    )
+
   };
 
   const updatePortfolio = (symbol, userID) => {
@@ -137,7 +154,7 @@ const Portfolio = () => {
       (res) => {
         setFirstname(firstname => res.data.firstname);
         setLastname(lastname => res.data.lastname);
-        findPortfolio(getCookie("vs_id"));
+        findPortfolio(getCookie("vs_id"), selectedStatus);
       }
     );
   };
@@ -167,6 +184,14 @@ const Portfolio = () => {
   }
 
   //END: Login functions
+
+  const renderValueSearchResults = (symbols, selectedStatus) => {
+    API.findPortfolioQuotes(symbols, selectedStatus).then(res => {
+      console.log(res.data);
+      setValueSearchData(valueSearchData => res.data);
+      setLoading(loading => false);
+    })
+  }
 
   const syncWithEtrade = () => {
     console.log("Called Sync with Etrade");
@@ -213,6 +238,7 @@ const Portfolio = () => {
         }
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2)
+      API.syncPortfolioWithEtrade(etradeSymbols, "own").then(res => console.log(res.data))
       console.log(etradeSymbols);
     }
   };
@@ -301,6 +327,15 @@ const Portfolio = () => {
               </div>
               <div className="row">
                 <button className="btn btn-sm btn-outline-primary mt-2" onClick={() => syncWithEtrade()}>Sync Portfolio with Etrade</button>
+              </div>
+              <div className="row">
+                <div className="col-md-12 mt-2">
+                  <button type="button" class={selectedStatus === "icebox" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "icebox"); setSelectedStatus(selectedStatus => "icebox")}}>Icebox</button>
+                  <button type="button" class={selectedStatus === "watch" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "watch"); setSelectedStatus(selectedStatus => "watch")}}>Watch</button>
+                  <button type="button" class={selectedStatus === "own" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "own"); setSelectedStatus(selectedStatus => "own") }}>Own</button>
+                  <button type="button" class={selectedStatus === "hold" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "hold"); setSelectedStatus(selectedStatus => "hold") }}>Hold</button>
+                  <button type="button" class={selectedStatus === "speculative" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "speculative"); setSelectedStatus(selectedStatus => "speculative") }}>Speculative</button>
+                </div>
               </div>
             </div>
           </div>

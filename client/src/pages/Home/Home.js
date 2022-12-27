@@ -155,7 +155,7 @@ const Home = () => {
         status: newStatus
       })
     }
-    API.updatePortfolio(userID, tempPortfolio).then(res => console.log(res.data))
+    API.updatePortfolio(userID, tempPortfolio).then(res => console.log(res.data, findPortfolio(userID)))
   }
 
   //START: Login functions
