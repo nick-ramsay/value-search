@@ -6,7 +6,7 @@ import API from "../../utils/API";
 import moment from "moment";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
-import { sha256 } from 'js-sha256';
+import { sha256 } from "js-sha256";
 import "./style.css";
 
 import QuoteCard from "../../components/QuoteCard/QuoteCard";
@@ -30,14 +30,13 @@ const Home = () => {
   var [investmentType, setInvestmentType] = useState("cs");
   var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
   var [currentSort, setCurrentSort] = useState("");
-  var [searchSymbol, setSearchSymbol] = useInput("")
-  var [currentView, setCurrentView] = useState("valueSearch")
+  var [searchSymbol, setSearchSymbol] = useInput("");
+  var [currentView, setCurrentView] = useState("valueSearch");
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
-
+  const setMarketCapSize = (event) => {};
+  const selectedInvestmentType = (event) => {};
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -56,45 +55,63 @@ const Home = () => {
   var [submissionMessage, setSubmissionMessage] = useState("");
 
   const renderValueSearchResults = () => {
-    API.findSearchResults(minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false); });
+    API.findSearchResults(
+      minPE,
+      maxPE,
+      minDebtEquity,
+      maxDebtEquity,
+      minPriceSales,
+      maxPriceSales,
+      minPriceToBook,
+      maxPriceToBook,
+      minCap,
+      maxCap
+    ).then((res) => {
+      setValueSearchData((valueSearchData) => res.data);
+      setLoading((loading) => false);
+    });
   };
 
   const renderSearchResults = () => {
-    setLoading(loading => true);
-    renderValueSearchResults()
-  }
+    setLoading((loading) => true);
+    renderValueSearchResults();
+  };
 
   const findSingleStock = () => {
     console.log("Current Symbol: " + searchSymbol);
     if (searchSymbol !== "") {
-      setLoading(loading => true);
-      API.findSingleStock(searchSymbol.toUpperCase()).then(res => { setValueSearchData(valueSearchData => res.data); setLoading(loading => false); });
-    };
+      setLoading((loading) => true);
+      API.findSingleStock(searchSymbol.toUpperCase()).then((res) => {
+        setValueSearchData((valueSearchData) => res.data);
+        setLoading((loading) => false);
+      });
+    }
   };
 
   //START: Account Creation Functions
   const checkEmailAvailability = () => {
     if (email !== "") {
-      API.checkExistingAccountEmails(email.toLowerCase())
-        .then(res => {
-          console.log("Check Existing: " + res);
-          if (res.data !== "") {
-            setSubmissionMessage(submissionMessage => ("Looks like an account already exists with this e-mail. Try logging in."));
-          } else {
-            API.setEmailVerificationToken(email)
-              .then(res => {
-                console.log(res.data);
-              })
-          }
+      API.checkExistingAccountEmails(email.toLowerCase()).then((res) => {
+        console.log("Check Existing: " + res);
+        if (res.data !== "") {
+          setSubmissionMessage(
+            (submissionMessage) =>
+              "Looks like an account already exists with this e-mail. Try logging in."
+          );
+        } else {
+          API.setEmailVerificationToken(email).then((res) => {
+            console.log(res.data);
+          });
         }
-        );
+      });
     } else {
-      setSubmissionMessage(submissionMessage => "Please enter an email address")
+      setSubmissionMessage(
+        (submissionMessage) => "Please enter an email address"
+      );
     }
-  }
+  };
 
   const createNewAccount = () => {
-
     let currentAccountInfo = {
       email: email,
       phone: phone,
@@ -102,98 +119,128 @@ const Home = () => {
       lastname: lastname,
       password: sha256(password),
       sessionAccessToken: null,
-      passwordResetToken: null
-    }
+      passwordResetToken: null,
+    };
 
-    if (firstname !== "" && lastname !== "" && email !== "" && password !== "" && emailVerificationToken !== "" && confirmPassword !== "" && password === confirmPassword) {
-      setSubmissionMessage(submissionMessage => "");
+    if (
+      firstname !== "" &&
+      lastname !== "" &&
+      email !== "" &&
+      password !== "" &&
+      emailVerificationToken !== "" &&
+      confirmPassword !== "" &&
+      password === confirmPassword
+    ) {
+      setSubmissionMessage((submissionMessage) => "");
       API.checkEmailVerificationToken(email, emailVerificationToken).then(
-        res => {
+        (res) => {
           if (res.data !== "") {
-            console.log(res.data)
-            API.checkExistingAccountEmails(currentAccountInfo.email)
-              .then(res => {
+            console.log(res.data);
+            API.checkExistingAccountEmails(currentAccountInfo.email).then(
+              (res) => {
                 console.log("Matching Emails at Creation??? -> " + res.data);
                 if (res.data === "") {
-                  API.createAccount(currentAccountInfo).then(res => {
-                    API.deleteEmailVerificationToken(email).then(res =>
-                      window.location.href = "/"
-                    )
+                  API.createAccount(currentAccountInfo).then((res) => {
+                    API.deleteEmailVerificationToken(email).then(
+                      (res) => (window.location.href = "/")
+                    );
                   });
                 } else {
-                  setSubmissionMessage(submissionMessage => ("Sorry... an account already exists for this email."));
+                  setSubmissionMessage(
+                    (submissionMessage) =>
+                      "Sorry... an account already exists for this email."
+                  );
                 }
               }
-              );
+            );
           } else {
-            setSubmissionMessage(submissionMessage => "Hmm... reset code doesn't appear correct for email. Please make sure you've properly entered the email and reset code.")
+            setSubmissionMessage(
+              (submissionMessage) =>
+                "Hmm... reset code doesn't appear correct for email. Please make sure you've properly entered the email and reset code."
+            );
           }
-        });
-
+        }
+      );
     } else if (password !== confirmPassword) {
-      setSubmissionMessage(submissionMessage => ("Password and confirm password fields don't match..."));
+      setSubmissionMessage(
+        (submissionMessage) =>
+          "Password and confirm password fields don't match..."
+      );
+    } else {
+      setSubmissionMessage((submissionMessage) => "Not enough info entered...");
     }
-    else {
-      setSubmissionMessage(submissionMessage => ("Not enough info entered..."));
-    }
-  }
+  };
   //END: User Account Creation Functions
 
   const findPortfolio = (user) => {
-    API.findPortfolio(user).then(res => { console.log(res.data); setPortfolio(portfolio => res.data.portfolio) });
+    API.findPortfolio(user).then((res) => {
+      setPortfolio((portfolio) => res.data.portfolio);
+    });
   };
 
   const updatePortfolio = (symbol, userID) => {
-    let newStatus = document.getElementById(symbol + "PortfolioStatusInput").value;
+    let newStatus = document.getElementById(
+      symbol + "PortfolioStatusInput"
+    ).value;
     let tempPortfolio = portfolio;
-    let symbolIndex = portfolio.map(object => object.symbol).indexOf(symbol);
+    let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
     } else {
       tempPortfolio.push({
         symbol: symbol,
-        status: newStatus
-      })
+        status: newStatus,
+      });
     }
-    API.updatePortfolio(userID, tempPortfolio).then(res => console.log(res.data, findPortfolio(userID)))
-  }
+    API.updatePortfolio(userID, tempPortfolio).then((res) => {
+      console.log(res.data);
+      console.log(userID);
+      findPortfolio(userID);
+    });
+  };
 
   //START: Login functions
 
   const renderAccountName = () => {
-    setUserID(userID => getCookie("vs_id"));
-    API.findUserName(getCookie("vs_id")).then(
-      (res) => {
-        setFirstname(firstname => res.data.firstname);
-        setLastname(lastname => res.data.lastname);
-        findPortfolio(getCookie("vs_id"));
-      }
-    );
+    setUserID((userID) => getCookie("vs_id"));
+    API.findUserName(getCookie("vs_id")).then((res) => {
+      setFirstname((firstname) => res.data.firstname);
+      setLastname((lastname) => res.data.lastname);
+      findPortfolio(getCookie("vs_id"));
+    });
   };
 
   const login = () => {
-
     let cookieExpiryDate = moment().add("60", "minutes").format();
 
     if (loginEmail && loginPassword) {
-      API.login(loginEmail, sha256(loginPassword)).then(
-        res => {
-          if (res.data) {
-            setSubmissionMessage(submissionMessage => "");
-            document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-            document.cookie = "vs_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-            setUserID(userID => res.data._id);
-            document.location = "/"
-            renderAccountName();
-          } else {
-            setSubmissionMessage(submissionMessage => "Hmm... this is incorrect. Enter your username and password again.");
-          }
+      API.login(loginEmail, sha256(loginPassword)).then((res) => {
+        if (res.data) {
+          setSubmissionMessage((submissionMessage) => "");
+          document.cookie =
+            "auth_expiry=" +
+            cookieExpiryDate +
+            "; expires=" +
+            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+          document.cookie =
+            "vs_id=" +
+            res.data._id +
+            "; expires=" +
+            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+          setUserID((userID) => res.data._id);
+          document.location = "/";
+          renderAccountName();
+        } else {
+          setSubmissionMessage(
+            (submissionMessage) =>
+              "Hmm... this is incorrect. Enter your username and password again."
+          );
         }
-      )
+      });
     } else {
-      setSubmissionMessage(submissionMessage => "Please complete all fields");
+      setSubmissionMessage((submissionMessage) => "Please complete all fields");
     }
-  }
+  };
 
   //END: Login functions
 
@@ -206,40 +253,88 @@ const Home = () => {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">Value Search</a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <a className="navbar-brand" href="#">
+            Value Search
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mt-auto">
                 <form className="d-flex pt-1" role="search">
-                  <input id="searchSymbol" aria-describedby="searchSymbol" className="form-control form-control-sm mr-sm-2" type="text" placeholder="Ticker Symbol" defaultValue={""} onChange={setSearchSymbol} aria-label="Search" />
-                  <button type="button" className="btn btn-sm btn-outline-primary my-2 my-sm-0" onClick={findSingleStock}>Search</button>
+                  <input
+                    id="searchSymbol"
+                    aria-describedby="searchSymbol"
+                    className="form-control form-control-sm mr-sm-2"
+                    type="text"
+                    placeholder="Ticker Symbol"
+                    defaultValue={""}
+                    onChange={setSearchSymbol}
+                    aria-label="Search"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary my-2 my-sm-0"
+                    onClick={findSingleStock}
+                  >
+                    Search
+                  </button>
                 </form>
               </li>
             </ul>
             <ul className="navbar-nav ml-auto">
               <li className="nav-item mt-auto">
                 <form className="d-flex pt-1" role="search">
-                  {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ?
-                    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                  {getCookie("vs_id") !== "" &&
+                  getCookie("vs_id") !== undefined ? (
+                    <div
+                      class="collapse navbar-collapse"
+                      id="navbarNavDarkDropdown"
+                    >
                       <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
                             {firstname + " " + lastname}
                           </a>
                           <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end text-center">
-                            <li><button type="button" className="btn btn-sm btn-outline-danger" onClick={logout}>Logout</button></li>
+                            <li>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={logout}
+                              >
+                                Logout
+                              </button>
+                            </li>
                           </ul>
                         </li>
                       </ul>
                     </div>
-                    :
-                    <button type="button" className="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signInModal">
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-outline-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signInModal"
+                    >
                       Sign In
                     </button>
-                  }
+                  )}
                 </form>
               </li>
             </ul>
@@ -247,26 +342,66 @@ const Home = () => {
         </div>
       </nav>
       <div className="container text-center">
-        <div className="modal fade" id="signInModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div
+          className="modal fade"
+          id="signInModal"
+          tabIndex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                    <input type="email" className="form-control form-control-sm" id="exampleInputEmail1" aria-describedby="emailHelp" onChange={setLoginEmail} />
-                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                    <label htmlFor="exampleInputEmail1" className="form-label">
+                      Email address
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control form-control-sm"
+                      id="exampleInputEmail1"
+                      aria-describedby="emailHelp"
+                      onChange={setLoginEmail}
+                    />
+                    <div id="emailHelp" className="form-text">
+                      We'll never share your email with anyone else.
+                    </div>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                    <input type="password" className="form-control form-control-sm" id="exampleInputPassword1" onChange={setLoginPassword} />
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control form-control-sm"
+                      id="exampleInputPassword1"
+                      onChange={setLoginPassword}
+                    />
                   </div>
-                  <button type="button" className="btn btn-sm btn-primary" onClick={login}>Sign In</button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-primary"
+                    onClick={login}
+                  >
+                    Sign In
+                  </button>
                   <div className="row mt-2">
-                    <a className="link-primary" href="./create-account-request" data-bs-toggle="modal">Create Account</a>
+                    <a
+                      className="link-primary"
+                      href="./create-account-request"
+                      data-bs-toggle="modal"
+                    >
+                      Create Account
+                    </a>
                   </div>
                   <div className="row">
-                    <a className="link-primary" href="./reset-password-request">Reset Password</a>
+                    <a className="link-primary" href="./reset-password-request">
+                      Reset Password
+                    </a>
                   </div>
                 </form>
               </div>
@@ -286,16 +421,14 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                     : () => {
-                      setAdvancedOptionsOpen(
-                        (advancedOptionsOpen) => false
-                      );
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                      }
                 }
               >
-                Value Search Parameters {" "}
+                Value Search Parameters{" "}
                 {advancedOptionsOpen === true ? (
                   <img
                     className="text-icon"
@@ -470,9 +603,7 @@ const Home = () => {
                               }}
                               defaultValue="all"
                             >
-                              <option value="all">
-                                All
-                              </option>
+                              <option value="all">All</option>
                               <option value="small">Small Cap</option>
                               <option value="mid">Mid Cap</option>
                               <option value="large">Large</option>
@@ -506,9 +637,7 @@ const Home = () => {
                               <option value="cef">Closed Ended Fund</option>
                               <option value="ps">Preferred Stock</option>
                               <option value="ut">Unit</option>
-                              <option value="struct">
-                                Structured Product
-                              </option>
+                              <option value="struct">Structured Product</option>
                             </select>
                           </div>
                         </div>
@@ -551,25 +680,43 @@ const Home = () => {
             </div>
           </div>
           <div className="col-md-12">
-            {loading ?
+            {loading ? (
               <div className="row h-100">
-                <BarLoader className="my-auto mx-auto" width="100%" height="8px" color="#007bff" /> </div> : ""
-
-            }
-            {!loading ?
-              <p>{valueSearchData.length} Results Found</p> : ""
-            }
+                <BarLoader
+                  className="my-auto mx-auto"
+                  width="100%"
+                  height="8px"
+                  color="#007bff"
+                />{" "}
+              </div>
+            ) : (
+              ""
+            )}
+            {!loading ? <p>{valueSearchData.length} Results Found</p> : ""}
             <div className="row mb-1">
               <div className="col-md-12">
-                <button type="button" className="btn btn-sm btn-outline-primary" onClick={() => { renderSearchResults(); setCurrentView(currentView => "valueSearch") }}>Run Value Search</button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-primary"
+                  onClick={() => {
+                    renderSearchResults();
+                    setCurrentView((currentView) => "valueSearch");
+                  }}
+                >
+                  Run Value Search
+                </button>
               </div>
             </div>
-            {!loading ?
-              valueSearchData.map((stock, i) =>
-                <QuoteCard stock={stock} userID={userID} updatePortfolio={updatePortfolio} portfolio={portfolio} />
-              )
-              : ""
-            }
+            {!loading
+              ? valueSearchData.map((stock, i) => (
+                  <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                  />
+                ))
+              : ""}
           </div>
         </div>
       </div>

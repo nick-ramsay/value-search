@@ -3,13 +3,13 @@ import editIcon from "../../images/outline_edit_white_24dp.png";
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 
 const QuoteCard = (props) => {
-    let portfolio = props.portfolio;
+    let portfolio = props.portfolio !== undefined ? props.portfolio:[];
     let portfolioEntry = portfolio.length > 0 ? portfolio[portfolio.map(Object => Object.symbol).indexOf(props.stock.symbol)] : []
     let stock = props.stock
     let userID = props.userID;
     let updatePortfolio = props.updatePortfolio;
 
-    console.log(portfolioEntry.status)
+    console.log(portfolioEntry)
     return (
         <div className="card mb-3">
             <div className="card-body">
@@ -27,8 +27,8 @@ const QuoteCard = (props) => {
                         }
                     </div>
                     <div className="col-md-12 mt-1">
-                        {portfolioEntry.status !== "-" ?
-                            <span class="badge bg-primary"> {toTitleCase(portfolioEntry.status)}</span>
+                        {portfolioEntry !== undefined && portfolioEntry.status !== "-" ?
+                            <span class="badge bg-primary">{toTitleCase(portfolioEntry.status)}</span>
                             : ""
                         }
                     </div>
@@ -44,13 +44,13 @@ const QuoteCard = (props) => {
                                 </div>
                                 <div class="modal-body">
                                     <form>
-                                        <select id={stock.symbol + "PortfolioStatusInput"} class="form-select" defaultValue={portfolioEntry !== undefined ? portfolioEntry.status : ""} aria-label="Default select example">
-                                            <option value="-" selected={portfolioEntry.status === "-" || portfolioEntry.status === undefined}>-</option>
-                                            <option value="watch" selected={portfolioEntry.status === "watch"}>Watch</option>
-                                            <option value="own" selected={portfolioEntry.status === "own"}>Own</option>
-                                            <option value="hold" selected={portfolioEntry.status === "hold"}>Hold</option>
-                                            <option value="icebox" selected={portfolioEntry.status === "icebox"}>Icebox</option>
-                                            <option value="speculative" selected={portfolioEntry.status === "speculative"}>Speculative</option>
+                                        <select id={stock.symbol + "PortfolioStatusInput"} class="form-select" defaultValue={portfolioEntry != undefined ? portfolioEntry.status : ""} aria-label="Default select example">
+                                            <option value="-" selected={portfolioEntry === undefined || portfolioEntry.status === "-"}>-</option>
+                                            <option value="watch" selected={portfolioEntry !== undefined && portfolioEntry.status === "watch"}>Watch</option>
+                                            <option value="own" selected={portfolioEntry !== undefined && portfolioEntry.status === "own"}>Own</option>
+                                            <option value="hold" selected={portfolioEntry !== undefined && portfolioEntry.status === "hold"}>Hold</option>
+                                            <option value="icebox" selected={portfolioEntry !== undefined && portfolioEntry.status === "icebox"}>Icebox</option>
+                                            <option value="speculative" selected={portfolioEntry !== undefined && portfolioEntry.status === "speculative"}>Speculative</option>
                                         </select>
                                     </form>
                                 </div>
