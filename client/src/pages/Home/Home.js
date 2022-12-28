@@ -174,7 +174,7 @@ const Home = () => {
 
   const findPortfolio = (user) => {
     API.findPortfolio(user).then((res) => {
-      setPortfolio((portfolio) => res.data.portfolio);
+      setPortfolio(portfolio => res.data.portfolio);
     });
   };
 

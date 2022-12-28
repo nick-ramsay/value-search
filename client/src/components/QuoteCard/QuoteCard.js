@@ -64,7 +64,7 @@ const QuoteCard = (props) => {
                     {/*Start: Edit Symbol Modal*/}
                 </h5>
                 <div className="row">
-                    {stock.fundamentals.country && stock.fundamentals.country !== null ?
+                    {stock.fundamentals !== undefined && stock.fundamentals.country !== undefined && stock.fundamentals.country !== null ?
                         <div className="col-md-12">
                             <span><strong>Sector:</strong> {stock.fundamentals.sector} | <strong>Industry:</strong> {stock.fundamentals.industry} | <strong>Country:</strong> {stock.fundamentals.country}</span>
                         </div>
@@ -75,12 +75,12 @@ const QuoteCard = (props) => {
                         <p><strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}</p>
                     </div>
                     <div className="col-md-4">
-                        <p><strong>Target Price: </strong> ${Number(stock.fundamentals['Target Price']).toFixed(2)}</p>
+                        <p><strong>Target Price: </strong>{ stock.fundamentals !== undefined ? "$" + Number(stock.fundamentals['Target Price']).toFixed(2):"-"}</p>
                     </div>
                     <div className="col-md-4">
-                        {stock.fundamentals['Target Price'] >= stock.quote.latestPrice ?
+                        {stock.fundamentals !== undefined && stock.fundamentals['Target Price'] >= stock.quote.latestPrice ?
                             <p className="badge badge-success py-1 px-1">{((1 - (stock.quote.latestPrice / stock.fundamentals['Target Price'])) * 100).toFixed(2) + "% Undervalued"}</p>
-                            : <p className="badge badge-danger py-1 px-1">{(((stock.quote.latestPrice / stock.fundamentals['Target Price']) - 1) * 100).toFixed(2) + "% Overvalued"}</p>}
+                            : stock.fundamentals === undefined ? "":<p className="badge badge-danger py-1 px-1">{(((stock.quote.latestPrice / stock.fundamentals['Target Price']) - 1) * 100).toFixed(2) + "% Overvalued"}</p>}
                     </div>
                 </div>
                 <div className="progress bg-dark">
@@ -94,7 +94,7 @@ const QuoteCard = (props) => {
                         <p><strong>P/E: </strong>{stock.quote.peRatio}</p>
                     </div>
                     <div className="col-md-4">
-                        <p><strong>Profit Margin: </strong>{Number(stock.fundamentals['Profit Margin (%)']).toFixed(2)}%</p>
+                        <p><strong>Profit Margin: </strong>{stock.fundamentals !== undefined ? Number(stock.fundamentals['Profit Margin (%)']).toFixed(2):"-"}%</p>
                     </div>
                 </div>
                 <div className="row">
@@ -102,15 +102,15 @@ const QuoteCard = (props) => {
                         <p><strong>Market Cap: </strong>${(stock.quote.marketCap / 1000000000).toFixed(2)} billion</p>
                     </div>
                     <div className="col-md-4">
-                        <p><strong>Debt/Equity: </strong>{(stock.fundamentals['Debt/Eq'])} </p>
+                        <p><strong>Debt/Equity: </strong>{stock.fundamentals !== undefined ? (stock.fundamentals['Debt/Eq']):"-"} </p>
                     </div>
                     <div className="col-md-4">
-                        <p><strong>Price-to-Sales: </strong>{(stock.fundamentals['P/S'])} </p>
+                        <p><strong>Price-to-Sales: </strong>{stock.fundamentals !== undefined ? (stock.fundamentals['P/S']):"-"} </p>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-md-12">
-                        <p><strong>Price-to-Book: </strong>{(stock.fundamentals['P/B'])} </p>
+                        <p><strong>Price-to-Book: </strong>{stock.fundamentals !== undefined ? (stock.fundamentals['P/B']):"-"} </p>
                     </div>
                 </div>
             </div>

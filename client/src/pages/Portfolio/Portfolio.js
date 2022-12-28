@@ -239,7 +239,27 @@ const Portfolio = () => {
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2)
       API.syncPortfolioWithEtrade(etradeSymbols, "own").then(res => console.log(res.data))
-      console.log(etradeSymbols);
+      let tempPortfolio = portfolio;
+      for (let i = 0; i < etradeSymbols.length; i++) {
+        if (portfolio.map(object => object.symbol).indexOf(etradeSymbols[i]) === -1) {
+          tempPortfolio.push(
+            {
+              symbol: etradeSymbols[i],
+              status: "own"
+            }
+          )
+        }
+      };
+      //If symbol is in portfolio and NOT in etrade, set symbol to "watch" status
+      for (let j = 0; j < tempPortfolio.length; j++) {
+        if (etradeSymbols.indexOf(tempPortfolio[j].symbol) === -1 && (tempPortfolio[j].status === "own" || tempPortfolio[j].status === "hold" || tempPortfolio[j].status === "speculative")) {
+          console.log(tempPortfolio[j].symbol);
+          tempPortfolio[j].status = "watch"
+        }
+      };
+      API.updatePortfolio(userID, tempPortfolio).then((res) => {
+        findPortfolio(userID);
+      });
     }
   };
 
@@ -330,11 +350,11 @@ const Portfolio = () => {
               </div>
               <div className="row">
                 <div className="col-md-12 mt-2">
-                  <button type="button" class={selectedStatus === "icebox" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "icebox"); setSelectedStatus(selectedStatus => "icebox")}}>Icebox</button>
-                  <button type="button" class={selectedStatus === "watch" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "watch"); setSelectedStatus(selectedStatus => "watch")}}>Watch</button>
-                  <button type="button" class={selectedStatus === "own" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "own"); setSelectedStatus(selectedStatus => "own") }}>Own</button>
-                  <button type="button" class={selectedStatus === "hold" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "hold"); setSelectedStatus(selectedStatus => "hold") }}>Hold</button>
-                  <button type="button" class={selectedStatus === "speculative" ? "btn btn-sm btn-light ml-1 mr-1":"btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "speculative"); setSelectedStatus(selectedStatus => "speculative") }}>Speculative</button>
+                  <button type="button" class={selectedStatus === "icebox" ? "btn btn-sm btn-light ml-1 mr-1" : "btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "icebox"); setSelectedStatus(selectedStatus => "icebox") }}>Icebox</button>
+                  <button type="button" class={selectedStatus === "watch" ? "btn btn-sm btn-light ml-1 mr-1" : "btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "watch"); setSelectedStatus(selectedStatus => "watch") }}>Watch</button>
+                  <button type="button" class={selectedStatus === "own" ? "btn btn-sm btn-light ml-1 mr-1" : "btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "own"); setSelectedStatus(selectedStatus => "own") }}>Own</button>
+                  <button type="button" class={selectedStatus === "hold" ? "btn btn-sm btn-light ml-1 mr-1" : "btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "hold"); setSelectedStatus(selectedStatus => "hold") }}>Hold</button>
+                  <button type="button" class={selectedStatus === "speculative" ? "btn btn-sm btn-light ml-1 mr-1" : "btn btn-sm btn-outline-light ml-1 mr-1"} onClick={() => { findPortfolio(userID, "speculative"); setSelectedStatus(selectedStatus => "speculative") }}>Speculative</button>
                 </div>
               </div>
             </div>
