@@ -30,7 +30,6 @@ const Home = () => {
   var [investmentType, setInvestmentType] = useState("cs");
   var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
   var [currentSort, setCurrentSort] = useState("");
-  var [searchSymbol, setSearchSymbol] = useInput("");
   var [currentView, setCurrentView] = useState("valueSearch");
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
@@ -78,13 +77,16 @@ const Home = () => {
   };
 
   const findSingleStock = () => {
-    console.log("Current Symbol: " + searchSymbol);
-    if (searchSymbol !== "") {
+    let selectedSymbol = document.getElementById("searchSymbol").value;
+    if (selectedSymbol !== "") {
       setLoading((loading) => true);
-      API.findSingleStock(searchSymbol.toUpperCase()).then((res) => {
+      API.findSingleStock(selectedSymbol.toUpperCase()).then((res) => {
+        document.getElementById("searchSymbol").value = "";
         setValueSearchData((valueSearchData) => res.data);
         setLoading((loading) => false);
       });
+    } else if (selectedSymbol === "") {
+      renderSearchResults();
     }
   };
 
@@ -301,7 +303,6 @@ const Home = () => {
                     type="text"
                     placeholder="Ticker Symbol"
                     defaultValue={""}
-                    onChange={setSearchSymbol}
                     aria-label="Search"
                   />
                   <button
@@ -718,13 +719,17 @@ const Home = () => {
             {!loading ? <p>{valueSearchData.length} Results Found</p> : ""}
             <div className="row mb-1">
               <div className="col-md-12">
-                <button
-                  type="button"
-                  className="btn btn-sm btn-outline-primary m-1"
-                  onClick={() => (window.location.href = "/portfolio")}
-                >
-                  View Portfolio
-                </button>
+                {userID !== "" ? (
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary m-1"
+                    onClick={() => (window.location.href = "/portfolio")}
+                  >
+                    View Portfolio
+                  </button>
+                ) : (
+                  ""
+                )}
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-primary m-1"

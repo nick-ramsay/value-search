@@ -14,7 +14,6 @@ import QuoteCard from "../../components/QuoteCard/QuoteCard";
 const Portfolio = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
   var [userID, setUserID] = useState("");
-  var [searchSymbol, setSearchSymbol] = useInput("");
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
@@ -38,10 +37,11 @@ const Portfolio = () => {
   var [selectedStatus, setSelectedStatus] = useState("watch");
 
   const findSingleStock = () => {
-    console.log("Current Symbol: " + searchSymbol);
-    if (searchSymbol !== "") {
+    let selectedSymbol = document.getElementById("searchSymbol").value;
+    if (selectedSymbol !== "") {
       setLoading((loading) => true);
-      API.findSingleStock(searchSymbol.toUpperCase()).then((res) => {
+      API.findSingleStock(selectedSymbol.toUpperCase()).then((res) => {
+        document.getElementById("searchSymbol").value = "";
         setValueSearchData((valueSearchData) => res.data);
         setLoading((loading) => false);
       });
@@ -361,7 +361,6 @@ const Portfolio = () => {
                     type="text"
                     placeholder="Ticker Symbol"
                     defaultValue={""}
-                    onChange={setSearchSymbol}
                     aria-label="Search"
                   />
                   <button
