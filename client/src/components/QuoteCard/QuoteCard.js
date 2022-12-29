@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
+import "./style.css";
 
 const QuoteCard = (props) => {
   let portfolio = props.portfolio !== undefined ? props.portfolio : [];
   let portfolioEntry =
     portfolio.length > 0
       ? portfolio[
-          portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
-        ]
+      portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
+      ]
       : [];
   let stock = props.stock;
   let userID = props.userID;
@@ -248,8 +249,8 @@ const QuoteCard = (props) => {
         </h5>
         <div className="row">
           {stock.fundamentals !== undefined &&
-          stock.fundamentals.country !== undefined &&
-          stock.fundamentals.country !== null ? (
+            stock.fundamentals.country !== undefined &&
+            stock.fundamentals.country !== null ? (
             <div className="col-md-12">
               <span>
                 <strong>Sector:</strong> {stock.fundamentals.sector} |{" "}
@@ -277,12 +278,12 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-            stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
+              stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
                     stock.quote.latestPrice /
-                      stock.fundamentals["Target Price"]) *
+                    stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
               </p>
@@ -302,13 +303,14 @@ const QuoteCard = (props) => {
         </div>
         <div className="progress bg-dark">
           <div
+            id="52weekPricebar"
             className="progress-bar"
             role="progressbar"
             style={{
               width:
                 Math.round(
-                  (stock.quote.latestPrice / stock.quote.week52High) * 100
-                ) + "%",
+                  ((stock.quote.latestPrice - stock.quote.week52Low) / (stock.quote.week52High - stock.quote.week52Low) * 100
+                  )) + "%",
             }}
             aria-valuenow="25"
             aria-valuemin="0"
@@ -318,62 +320,74 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div className="row mt-2">
+          <div className="col-md-6">
+            <span class="badge badge-danger">
+              {"52 Week Low: $" + stock.quote.week52Low.toFixed(2)}
+            </span>
+          </div>
+          <div className="col-md-6">
+            <span class="badge bg-success">
+              {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
+            </span>
+          </div>
+        </div>
+        <div className="row mt-2">
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>Index: </strong>
               {stock.symbolData !== undefined
                 ? stock.symbolData.exchangeName
                 : "-"}
-            </p>
+            </span>
           </div>
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>P/E: </strong>
               {stock.quote.peRatio}
-            </p>
+            </span>
           </div>
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>Profit Margin: </strong>
               {stock.fundamentals !== undefined
                 ? Number(stock.fundamentals["Profit Margin (%)"]).toFixed(2)
                 : "-"}
               %
-            </p>
+            </span>
           </div>
         </div>
         <div className="row">
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>Market Cap: </strong>$
               {(stock.quote.marketCap / 1000000000).toFixed(2)} billion
-            </p>
+            </span>
           </div>
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>Debt/Equity: </strong>
               {stock.fundamentals !== undefined
                 ? stock.fundamentals["Debt/Eq"]
                 : "-"}{" "}
-            </p>
+            </span>
           </div>
           <div className="col-md-4">
-            <p>
+            <span>
               <strong>Price-to-Sales: </strong>
               {stock.fundamentals !== undefined
                 ? stock.fundamentals["P/S"]
                 : "-"}{" "}
-            </p>
+            </span>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
-            <p>
+            <span>
               <strong>Price-to-Book: </strong>
               {stock.fundamentals !== undefined
                 ? stock.fundamentals["P/B"]
                 : "-"}{" "}
-            </p>
+            </span>
           </div>
         </div>
       </div>

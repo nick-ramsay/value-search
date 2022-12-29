@@ -34,8 +34,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => {};
-  const selectedInvestmentType = (event) => {};
+  const setMarketCapSize = (event) => { };
+  const selectedInvestmentType = (event) => { };
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -275,93 +275,50 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-dark">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
-            Value Search
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
+    <div className="container">
+      <nav class="navbar navbar-dark navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Value Search</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item mt-auto">
-                <form className="d-flex pt-1" role="search">
-                  <input
-                    id="searchSymbol"
-                    aria-describedby="searchSymbol"
-                    className="form-control form-control-sm mr-sm-2"
-                    type="text"
-                    placeholder="Ticker Symbol"
-                    defaultValue={""}
-                    aria-label="Search"
-                  />
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {getCookie("vs_id") !== "" &&
+                getCookie("vs_id") !== undefined ? (
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {firstname + " " + lastname}
+                  </a>
+                  <ul class="dropdown-menu text-center bg-dark">
+                    <li>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger text-center"
+                        onClick={logout}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </li>
+              ) :
+                (
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-primary my-2 my-sm-0"
-                    onClick={findSingleStock}
+                    className="btn btn-sm btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signInModal"
                   >
-                    Search
+                    Sign In
                   </button>
-                </form>
-              </li>
+                )}
             </ul>
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item mt-auto">
-                <form className="d-flex pt-1" role="search">
-                  {getCookie("vs_id") !== "" &&
-                  getCookie("vs_id") !== undefined ? (
-                    <div
-                      class="collapse navbar-collapse"
-                      id="navbarNavDarkDropdown"
-                    >
-                      <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                          <a
-                            class="nav-link dropdown-toggle"
-                            href="#"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            {firstname + " " + lastname}
-                          </a>
-                          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end text-center">
-                            <li>
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={logout}
-                              >
-                                Logout
-                              </button>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-outline-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signInModal"
-                    >
-                      Sign In
-                    </button>
-                  )}
-                </form>
-              </li>
-            </ul>
+            <form class="d-flex" role="search">
+
+              <input id="searchSymbol" class="form-control me-2" type="search" placeholder="Ticker Symbol" defaultValue={""} aria-label="Search" />
+              <button class="btn btn-outline-primary" type="button" onClick={findSingleStock}>Search</button>
+            </form>
           </div>
         </div>
       </nav>
@@ -445,11 +402,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                    }
                     : () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                    }
                 }
               >
                 Value Search Parameters{" "}
@@ -744,13 +701,13 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    portfolio={portfolio}
-                  />
-                ))
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                />
+              ))
               : ""}
           </div>
         </div>
