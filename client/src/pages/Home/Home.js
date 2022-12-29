@@ -174,7 +174,9 @@ const Home = () => {
 
   const findPortfolio = (user) => {
     API.findPortfolio(user).then((res) => {
-      setPortfolio(portfolio => res.data.portfolio);
+      if (res.data !== null) {
+        setPortfolio((portfolio) => res.data.portfolio);
+      }
     });
   };
 
@@ -182,15 +184,36 @@ const Home = () => {
     let newStatus = document.getElementById(
       symbol + "PortfolioStatusInput"
     ).value;
+    let newComment = document.getElementById(
+      "new-comment-input-" + symbol
+    ).value;
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
+    let currentComments =
+      tempPortfolio[symbolIndex].comments !== undefined
+        ? tempPortfolio[symbolIndex].comments
+        : [];
+
+    let updatedComments = currentComments;
+    if (newComment !== "") {
+      updatedComments.unshift({ date: new Date(), comment: newComment });
+    }
+
+    console.log(currentComments);
+    console.log(updatedComments);
+    console.log(newComment);
+
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
+      tempPortfolio[symbolIndex].comments = updatedComments;
+      document.getElementById("new-comment-input-" + symbol).value = "";
     } else {
       tempPortfolio.push({
         symbol: symbol,
         status: newStatus,
+        comments: updatedComments,
       });
+      document.getElementById("new-comment-input-" + symbol).value = "";
     }
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       console.log(res.data);
@@ -253,7 +276,7 @@ const Home = () => {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand" href="/">
             Value Search
           </a>
           <button
@@ -697,7 +720,14 @@ const Home = () => {
               <div className="col-md-12">
                 <button
                   type="button"
-                  className="btn btn-sm btn-outline-primary"
+                  className="btn btn-sm btn-outline-primary m-1"
+                  onClick={() => (window.location.href = "/portfolio")}
+                >
+                  View Portfolio
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-primary m-1"
                   onClick={() => {
                     renderSearchResults();
                     setCurrentView((currentView) => "valueSearch");
