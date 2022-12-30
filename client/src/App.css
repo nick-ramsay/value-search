@@ -24,11 +24,40 @@ a:hover {
   text-decoration: none;
 }
 
-.form-control, .form-control:focus {
+.form-control, .form-control:focus, .form-select, .form-select:focus, .input-group-text {
   background-color: #202124;
   color: white;
 }
 
+.close, .close:hover {
+  color: white
+}
+
 .modal-content {
   background-color: black;
+}
+
+.modal-header {
+  border-bottom:none;
+}
+
+.modal-footer {
+  border-top:none;
+}
+
+.list-group-item {
+  background-color: #202124;
+  color: whitesmoke;
+  border-color:black;
+  text-align: left;
+}
+
+.comment-date {
+  font-size: 12px;
+  color:#007bff;
+}
+
+.comment-content {
+  font-size: 14px;
+  font-style: italic;
 }

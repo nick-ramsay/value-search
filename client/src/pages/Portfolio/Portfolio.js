@@ -335,23 +335,57 @@ const Portfolio = () => {
     <div className="container">
       <nav class="navbar navbar-dark navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Value Search</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <a class="navbar-brand" href="/">
+            Value Search
+          </a>
+          <button
+            class="navbar-toggler mb-2"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {getCookie("vs_id") !== "" &&
-                getCookie("vs_id") !== undefined ? (
+          <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+            <form class="d-flex" role="search">
+              <input
+                id="searchSymbol"
+                class="form-control form-control-sm me-2"
+                type="search"
+                placeholder="Ticker Symbol"
+                defaultValue={""}
+                aria-label="Search"
+              />
+              <button
+                class="btn btn-sm btn-outline-primary"
+                type="button"
+                onClick={findSingleStock}
+              >
+                Search
+              </button>
+            </form>
+            </ul>
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
+              {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
                     {firstname + " " + lastname}
                   </a>
                   <ul class="dropdown-menu text-center bg-dark">
                     <li>
                       <button
                         type="button"
-                        className="btn btn-sm btn-outline-danger text-center"
+                        className="btn btn-sm m-2 btn-outline-danger text-center"
                         onClick={logout}
                       >
                         Logout
@@ -359,23 +393,17 @@ const Portfolio = () => {
                     </li>
                   </ul>
                 </li>
-              ) :
-                (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#signInModal"
-                  >
-                    Sign In
-                  </button>
-                )}
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-sm m-2 btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#signInModal"
+                >
+                  Sign In
+                </button>
+              )}
             </ul>
-            <form class="d-flex" role="search">
-
-              <input id="searchSymbol" class="form-control me-2" type="search" placeholder="Ticker Symbol" defaultValue={""} aria-label="Search" />
-              <button class="btn btn-outline-primary" type="button" onClick={findSingleStock}>Search</button>
-            </form>
           </div>
         </div>
       </nav>

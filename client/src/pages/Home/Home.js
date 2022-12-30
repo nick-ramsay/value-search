@@ -34,8 +34,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
+  const setMarketCapSize = (event) => {};
+  const selectedInvestmentType = (event) => {};
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -278,23 +278,57 @@ const Home = () => {
     <div className="container">
       <nav class="navbar navbar-dark navbar-expand-lg">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/">Value Search</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <a class="navbar-brand" href="/">
+            Value Search
+          </a>
+          <button
+            class="navbar-toggler mb-2"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {getCookie("vs_id") !== "" &&
-                getCookie("vs_id") !== undefined ? (
+          <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+            <form class="d-flex" role="search">
+              <input
+                id="searchSymbol"
+                class="form-control form-control-sm me-2"
+                type="search"
+                placeholder="Ticker Symbol"
+                defaultValue={""}
+                aria-label="Search"
+              />
+              <button
+                class="btn btn-sm btn-outline-primary"
+                type="button"
+                onClick={findSingleStock}
+              >
+                Search
+              </button>
+            </form>
+            </ul>
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
+              {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
                     {firstname + " " + lastname}
                   </a>
                   <ul class="dropdown-menu text-center bg-dark">
                     <li>
                       <button
                         type="button"
-                        className="btn btn-sm btn-outline-danger text-center"
+                        className="btn btn-sm m-2 btn-outline-danger text-center"
                         onClick={logout}
                       >
                         Logout
@@ -302,23 +336,17 @@ const Home = () => {
                     </li>
                   </ul>
                 </li>
-              ) :
-                (
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#signInModal"
-                  >
-                    Sign In
-                  </button>
-                )}
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-sm m-2 btn-outline-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#signInModal"
+                >
+                  Sign In
+                </button>
+              )}
             </ul>
-            <form class="d-flex" role="search">
-
-              <input id="searchSymbol" class="form-control me-2" type="search" placeholder="Ticker Symbol" defaultValue={""} aria-label="Search" />
-              <button class="btn btn-outline-primary" type="button" onClick={findSingleStock}>Search</button>
-            </form>
           </div>
         </div>
       </nav>
@@ -402,11 +430,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                     : () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                      }
                 }
               >
                 Value Search Parameters{" "}
@@ -439,7 +467,7 @@ const Home = () => {
                             <label htmlFor="minPEInput">Min PE Ratio</label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="minPEInput"
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
@@ -453,7 +481,7 @@ const Home = () => {
                             <label htmlFor="maxPEInput">Max PE Ratio</label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="maxPEInput"
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
@@ -471,7 +499,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="minDebtEquityInput"
                               aria-describedby="minDebtEquityInput"
                               placeholder="Minimum Debt/Equity"
@@ -488,7 +516,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="maxDebtEquityInput"
                               aria-describedby="maxDebtEquityInput"
                               placeholder="Maximum Debt/Equity"
@@ -507,7 +535,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="minPriceToBookInput"
                               aria-describedby="minPriceToBookInput"
                               placeholder="Minimum Price-to-Book"
@@ -524,7 +552,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="maxPriceToBookInput"
                               aria-describedby="maxPriceToBookInput"
                               placeholder="Maximum Price-to-Book"
@@ -543,7 +571,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="minPriceSalesInput"
                               aria-describedby="minPriceSalesInput"
                               placeholder="Minimum Price-to-Sales"
@@ -560,7 +588,7 @@ const Home = () => {
                             </label>
                             <input
                               type="number"
-                              className="form-control"
+                              className="form-control form-control-sm"
                               id="maxPriceSalesInput"
                               aria-describedby="maxPriceSalesInput"
                               placeholder="Maximum Price-to-Sales"
@@ -701,13 +729,13 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                />
-              ))
+                  <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                  />
+                ))
               : ""}
           </div>
         </div>

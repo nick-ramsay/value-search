@@ -164,7 +164,7 @@ const QuoteCard = (props) => {
                       <span class="input-group-text">Comment</span>
                       <textarea
                         id={"new-comment-input-" + stock.symbol}
-                        class="form-control"
+                        class="form-control form-control-small"
                         aria-label="With textarea"
                       ></textarea>
                     </div>
@@ -173,14 +173,14 @@ const QuoteCard = (props) => {
                 <div class="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-sm btn-secondary"
                     data-bs-dismiss="modal"
                   >
                     Close
                   </button>
                   <button
                     type="button"
-                    class="btn btn-primary"
+                    class="btn btn-sm btn-primary"
                     data-bs-dismiss="modal"
                     onClick={() => updatePortfolio(stock.symbol, userID)}
                   >
@@ -224,12 +224,12 @@ const QuoteCard = (props) => {
                       {portfolioEntry !== undefined && portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
                           <li class="list-group-item">
-                            <p>{comment.comment}</p>
-                            <p>{comment.date}</p>
+                            <p className="comment-content">{'"' + comment.comment + '"'}</p>
+                            <span className="comment-date">{comment.date}</span>
                           </li>
                         ))
                       ) : (
-                        <li class="list-group-item">An item</li>
+                        <li class="list-group-item">No Comments</li>
                       )}
                     </ul>
                   </div>
@@ -237,7 +237,7 @@ const QuoteCard = (props) => {
                 <div class="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-secondary"
+                    class="btn btn-sm btn-secondary"
                     data-bs-dismiss="modal"
                   >
                     Close
