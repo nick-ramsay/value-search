@@ -16,7 +16,6 @@ const QuoteCard = (props) => {
   let userID = props.userID;
   let updatePortfolio = props.updatePortfolio;
 
-  console.log(portfolioEntry);
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -97,15 +96,6 @@ const QuoteCard = (props) => {
                       aria-label="Default select example"
                     >
                       <option
-                        value="avoid"
-                        selected={
-                          portfolioEntry !== undefined &&
-                          portfolioEntry.status === "avoid"
-                        }
-                      >
-                        Avoid
-                      </option>
-                      <option
                         value="-"
                         selected={
                           portfolioEntry === undefined ||
@@ -158,6 +148,15 @@ const QuoteCard = (props) => {
                         }
                       >
                         Speculative
+                      </option>
+                      <option
+                        value="avoid"
+                        selected={
+                          portfolioEntry !== undefined &&
+                          portfolioEntry.status === "avoid"
+                        }
+                      >
+                        Avoid
                       </option>
                     </select>
                     <div class="input-group mt-2">
@@ -301,34 +300,39 @@ const QuoteCard = (props) => {
             )}
           </div>
         </div>
-        <div className="progress bg-dark">
-          <div
-            id="52weekPricebar"
-            className="progress-bar"
-            role="progressbar"
-            style={{
-              width:
-                Math.round(
-                  ((stock.quote.latestPrice - stock.quote.week52Low) / (stock.quote.week52High - stock.quote.week52Low) * 100
-                  )) + "%",
-            }}
-            aria-valuenow="25"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          >
-            {"$" + stock.quote.latestPrice}
+        <div className="accordion">
+          <div id={"fiftyTwoWeekPricebar" + stock.symbol} className="progress bg-dark collapsed"
+            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol} data-bs-toggle="collapse" aria-expanded="false"
+            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol}>
+            <div
+              className="progress-bar"
+              role="progressbar"
+              style={{
+                width:
+                  Math.round(
+                    ((stock.quote.latestPrice - stock.quote.week52Low) / (stock.quote.week52High - stock.quote.week52Low) * 100
+                    )) + "%",
+              }}
+              aria-valuenow="25"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              {"$" + stock.quote.latestPrice.toFixed(2)}
+            </div>
           </div>
         </div>
-        <div className="row mt-2">
-          <div className="col-md-6">
-            <span class="badge badge-danger">
-              {"52 Week Low: $" + stock.quote.week52Low.toFixed(2)}
-            </span>
-          </div>
-          <div className="col-md-6">
-            <span class="badge bg-success">
-              {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
-            </span>
+        <div id={"fiftyTwoWeekPriceValues" + stock.symbol} class="accordion-collapse collapse" aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol} data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol}>
+          <div className="row">
+            <div className="col-md-6">
+              <span class="badge badge-danger">
+                {"52 Week Low: $" + stock.quote.week52Low.toFixed(2)}
+              </span>
+            </div>
+            <div className="col-md-6">
+              <span class="badge bg-success">
+                {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
+              </span>
+            </div>
           </div>
         </div>
         <div className="row mt-2">
@@ -342,8 +346,10 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             <span>
-              <strong>P/E: </strong>
-              {stock.quote.peRatio}
+              <strong>Forward P/E: </strong>
+              {stock.fundamentals !== undefined
+                ? Number(stock.fundamentals["Forward P/E"]).toFixed(2)
+                : "-"}
             </span>
           </div>
           <div className="col-md-4">
@@ -381,7 +387,16 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-4">
+            <span>
+              <strong>Current P/E: </strong>
+              {stock.quote.peRatio}
+            </span>
+          </div>
+          <div className="col-md-4">
+
+          </div>
+          <div className="col-md-4">
             <span>
               <strong>Price-to-Book: </strong>
               {stock.fundamentals !== undefined

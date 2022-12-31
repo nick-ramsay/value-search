@@ -34,8 +34,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => {};
-  const selectedInvestmentType = (event) => {};
+  const setMarketCapSize = (event) => { };
+  const selectedInvestmentType = (event) => { };
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -192,18 +192,21 @@ const Home = () => {
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
-      tempPortfolio[symbolIndex].comments !== undefined
+      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
+    let currentTags =
+      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].tags !== undefined
+        ? tempPortfolio[symbolIndex].tags
+        : [];
+
     let updatedComments = currentComments;
+    let updatedTags = updatedTags;
+
     if (newComment !== "") {
       updatedComments.unshift({ date: new Date(), comment: newComment });
     }
-
-    console.log(currentComments);
-    console.log(updatedComments);
-    console.log(newComment);
 
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
@@ -214,6 +217,7 @@ const Home = () => {
         symbol: symbol,
         status: newStatus,
         comments: updatedComments,
+        tags: updatedTags
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
@@ -293,24 +297,24 @@ const Home = () => {
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-            <form class="d-flex" role="search">
-              <input
-                id="searchSymbol"
-                class="form-control form-control-sm me-2"
-                type="search"
-                placeholder="Ticker Symbol"
-                defaultValue={""}
-                aria-label="Search"
-              />
-              <button
-                class="btn btn-sm btn-outline-primary"
-                type="button"
-                onClick={findSingleStock}
-              >
-                Search
-              </button>
-            </form>
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+              <form class="d-flex" role="search">
+                <input
+                  id="searchSymbol"
+                  class="form-control form-control-sm me-2"
+                  type="search"
+                  placeholder="Ticker Symbol"
+                  defaultValue={""}
+                  aria-label="Search"
+                />
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  type="button"
+                  onClick={findSingleStock}
+                >
+                  Search
+                </button>
+              </form>
             </ul>
             <ul class="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
               {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
@@ -430,11 +434,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                    }
                     : () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                    }
                 }
               >
                 Value Search Parameters{" "}
@@ -464,7 +468,7 @@ const Home = () => {
                       <div className="row pr-3 pl-3">
                         <div className="col-md-6 mt-auto mb-auto">
                           <div className="form-group">
-                            <label htmlFor="minPEInput">Min PE Ratio</label>
+                            <label htmlFor="minPEInput">Min Forward PE Ratio</label>
                             <input
                               type="number"
                               className="form-control form-control-sm"
@@ -478,7 +482,7 @@ const Home = () => {
                         </div>
                         <div className="col-md-6 mt-auto mb-auto">
                           <div className="form-group">
-                            <label htmlFor="maxPEInput">Max PE Ratio</label>
+                            <label htmlFor="maxPEInput">Max Forward PE Ratio</label>
                             <input
                               type="number"
                               className="form-control form-control-sm"
@@ -729,13 +733,13 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    portfolio={portfolio}
-                  />
-                ))
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                />
+              ))
               : ""}
           </div>
         </div>

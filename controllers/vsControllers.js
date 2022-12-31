@@ -213,7 +213,7 @@ module.exports = {
     //END: User Account Controllers...
     findSearchResults: (req, res) => {
         db.StockData.find({
-            "quote.peRatio": { $gte: Number(req.body.minPE), $lte: Number(req.body.maxPE) },
+            "fundamentals.Forward P/E": { $gte: Number(req.body.minPE), $lte: Number(req.body.maxPE) },
             "fundamentals.Debt/Eq": { $gte: Number(req.body.minDebtEquity), $lte: Number(req.body.maxDebtEquity) },
             "fundamentals.P/S": { $gte: Number(req.body.minPriceSales), $lte: Number(req.body.maxPriceSales) },
             "fundamentals.P/B": { $gte: Number(req.body.minPriceToBook), $lte: Number(req.body.maxPriceToBook) }
