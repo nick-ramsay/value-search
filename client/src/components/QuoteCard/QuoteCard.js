@@ -394,14 +394,33 @@ const QuoteCard = (props) => {
             </span>
           </div>
           <div className="col-md-4">
-
-          </div>
-          <div className="col-md-4">
             <span>
               <strong>Price-to-Book: </strong>
               {stock.fundamentals !== undefined
                 ? stock.fundamentals["P/B"]
                 : "-"}{" "}
+            </span>
+          </div>
+          <div className="col-md-4">
+            <span>
+              <strong>200 Day Moving Average: </strong>
+              <span style={{color: stock.iexStats !== undefined && stock.iexStats.day200MovingAvg < stock.quote.latestPrice ? "red":"green"}}>
+              {stock.iexStats !== undefined
+                ? "$" + stock.iexStats.day200MovingAvg.toFixed(2)
+                : "-"}{" "}
+                </span>
+            </span>
+          </div>
+        </div>
+        <div className="row">
+        <div className="col-md-4">
+            <span>
+              <strong>50 Day Moving Average: </strong>
+              <span style={{color: stock.iexStats !== undefined && stock.iexStats.day50MovingAvg < stock.quote.latestPrice ? "red":"green"}}>
+              {stock.iexStats !== undefined
+                ? "$" + stock.iexStats.day50MovingAvg.toFixed(2)
+                : "-"}{" "}
+                </span>
             </span>
           </div>
         </div>
