@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
+import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png"
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
 
@@ -57,6 +58,13 @@ const QuoteCard = (props) => {
               <span class="badge bg-primary">
                 {toTitleCase(portfolioEntry.status)}
               </span>
+            ) : (
+              ""
+            )}
+            {portfolioEntry !== undefined && portfolioEntry.status !== "-" && portfolioEntry.queuedForPurchase === true ? (
+            
+                <img className="text-icon ml-2" src={shoppingBasketIcon} />
+            
             ) : (
               ""
             )}

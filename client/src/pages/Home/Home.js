@@ -198,7 +198,7 @@ const Home = () => {
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
-      tempPortfolio[symbolIndex].comments !== undefined
+    tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
