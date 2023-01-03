@@ -9,8 +9,8 @@ const QuoteCard = (props) => {
   let portfolioEntry =
     portfolio.length > 0
       ? portfolio[
-      portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
-      ]
+          portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
+        ]
       : [];
   let stock = props.stock;
   let userID = props.userID;
@@ -167,6 +167,23 @@ const QuoteCard = (props) => {
                         aria-label="With textarea"
                       ></textarea>
                     </div>
+                    <div class="input-group mt-2">
+                      <div class="form-check">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          defaultChecked={portfolioEntry !== undefined ? portfolioEntry.queuedForPurchase:"false"}
+                          id={"queued-for-purchase-" + stock.symbol}
+                        />
+                        <label
+                          class="form-check-label"
+                          style={{ fontSize: 14 }}
+                          for={"queued-for-purchase-" + stock.symbol}
+                        >
+                          Queued for Purchase
+                        </label>
+                      </div>
+                    </div>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -220,10 +237,13 @@ const QuoteCard = (props) => {
                 <div class="modal-body">
                   <div class="card">
                     <ul class="list-group list-group-flush">
-                      {portfolioEntry !== undefined && portfolioEntry.comments !== undefined ? (
+                      {portfolioEntry !== undefined &&
+                      portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
                           <li class="list-group-item">
-                            <p className="comment-content">{'"' + comment.comment + '"'}</p>
+                            <p className="comment-content">
+                              {'"' + comment.comment + '"'}
+                            </p>
                             <span className="comment-date">{comment.date}</span>
                           </li>
                         ))
@@ -248,8 +268,8 @@ const QuoteCard = (props) => {
         </h5>
         <div className="row">
           {stock.fundamentals !== undefined &&
-            stock.fundamentals.country !== undefined &&
-            stock.fundamentals.country !== null ? (
+          stock.fundamentals.country !== undefined &&
+          stock.fundamentals.country !== null ? (
             <div className="col-md-12">
               <span>
                 <strong>Sector:</strong> {stock.fundamentals.sector} |{" "}
@@ -277,12 +297,12 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-              stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
+            stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
                     stock.quote.latestPrice /
-                    stock.fundamentals["Target Price"]) *
+                      stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
               </p>
@@ -301,17 +321,24 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div className="accordion">
-          <div id={"fiftyTwoWeekPricebar" + stock.symbol} className="progress bg-dark collapsed"
-            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol} data-bs-toggle="collapse" aria-expanded="false"
-            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol}>
+          <div
+            id={"fiftyTwoWeekPricebar" + stock.symbol}
+            className="progress bg-dark collapsed"
+            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol}
+            data-bs-toggle="collapse"
+            aria-expanded="false"
+            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol}
+          >
             <div
               className="progress-bar"
               role="progressbar"
               style={{
                 width:
                   Math.round(
-                    ((stock.quote.latestPrice - stock.quote.week52Low) / (stock.quote.week52High - stock.quote.week52Low) * 100
-                    )) + "%",
+                    ((stock.quote.latestPrice - stock.quote.week52Low) /
+                      (stock.quote.week52High - stock.quote.week52Low)) *
+                      100
+                  ) + "%",
               }}
               aria-valuenow="25"
               aria-valuemin="0"
@@ -321,7 +348,12 @@ const QuoteCard = (props) => {
             </div>
           </div>
         </div>
-        <div id={"fiftyTwoWeekPriceValues" + stock.symbol} class="accordion-collapse collapse" aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol} data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol}>
+        <div
+          id={"fiftyTwoWeekPriceValues" + stock.symbol}
+          class="accordion-collapse collapse"
+          aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol}
+          data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol}
+        >
           <div className="row">
             <div className="col-md-6">
               <span class="badge badge-danger">
@@ -404,23 +436,39 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>200 Day Moving Average: </strong>
-              <span style={{color: stock.iexStats !== undefined && stock.iexStats.day200MovingAvg < stock.quote.latestPrice ? "red":"green"}}>
-              {stock.iexStats !== undefined
-                ? "$" + stock.iexStats.day200MovingAvg.toFixed(2)
-                : "-"}{" "}
-                </span>
+              <span
+                style={{
+                  color:
+                    stock.iexStats !== undefined &&
+                    stock.iexStats.day200MovingAvg < stock.quote.latestPrice
+                      ? "red"
+                      : "green",
+                }}
+              >
+                {stock.iexStats !== undefined
+                  ? "$" + stock.iexStats.day200MovingAvg.toFixed(2)
+                  : "-"}{" "}
+              </span>
             </span>
           </div>
         </div>
         <div className="row">
-        <div className="col-md-4">
+          <div className="col-md-4">
             <span>
               <strong>50 Day Moving Average: </strong>
-              <span style={{color: stock.iexStats !== undefined && stock.iexStats.day50MovingAvg < stock.quote.latestPrice ? "red":"green"}}>
-              {stock.iexStats !== undefined
-                ? "$" + stock.iexStats.day50MovingAvg.toFixed(2)
-                : "-"}{" "}
-                </span>
+              <span
+                style={{
+                  color:
+                    stock.iexStats !== undefined &&
+                    stock.iexStats.day50MovingAvg < stock.quote.latestPrice
+                      ? "red"
+                      : "green",
+                }}
+              >
+                {stock.iexStats !== undefined
+                  ? "$" + stock.iexStats.day50MovingAvg.toFixed(2)
+                  : "-"}{" "}
+              </span>
             </span>
           </div>
         </div>

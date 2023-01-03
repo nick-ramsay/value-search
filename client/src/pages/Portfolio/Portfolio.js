@@ -154,9 +154,15 @@ const Portfolio = () => {
     let newStatus = document.getElementById(
       symbol + "PortfolioStatusInput"
     ).value;
+
     let newComment = document.getElementById(
       "new-comment-input-" + symbol
     ).value;
+
+    let newQueuedForPurchase = document.getElementById(
+      "queued-for-purchase-" + symbol
+    ).checked;
+    
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
@@ -169,25 +175,21 @@ const Portfolio = () => {
       updatedComments.unshift({ date: new Date(), comment: newComment });
     }
 
-    console.log(currentComments);
-    console.log(updatedComments);
-    console.log(newComment);
-
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
       tempPortfolio[symbolIndex].comments = updatedComments;
+      tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
       document.getElementById("new-comment-input-" + symbol).value = "";
     } else {
       tempPortfolio.push({
         symbol: symbol,
         status: newStatus,
         comments: updatedComments,
+        queuedForPurchase: newQueuedForPurchase
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      console.log(res.data);
-      console.log(userID);
       findPortfolio(userID, selectedStatus);
     });
   };

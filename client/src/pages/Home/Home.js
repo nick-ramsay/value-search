@@ -34,8 +34,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
+  const setMarketCapSize = (event) => {};
+  const selectedInvestmentType = (event) => {};
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -186,24 +186,23 @@ const Home = () => {
     let newStatus = document.getElementById(
       symbol + "PortfolioStatusInput"
     ).value;
+
     let newComment = document.getElementById(
       "new-comment-input-" + symbol
     ).value;
+
+    let newQueuedForPurchase = document.getElementById(
+      "queued-for-purchase-" + symbol
+    ).checked;
+
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
-      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
+      tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
-    let currentTags =
-      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].tags !== undefined
-        ? tempPortfolio[symbolIndex].tags
-        : [];
-
     let updatedComments = currentComments;
-    let updatedTags = updatedTags;
-
     if (newComment !== "") {
       updatedComments.unshift({ date: new Date(), comment: newComment });
     }
@@ -211,19 +210,18 @@ const Home = () => {
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
       tempPortfolio[symbolIndex].comments = updatedComments;
+      tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
       document.getElementById("new-comment-input-" + symbol).value = "";
     } else {
       tempPortfolio.push({
         symbol: symbol,
         status: newStatus,
         comments: updatedComments,
-        tags: updatedTags
+        queuedForPurchase: newQueuedForPurchase,
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      console.log(res.data);
-      console.log(userID);
       findPortfolio(userID);
     });
   };
@@ -434,11 +432,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                     : () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                      }
                 }
               >
                 Value Search Parameters{" "}
@@ -468,7 +466,9 @@ const Home = () => {
                       <div className="row pr-3 pl-3">
                         <div className="col-md-6 mt-auto mb-auto">
                           <div className="form-group">
-                            <label htmlFor="minPEInput">Min Forward PE Ratio</label>
+                            <label htmlFor="minPEInput">
+                              Min Forward PE Ratio
+                            </label>
                             <input
                               type="number"
                               className="form-control form-control-sm"
@@ -482,7 +482,9 @@ const Home = () => {
                         </div>
                         <div className="col-md-6 mt-auto mb-auto">
                           <div className="form-group">
-                            <label htmlFor="maxPEInput">Max Forward PE Ratio</label>
+                            <label htmlFor="maxPEInput">
+                              Max Forward PE Ratio
+                            </label>
                             <input
                               type="number"
                               className="form-control form-control-sm"
@@ -733,13 +735,13 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                />
-              ))
+                  <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                  />
+                ))
               : ""}
           </div>
         </div>
