@@ -1,3 +1,9 @@
+const tracer = require('dd-trace').init({
+  service: "value-search-server",
+  debug: true,
+  logInjection: true
+});
+
 const express = require("express");
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
