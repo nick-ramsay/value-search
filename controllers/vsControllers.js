@@ -251,6 +251,11 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
     },
+    addLabel: (req, res) => {
+        db.Portfolio.updateOne({ "account_id": req.body.account_id }, { "labels": req.body.labels }, { "upsert": true })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
     findPortfolio: (req, res) => {
         console.log(req.body);
         db.Portfolio.findOne({ "account_id": req.body.account_id })

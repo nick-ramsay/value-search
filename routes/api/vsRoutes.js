@@ -74,6 +74,10 @@ router
   .post(vsControllers.updatePortfolio);
 
 router
+  .route("/add-label")
+  .post(vsControllers.addLabel);
+
+router
   .route("/find-portfolio-results")
   .post(vsControllers.findPortfolioResults);
 

@@ -10,12 +10,13 @@ const QuoteCard = (props) => {
   let portfolioEntry =
     portfolio.length > 0
       ? portfolio[
-          portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
-        ]
+      portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
+      ]
       : [];
   let stock = props.stock;
   let userID = props.userID;
   let updatePortfolio = props.updatePortfolio;
+  let addLabel = props.addLabel;
 
   return (
     <div className="card mb-3">
@@ -62,9 +63,9 @@ const QuoteCard = (props) => {
               ""
             )}
             {portfolioEntry !== undefined && portfolioEntry.status !== "-" && portfolioEntry.queuedForPurchase === true ? (
-            
-                <img className="text-icon ml-2" src={shoppingBasketIcon} />
-            
+
+              <img className="text-icon ml-2" src={shoppingBasketIcon} />
+
             ) : (
               ""
             )}
@@ -175,12 +176,30 @@ const QuoteCard = (props) => {
                         aria-label="With textarea"
                       ></textarea>
                     </div>
+                    <form class="row mt-2">
+                      <div class="col-md-9">
+                        <select id={stock.symbol + "newSelectedLabel"} class="form-select" aria-label="Default select example">
+                          <option value="-" selected>Select New Label</option>
+                          <option value="KPP">KPP</option>
+                          <option value="Motley Fool">Motley Fool</option>
+                          <option value="Value Search">Value Search</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <button type="button" className="btn btn-primary mb-3" onClick={() => { addLabel(stock.symbol, document.getElementById(stock.symbol + "newSelectedLabel").value, portfolioEntry.labels) }}>Add +</button>
+                      </div>
+                    </form>
+                    <div class="input-group mt-2">
+                      {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
+                        <div className="badge badge-primary m-1"><span>{label}</span><span className="remove-label m-1"> - </span></div>
+                      )) : ""}
+                    </div>
                     <div class="input-group mt-2">
                       <div class="form-check">
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          defaultChecked={portfolioEntry !== undefined ? portfolioEntry.queuedForPurchase:"false"}
+                          defaultChecked={portfolioEntry !== undefined ? portfolioEntry.queuedForPurchase : "false"}
                           id={"queued-for-purchase-" + stock.symbol}
                         />
                         <label
@@ -246,7 +265,7 @@ const QuoteCard = (props) => {
                   <div class="card">
                     <ul class="list-group list-group-flush">
                       {portfolioEntry !== undefined &&
-                      portfolioEntry.comments !== undefined ? (
+                        portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
                           <li class="list-group-item">
                             <p className="comment-content">
@@ -276,8 +295,8 @@ const QuoteCard = (props) => {
         </h5>
         <div className="row">
           {stock.fundamentals !== undefined &&
-          stock.fundamentals.country !== undefined &&
-          stock.fundamentals.country !== null ? (
+            stock.fundamentals.country !== undefined &&
+            stock.fundamentals.country !== null ? (
             <div className="col-md-12">
               <span>
                 <strong>Sector:</strong> {stock.fundamentals.sector} |{" "}
@@ -305,12 +324,12 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-            stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
+              stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
                     stock.quote.latestPrice /
-                      stock.fundamentals["Target Price"]) *
+                    stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
               </p>
@@ -345,7 +364,7 @@ const QuoteCard = (props) => {
                   Math.round(
                     ((stock.quote.latestPrice - stock.quote.week52Low) /
                       (stock.quote.week52High - stock.quote.week52Low)) *
-                      100
+                    100
                   ) + "%",
               }}
               aria-valuenow="25"
@@ -448,7 +467,7 @@ const QuoteCard = (props) => {
                 style={{
                   color:
                     stock.iexStats !== undefined &&
-                    stock.iexStats.day200MovingAvg < stock.quote.latestPrice
+                      stock.iexStats.day200MovingAvg < stock.quote.latestPrice
                       ? "red"
                       : "green",
                 }}
@@ -468,7 +487,7 @@ const QuoteCard = (props) => {
                 style={{
                   color:
                     stock.iexStats !== undefined &&
-                    stock.iexStats.day50MovingAvg < stock.quote.latestPrice
+                      stock.iexStats.day50MovingAvg < stock.quote.latestPrice
                       ? "red"
                       : "green",
                 }}

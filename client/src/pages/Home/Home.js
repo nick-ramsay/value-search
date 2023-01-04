@@ -34,8 +34,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => {};
-  const selectedInvestmentType = (event) => {};
+  const setMarketCapSize = (event) => { };
+  const selectedInvestmentType = (event) => { };
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -198,7 +198,7 @@ const Home = () => {
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
-    tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
+      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
@@ -224,6 +224,23 @@ const Home = () => {
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       findPortfolio(userID);
     });
+  };
+
+  const addLabel = (symbol, newLabel, currentLabels) => {
+    let portfolioIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
+    let tempPortfolio = portfolio;
+    let existingLabels = currentLabels !== undefined ? currentLabels : [];
+
+    if (newLabel !== "-" && existingLabels.indexOf(newLabel) === -1) {
+      existingLabels.push(newLabel);
+    }
+
+    tempPortfolio[portfolioIndex].labels = existingLabels;
+
+    API.updatePortfolio(userID, tempPortfolio).then((res) => {
+      findPortfolio(userID);
+    });
+
   };
 
   //START: Login functions
@@ -432,11 +449,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                    }
                     : () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                    }
                 }
               >
                 Value Search Parameters{" "}
@@ -735,13 +752,14 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    portfolio={portfolio}
-                  />
-                ))
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                  addLabel={addLabel}
+                />
+              ))
               : ""}
           </div>
         </div>

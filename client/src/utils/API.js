@@ -62,6 +62,9 @@ export default {
     updatePortfolio: (account_id, portfolio) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/update-portfolio", data: { account_id: account_id, portfolio: portfolio } });
     },
+    addLabel: (account_id, labels) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/add-label", data: { account_id: account_id, labels: labels } });
+    },
     findPortfolio: (account_id) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio", data: { account_id: account_id } });
     },
