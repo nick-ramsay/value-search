@@ -174,7 +174,7 @@ const Home = () => {
   };
   //END: User Account Creation Functions
 
-  const findPortfolio = (user) => {
+  const findPortfolio = (user, selectedStatus) => {
     API.findPortfolio(user).then((res) => {
       if (res.data !== null) {
         setPortfolio((portfolio) => res.data.portfolio);
@@ -224,23 +224,6 @@ const Home = () => {
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       findPortfolio(userID);
     });
-  };
-
-  const addLabel = (symbol, newLabel, currentLabels) => {
-    let portfolioIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
-    let tempPortfolio = portfolio;
-    let existingLabels = currentLabels !== undefined ? currentLabels : [];
-
-    if (newLabel !== "-" && existingLabels.indexOf(newLabel) === -1) {
-      existingLabels.push(newLabel);
-    }
-
-    tempPortfolio[portfolioIndex].labels = existingLabels;
-
-    API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID);
-    });
-
   };
 
   //START: Login functions
@@ -757,7 +740,7 @@ const Home = () => {
                   userID={userID}
                   updatePortfolio={updatePortfolio}
                   portfolio={portfolio}
-                  addLabel={addLabel}
+                  findPortfolio={findPortfolio}
                 />
               ))
               : ""}

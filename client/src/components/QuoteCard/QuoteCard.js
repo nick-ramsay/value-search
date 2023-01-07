@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { useInput } from "../../sharedFunctions/sharedFunctions";
+import API from "../../utils/API";
+import moment from "moment";
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
 import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png"
+import removeIcon from "../../images/round_remove_circle_outline_white_24dp.png"
+import infoIcon from "../../images/round_info_white_24dp.png"
+import motleyFoolIcon from "../../images/motley_fool_logo.png";
+import kppIcon from "../../images/kpp_logo.png";
+import valueSearchIcon from "../../images/value_search_logo.png"
+
+
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
 
@@ -16,7 +26,43 @@ const QuoteCard = (props) => {
   let stock = props.stock;
   let userID = props.userID;
   let updatePortfolio = props.updatePortfolio;
-  let addLabel = props.addLabel;
+  //let addLabel = props.addLabel;
+  let findPortfolio = props.findPortfolio;
+
+  const addLabel = (symbol, newLabel, currentLabels) => {
+    let portfolioIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
+    let tempPortfolio = portfolio;
+    let existingLabels = currentLabels !== undefined ? currentLabels : [];
+
+    if (newLabel !== "-" && existingLabels.indexOf(newLabel) === -1) {
+      existingLabels.push(newLabel);
+    }
+
+    tempPortfolio[portfolioIndex].labels = existingLabels;
+
+    API.updatePortfolio(userID, tempPortfolio).then((res) => {
+      findPortfolio(userID);
+    });
+
+  };
+
+  const removeLabel = (symbol, label) => {
+    console.log("Symbol: " + symbol);
+    console.log("User ID: " + userID);
+   
+    let tempPortfolio = portfolio;
+    let symbolIndex = tempPortfolio.map((object) => object.symbol).indexOf(symbol);
+    let labelIndex = tempPortfolio[symbolIndex].labels.indexOf(label);
+
+    tempPortfolio[symbolIndex].labels.splice(labelIndex, 1);
+
+    console.log(tempPortfolio)
+
+    API.updatePortfolio(userID, tempPortfolio).then((res) => {
+      findPortfolio(userID, null);
+    });
+
+  };
 
   return (
     <div className="card mb-3">
@@ -55,20 +101,27 @@ const QuoteCard = (props) => {
             )}
           </div>
           <div className="col-md-12 mt-1">
-            {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
-              <span class="badge bg-primary">
-                {toTitleCase(portfolioEntry.status)}
-              </span>
-            ) : (
-              ""
-            )}
             {portfolioEntry !== undefined && portfolioEntry.status !== "-" && portfolioEntry.queuedForPurchase === true ? (
-
-              <img className="text-icon ml-2" src={shoppingBasketIcon} />
-
+              <span><img className="text-icon ml-2" src={shoppingBasketIcon} /></span>
             ) : (
               ""
             )}
+            {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
+              <img
+                className="text-icon m-1"
+                title={label}
+                src={label === "Motley Fool" ? motleyFoolIcon : label === "KPP" ? kppIcon : label === "Value Search" ? valueSearchIcon : ""}
+              />
+            )) : ""}
+            <div className="col-md-12">
+              {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
+                <span class="badge bg-primary">
+                  {toTitleCase(portfolioEntry.status)}
+                </span>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
           {/*Start: Edit Symbol Modal*/}
           <div
@@ -186,12 +239,12 @@ const QuoteCard = (props) => {
                         </select>
                       </div>
                       <div class="col-md-3">
-                        <button type="button" className="btn btn-primary mb-3" onClick={() => { addLabel(stock.symbol, document.getElementById(stock.symbol + "newSelectedLabel").value, portfolioEntry.labels) }}>Add +</button>
+                        <button type="button" className="btn btn-sm btn-primary" onClick={() => { addLabel(stock.symbol, document.getElementById(stock.symbol + "newSelectedLabel").value, portfolioEntry.labels) }}>Add +</button>
                       </div>
                     </form>
                     <div class="input-group mt-2">
                       {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
-                        <div className="badge badge-primary m-1"><span>{label}</span><span className="remove-label m-1"> - </span></div>
+                        <div className="badge badge-primary m-1"><span>{label}</span><img className="ml-2 text-icon" src={removeIcon} onClick={() => {removeLabel(stock.symbol, label)}}/></div>
                       )) : ""}
                     </div>
                     <div class="input-group mt-2">
