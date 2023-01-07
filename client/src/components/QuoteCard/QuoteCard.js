@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Chart from 'chart.js/auto';
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
@@ -49,7 +50,7 @@ const QuoteCard = (props) => {
   const removeLabel = (symbol, label) => {
     console.log("Symbol: " + symbol);
     console.log("User ID: " + userID);
-   
+
     let tempPortfolio = portfolio;
     let symbolIndex = tempPortfolio.map((object) => object.symbol).indexOf(symbol);
     let labelIndex = tempPortfolio[symbolIndex].labels.indexOf(label);
@@ -244,7 +245,7 @@ const QuoteCard = (props) => {
                     </form>
                     <div class="input-group mt-2">
                       {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
-                        <div className="badge badge-primary m-1"><span>{label}</span><img className="ml-2 text-icon" src={removeIcon} onClick={() => {removeLabel(stock.symbol, label)}}/></div>
+                        <div className="badge badge-primary m-1"><span>{label}</span><img className="ml-2 text-icon" src={removeIcon} onClick={() => { removeLabel(stock.symbol, label) }} /></div>
                       )) : ""}
                     </div>
                     <div class="input-group mt-2">
@@ -513,7 +514,7 @@ const QuoteCard = (props) => {
                 : "-"}{" "}
             </span>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4" data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}>
             <span>
               <strong>200 Day Moving Average: </strong>
               <span
@@ -533,7 +534,7 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-4" data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}>
             <span>
               <strong>50 Day Moving Average: </strong>
               <span
@@ -550,6 +551,23 @@ const QuoteCard = (props) => {
                   : "-"}{" "}
               </span>
             </span>
+          </div>
+        </div>
+        <div class="modal fade" id={stock.symbol + "movingAverageTrendModal"} tabindex="-1" aria-labelledby={stock.symbol + "movingAverageTrendModalLabel"} aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id={stock.symbol + "movingAverageTrendModalLabel"}>{"Moving Average Trend for " + stock.symbol}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                
+                <p>Chart to be added...</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
