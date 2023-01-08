@@ -50,7 +50,7 @@ const QuoteCard = (props) => {
   };
 
   const removeLabel = (symbol, label) => {
-   
+
     let tempPortfolio = portfolio;
     let symbolIndex = tempPortfolio.map((object) => object.symbol).indexOf(symbol);
     let labelIndex = tempPortfolio[symbolIndex].labels.indexOf(label);
@@ -78,6 +78,7 @@ const QuoteCard = (props) => {
             >
               {stock.quote.companyName + " (" + stock.symbol + ")"}
             </a>
+            {stock.valueSearchScore !== undefined && stock.valueSearchScore.totalPossiblePoints > 0 ? <span data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"} className={stock.valueSearchScore.calculatedScorePercentage <= .33 ? "ml-2 vs-score-badge-red" : stock.valueSearchScore.calculatedScorePercentage <= .66 ? "ml-2 vs-score-badge-yellow" : "ml-2 vs-score-badge-green"}>{Math.round((stock.valueSearchScore.calculatedScorePercentage * 100)) + "%"}</span> : ""}
             {userID !== undefined && userID !== "" ? (
               <span>
                 <img
@@ -574,7 +575,7 @@ const QuoteCard = (props) => {
                         datasets: [
                           {
                             label: 'Moving Average Trend',
-                            data: [stock.quote.week52High,stock.iexStats.day200MovingAvg, stock.iexStats.day50MovingAvg, stock.quote.latestPrice],
+                            data: [stock.quote.week52High, stock.iexStats.day200MovingAvg, stock.iexStats.day50MovingAvg, stock.quote.latestPrice],
                             fill: false,
                             backgroundColor: 'blue',
                             borderColor: 'blue',
@@ -586,6 +587,76 @@ const QuoteCard = (props) => {
                     }
 
                   />
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id={stock.symbol + "valueSearchScoreModal"} tabindex="-1" aria-labelledby={stock.symbol + "valueSearchScoreModalLabel"} aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id={stock.symbol + "valueSearchScoreModalLabel"}>{"Value Search Score for " + stock.symbol}</h5>
+                <button
+                  type="button"
+                  class="close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div className="row text-center">
+                  {
+                    /*
+                    healthyPE: 0,
+                                healthyPEAttempted: false,
+                                healthyFuturePE: 0,
+                                healthyFuturePEAttempted: false,
+                                forwardPEGreater: 0,
+                                forwardPEGreaterAttempted: false,
+                                healthyDebtEquity: 0,
+                                healthyDebtEquityAttempted: false,
+                                healthyPriceBook: 0,
+                                healthyPriceBookAttempted: false,
+                                healthyPriceSales: 0,
+                                healthyPriceSalesAttempted: false,
+                                movingAveragesGreaterThanPrice: 0,
+                                movingAveragesGreaterThanPriceAttempted: false,
+                                movingAverageSupport: 0,
+                                movingAverageSupportAttempted: false,
+                    */
+                  }
+                  <p>{stock.valueSearchScore !== undefined ? stock.quote.companyName + " has a score of " + stock.valueSearchScore.totalCalculatedPoints + " out of a possible " + stock.valueSearchScore.totalPossiblePoints + " points, for a score percentage of " + (stock.valueSearchScore.calculatedScorePercentage * 100).toFixed(2) + "%" : ""}</p>
+                  <ul class="list-group">
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPEAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.healthyPE === 0 ? "❌ Unhealthy Current PE Ratio ❌":"✅ Good Current PE Ratio ✅"}</li>:""
+                    }
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyFuturePEAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.healthyFuturePE === 0 ? "❌ Unhealthy Forward PE Ratio ❌":"✅ Good Forward PE Ratio ✅"}</li>:""
+                    }
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.forwardPEGreaterAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.forwardPEGreater === 0 ? "❌ Forward PE Ratio Lower Than Current ❌":"✅ Forward PE Ratio Higher Than Current ✅"}</li>:""
+                    }
+                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyDebtEquityAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.healthyDebtEquity === 0 ? "❌ Unhealthy Debt to Equity ❌":"✅ Good Debt to Equity ✅"}</li>:""
+                    }
+                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPriceBookAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.healthyPriceBook === 0 ? "❌ Unhealthy Price to Book ❌":"✅ Good Price to Book ✅"}</li>:""
+                    }
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPriceSalesAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.healthyPriceSales === 0 ? "❌ Unhealthy Price to Sales ❌":"✅ Good Price to Sales ✅"}</li>:""
+                    }
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.movingAveragesGreaterThanPriceAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.movingAveragesGreaterThanPrice === 0 ? "❌ Stock trading above it's 200 and 50 day moving averages ❌":"✅ Stock trading below it's 200 and 50 day moving averages ✅"}</li>:""
+                    }
+                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.movingAverageSupportAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.movingAverageSupport === 0 ? "❌ Price hasn't found support with moving averages ❌":"✅ Stock may have found support with it's moving averages ✅"}</li>:""
+                    }
+                  </ul>
                 </div>
                 <div class="modal-footer">
                 </div>
