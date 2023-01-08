@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Line } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
@@ -558,14 +559,39 @@ const QuoteCard = (props) => {
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id={stock.symbol + "movingAverageTrendModalLabel"}>{"Moving Average Trend for " + stock.symbol}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                  type="button"
+                  class="close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
               <div class="modal-body">
-                
-                <p>Chart to be added...</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div className="row text-center">
+                  <Line
+                    data={
+                      {
+                        labels: ["52 Week High", "200d MA", "50d MA", "Current Price"],
+                        datasets: [
+                          {
+                            label: 'Moving Average Trend',
+                            data: [stock.quote.week52High,stock.iexStats.day200MovingAvg, stock.iexStats.day50MovingAvg, stock.quote.latestPrice],
+                            fill: false,
+                            backgroundColor: 'blue',
+                            borderColor: 'blue',
+                          },
+                        ]
+                      }}
+                    options={
+                      { scales: { y: { min: stock.quote.week52Low, max: stock.quote.week52High } } }
+                    }
+
+                  />
+                </div>
+                <div class="modal-footer">
+                </div>
               </div>
             </div>
           </div>
