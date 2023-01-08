@@ -94,7 +94,6 @@ const Home = () => {
   const checkEmailAvailability = () => {
     if (email !== "") {
       API.checkExistingAccountEmails(email.toLowerCase()).then((res) => {
-        console.log("Check Existing: " + res);
         if (res.data !== "") {
           setSubmissionMessage(
             (submissionMessage) =>
@@ -102,7 +101,6 @@ const Home = () => {
           );
         } else {
           API.setEmailVerificationToken(email).then((res) => {
-            console.log(res.data);
           });
         }
       });
@@ -137,10 +135,8 @@ const Home = () => {
       API.checkEmailVerificationToken(email, emailVerificationToken).then(
         (res) => {
           if (res.data !== "") {
-            console.log(res.data);
             API.checkExistingAccountEmails(currentAccountInfo.email).then(
               (res) => {
-                console.log("Matching Emails at Creation??? -> " + res.data);
                 if (res.data === "") {
                   API.createAccount(currentAccountInfo).then((res) => {
                     API.deleteEmailVerificationToken(email).then(
@@ -278,13 +274,13 @@ const Home = () => {
 
   return (
     <div className="container">
-      <nav class="navbar navbar-dark navbar-expand-lg">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">
+      <nav className="navbar navbar-dark navbar-expand-lg">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="/">
             Value Search
           </a>
           <button
-            class="navbar-toggler mb-2"
+            className="navbar-toggler mb-2"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -292,21 +288,21 @@ const Home = () => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-              <form class="d-flex" role="search">
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
+              <form className="d-flex" role="search">
                 <input
                   id="searchSymbol"
-                  class="form-control form-control-sm me-2"
+                  className="form-control form-control-sm me-2"
                   type="search"
                   placeholder="Ticker Symbol"
                   defaultValue={""}
                   aria-label="Search"
                 />
                 <button
-                  class="btn btn-sm btn-outline-primary"
+                  className="btn btn-sm btn-outline-primary"
                   type="button"
                   onClick={findSingleStock}
                 >
@@ -314,11 +310,11 @@ const Home = () => {
                 </button>
               </form>
             </ul>
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
+            <ul className="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
               {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
-                <li class="nav-item dropdown">
+                <li className="nav-item dropdown">
                   <a
-                    class="nav-link dropdown-toggle"
+                    className="nav-link dropdown-toggle"
                     href="#"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -326,7 +322,7 @@ const Home = () => {
                   >
                     {firstname + " " + lastname}
                   </a>
-                  <ul class="dropdown-menu text-center bg-dark">
+                  <ul className="dropdown-menu text-center bg-dark">
                     <li>
                       <button
                         type="button"

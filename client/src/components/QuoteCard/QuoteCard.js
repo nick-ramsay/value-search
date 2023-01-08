@@ -30,6 +30,7 @@ const QuoteCard = (props) => {
   let updatePortfolio = props.updatePortfolio;
   //let addLabel = props.addLabel;
   let findPortfolio = props.findPortfolio;
+  let selectedStatus = props.selectedStatus;
 
   const addLabel = (symbol, newLabel, currentLabels) => {
     let portfolioIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
@@ -43,25 +44,21 @@ const QuoteCard = (props) => {
     tempPortfolio[portfolioIndex].labels = existingLabels;
 
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID);
+      findPortfolio(userID, selectedStatus);
     });
 
   };
 
   const removeLabel = (symbol, label) => {
-    console.log("Symbol: " + symbol);
-    console.log("User ID: " + userID);
-
+   
     let tempPortfolio = portfolio;
     let symbolIndex = tempPortfolio.map((object) => object.symbol).indexOf(symbol);
     let labelIndex = tempPortfolio[symbolIndex].labels.indexOf(label);
 
     tempPortfolio[symbolIndex].labels.splice(labelIndex, 1);
 
-    console.log(tempPortfolio)
-
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID, null);
+      findPortfolio(userID, selectedStatus);
     });
 
   };
@@ -573,7 +570,7 @@ const QuoteCard = (props) => {
                   <Line
                     data={
                       {
-                        labels: ["52 Week High", "200d MA", "50d MA", "Current Price"],
+                        labels: ["52 Week High (" + stock.quote.week52High + ")", "200d MA", "50d MA", "Current Price (" + stock.quote.latestPrice + ")"],
                         datasets: [
                           {
                             label: 'Moving Average Trend',
@@ -585,7 +582,7 @@ const QuoteCard = (props) => {
                         ]
                       }}
                     options={
-                      { scales: { y: { min: stock.quote.week52Low, max: stock.quote.week52High } } }
+                      { scales: { y: { min: stock.quote.week52Low, max: Math.round((stock.quote.week52High + 5)) } } }
                     }
 
                   />

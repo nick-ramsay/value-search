@@ -52,7 +52,6 @@ const Portfolio = () => {
   const checkEmailAvailability = () => {
     if (email !== "") {
       API.checkExistingAccountEmails(email.toLowerCase()).then((res) => {
-        console.log("Check Existing: " + res);
         if (res.data !== "") {
           setSubmissionMessage(
             (submissionMessage) =>
@@ -60,7 +59,6 @@ const Portfolio = () => {
           );
         } else {
           API.setEmailVerificationToken(email).then((res) => {
-            console.log(res.data);
           });
         }
       });
@@ -95,10 +93,8 @@ const Portfolio = () => {
       API.checkEmailVerificationToken(email, emailVerificationToken).then(
         (res) => {
           if (res.data !== "") {
-            console.log(res.data);
             API.checkExistingAccountEmails(currentAccountInfo.email).then(
               (res) => {
-                console.log("Matching Emails at Creation??? -> " + res.data);
                 if (res.data === "") {
                   API.createAccount(currentAccountInfo).then((res) => {
                     API.deleteEmailVerificationToken(email).then(
@@ -241,20 +237,14 @@ const Portfolio = () => {
 
   const renderValueSearchResults = (symbols, selectedStatus) => {
     API.findPortfolioQuotes(symbols, selectedStatus).then((res) => {
-      console.log(res.data);
       setValueSearchData((valueSearchData) => res.data);
       setLoading((loading) => false);
     });
   };
 
   const syncWithEtrade = () => {
-    console.log("Called Sync with Etrade");
-
-    //let filePath = document.getElementById("etradeCSVSelect").value;
-    //console.log(filePath);
 
     var file = document.querySelector("#etradeCSVSelect").files[0];
-    console.log(file);
     var reader = new FileReader();
     reader.readAsText(file);
 
@@ -296,9 +286,7 @@ const Portfolio = () => {
         }
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2);
-      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) =>
-        console.log(res.data)
-      );
+      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) =>{});
       let tempPortfolio = portfolio;
       for (let i = 0; i < etradeSymbols.length; i++) {
         if (
@@ -319,7 +307,6 @@ const Portfolio = () => {
             tempPortfolio[j].status === "hold" ||
             tempPortfolio[j].status === "speculative")
         ) {
-          console.log(tempPortfolio[j].symbol);
           tempPortfolio[j].status = "watch";
         }
       }
@@ -335,13 +322,13 @@ const Portfolio = () => {
 
   return (
     <div className="container">
-      <nav class="navbar navbar-dark navbar-expand-lg">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/">
+      <nav className="navbar navbar-dark navbar-expand-lg">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="/">
             Value Search
           </a>
           <button
-            class="navbar-toggler mb-2"
+            className="navbar-toggler mb-2"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -349,21 +336,21 @@ const Portfolio = () => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
-            <form class="d-flex" role="search">
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
+            <form className="d-flex" role="search">
               <input
                 id="searchSymbol"
-                class="form-control form-control-sm me-2"
+                className="form-control form-control-sm me-2"
                 type="search"
                 placeholder="Ticker Symbol"
                 defaultValue={""}
                 aria-label="Search"
               />
               <button
-                class="btn btn-sm btn-outline-primary"
+                className="btn btn-sm btn-outline-primary"
                 type="button"
                 onClick={findSingleStock}
               >
@@ -371,11 +358,11 @@ const Portfolio = () => {
               </button>
             </form>
             </ul>
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
+            <ul className="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
               {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
-                <li class="nav-item dropdown">
+                <li className="nav-item dropdown">
                   <a
-                    class="nav-link dropdown-toggle"
+                    className="nav-link dropdown-toggle"
                     href="#"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -383,7 +370,7 @@ const Portfolio = () => {
                   >
                     {firstname + " " + lastname}
                   </a>
-                  <ul class="dropdown-menu text-center bg-dark">
+                  <ul className="dropdown-menu text-center bg-dark">
                     <li>
                       <button
                         type="button"
@@ -478,14 +465,14 @@ const Portfolio = () => {
         </div>
         <div>
           <div>
-            <div class="mb-3">
+            <div className="mb-3">
 
-              <div class=" accordion-flush" id="accordionFlushExample">
+              <div className=" accordion-flush" id="accordionFlushExample">
                 <div className="col-md-12 text-center">
                   <div className=" text-center">
 
                     <a
-                      class="text-center collapsed"
+                      className="text-center collapsed"
                       type="button"
                       data-bs-toggle="collapse"
                       data-bs-target="#flush-collapseOne"
@@ -497,16 +484,16 @@ const Portfolio = () => {
                     </a>
                   </div>
                 </div>
-                <div class="accordion-item">
+                <div className="accordion-item">
                   <div
                     id="flush-collapseOne"
-                    class="accordion-collapse collapse"
+                    className="accordion-collapse collapse"
                     aria-labelledby="flush-headingOne"
                     data-bs-parent="#accordionFlushExample"
                   >
-                    <div class="accordion-body">
+                    <div className="accordion-body">
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="file"
                         id="etradeCSVSelect"
                       />
@@ -528,7 +515,7 @@ const Portfolio = () => {
                 <div className="col-md-12 mt-2">
                   <button
                     type="button"
-                    class={
+                    className={
                       selectedStatus === "icebox"
                         ? "btn btn-sm btn-light status-button m-1"
                         : "btn btn-sm btn-outline-light status-button m-1"
@@ -542,7 +529,7 @@ const Portfolio = () => {
                   </button>
                   <button
                     type="button"
-                    class={
+                    className={
                       selectedStatus === "watch"
                         ? "btn btn-sm btn-light status-button m-1"
                         : "btn btn-sm btn-outline-light status-button m-1"
@@ -556,7 +543,7 @@ const Portfolio = () => {
                   </button>
                   <button
                     type="button"
-                    class={
+                    className={
                       selectedStatus === "own"
                         ? "btn btn-sm btn-light status-button m-1"
                         : "btn btn-sm btn-outline-light status-button m-1"
@@ -570,7 +557,7 @@ const Portfolio = () => {
                   </button>
                   <button
                     type="button"
-                    class={
+                    className={
                       selectedStatus === "hold"
                         ? "btn btn-sm btn-light status-button m-1"
                         : "btn btn-sm btn-outline-light status-button m-1"
@@ -584,7 +571,7 @@ const Portfolio = () => {
                   </button>
                   <button
                     type="button"
-                    class={
+                    className={
                       selectedStatus === "speculative"
                         ? "btn btn-sm btn-light status-button m-1"
                         : "btn btn-sm btn-outline-light status-button m-1"
@@ -607,6 +594,8 @@ const Portfolio = () => {
                 userID={userID}
                 updatePortfolio={updatePortfolio}
                 portfolio={portfolio}
+                selectedStatus={selectedStatus}
+                findPortfolio={findPortfolio}
               />
             ))
             : ""}
