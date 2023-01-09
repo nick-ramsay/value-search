@@ -78,7 +78,7 @@ const QuoteCard = (props) => {
             >
               {stock.quote.companyName + " (" + stock.symbol + ")"}
             </a>
-            {stock.valueSearchScore !== undefined && stock.valueSearchScore.totalPossiblePoints > 0 ? <span data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"} className={stock.valueSearchScore.calculatedScorePercentage <= .33 ? "ml-2 vs-score-badge-red" : stock.valueSearchScore.calculatedScorePercentage <= .66 ? "ml-2 vs-score-badge-yellow" : "ml-2 vs-score-badge-green"}>{Math.round((stock.valueSearchScore.calculatedScorePercentage * 100)) + "%"}</span> : ""}
+            {stock.valueSearchScore !== undefined && stock.valueSearchScore.totalPossiblePoints > 0 ? <span data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"} className={stock.valueSearchScore.calculatedScorePercentage <= .33 ? "ml-2 vs-score-badge vs-score-badge-red" : stock.valueSearchScore.calculatedScorePercentage <= .66 ? "ml-2 vs-score-badge vs-score-badge-yellow" : "ml-2 vs-score-badge vs-score-badge-green"}>{Math.round((stock.valueSearchScore.calculatedScorePercentage * 100)) + "%"}</span> : ""}
             {userID !== undefined && userID !== "" ? (
               <span>
                 <img
@@ -637,6 +637,9 @@ const QuoteCard = (props) => {
                     }
                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyFuturePEAttempted === true ? 
                       <li class="list-group-item">{stock.valueSearchScore.healthyFuturePE === 0 ? "❌ Unhealthy Forward PE Ratio ❌":"✅ Good Forward PE Ratio ✅"}</li>:""
+                    }
+                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.profitMarginPositiveAttempted === true ? 
+                      <li class="list-group-item">{stock.valueSearchScore.profitMarginPositive === 0 ? "❌ Company not profitable ❌":"✅ Company is profitable ✅"}</li>:""
                     }
                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.forwardPEGreaterAttempted === true ? 
                       <li class="list-group-item">{stock.valueSearchScore.forwardPEGreater === 0 ? "❌ Forward PE Ratio Lower Than Current ❌":"✅ Forward PE Ratio Higher Than Current ✅"}</li>:""

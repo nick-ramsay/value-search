@@ -8,7 +8,7 @@
 
 .vs-score-badge-red {
     color: red;
-    font-size: 14px;
+    font-size: 11px;
     border: red 1px solid;
     border-radius: 10%;
     padding: 2px;
@@ -16,7 +16,7 @@
 
 .vs-score-badge-yellow {
     color: yellow;
-    font-size: 14px;
+    font-size: 11px;
     border: yellow 1px solid;
     border-radius: 10%;
     padding: 2px;
@@ -24,8 +24,12 @@
 
 .vs-score-badge-green {
     color: green;
-    font-size: 14px;
+    font-size: 11px;
     border: green 1px solid;
     border-radius: 10%;
     padding: 2px;
+}
+
+.vs-score-badge:hover {
+    cursor: pointer;
 }
