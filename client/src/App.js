@@ -12,6 +12,34 @@ import ResetPassword from '../src/pages/ResetPassword/ResetPassword';
 import Error from '../src/pages/Error/Error';
 import NoAccess from '../src/pages/NoAccess/NoAccess';
 
+import { datadogRum } from '@datadog/browser-rum';
+import { datadogLogs } from '@datadog/browser-logs'
+
+datadogRum.init({
+    applicationId: 'f4f1a0a5-0519-4ff5-889d-db1733aad98f',
+    clientToken: 'pub9fb08dd8420145635d6d85ef8ace47f7',
+    site: 'datadoghq.com',
+    service:'value-search',
+    
+    // Specify a version number to identify the deployed version of your application in Datadog 
+    // version: '1.0.0',
+    sampleRate: 100,
+    sessionReplaySampleRate: 20,
+    trackInteractions: true,
+    trackResources: true,
+    trackLongTasks: true,
+    defaultPrivacyLevel:'mask-user-input'
+});
+
+datadogLogs.init({
+  clientToken: 'pub9fb08dd8420145635d6d85ef8ace47f7',
+  site: 'datadoghq.com',
+  forwardErrorsToLogs: true,
+  sampleRate: 100,
+})
+    
+datadogRum.startSessionReplayRecording();
+
 function App() {
   return (
     <Router>
