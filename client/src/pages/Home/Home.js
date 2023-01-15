@@ -54,6 +54,28 @@ const Home = () => {
   var [submissionMessage, setSubmissionMessage] = useState("");
 
   const renderValueSearchResults = () => {
+    let selectedMarketCapInput = document.getElementById("marketCapSizeInput").value;
+    let selectedMarketCapMin = 0;
+    let selectedMarketCapMax = 1000000000000000000;
+    if (selectedMarketCapInput === "all")  {
+      selectedMarketCapMin = 0;
+      selectedMarketCapMax = 1000000000000000000;
+    } else if (selectedMarketCapInput === "small") {
+      selectedMarketCapMin = 0;
+      selectedMarketCapMax = 1999999999;
+    }else if (selectedMarketCapInput === "mid") {
+      selectedMarketCapMin = 2000000000;
+      selectedMarketCapMax = 99999999999;
+    }
+    else if (selectedMarketCapInput === "large") {
+      selectedMarketCapMin = 10000000000;
+      selectedMarketCapMax = 199999999999;
+    }else if (selectedMarketCapInput === "mega") {
+      selectedMarketCapMin = 200000000000;                      
+      selectedMarketCapMax = 1000000000000000000;
+    }
+
+
     API.findSearchResults(
       minPE,
       maxPE,
@@ -63,8 +85,8 @@ const Home = () => {
       maxPriceSales,
       minPriceToBook,
       maxPriceToBook,
-      minCap,
-      maxCap
+      selectedMarketCapMin,
+      selectedMarketCapMax
     ).then((res) => {
       setValueSearchData((valueSearchData) => res.data);
       setLoading((loading) => false);
@@ -472,7 +494,7 @@ const Home = () => {
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
                               defaultValue={10}
-                              onChange={Number(setMinPE)}
+                              //onChange={Number(setMinPE)}
                             />
                           </div>
                         </div>
@@ -488,7 +510,7 @@ const Home = () => {
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
                               defaultValue={15}
-                              onChange={setMaxPE}
+                              //onChange={setMaxPE}
                             />
                           </div>
                         </div>
@@ -507,7 +529,7 @@ const Home = () => {
                               placeholder="Minimum Debt/Equity"
                               defaultValue={0.0}
                               step="0.01"
-                              onChange={setMinDebtEquity}
+                              //onChange={setMinDebtEquity}
                             />
                           </div>
                         </div>
@@ -524,7 +546,7 @@ const Home = () => {
                               placeholder="Maximum Debt/Equity"
                               defaultValue={2.0}
                               step="0.01"
-                              onChange={setMaxDebtEquity}
+                              //onChange={setMaxDebtEquity}
                             />
                           </div>
                         </div>
@@ -543,7 +565,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Book"
                               defaultValue={0.95}
                               step="0.01"
-                              onChange={setMinPriceToBook}
+                              //onChange={setMinPriceToBook}
                             />
                           </div>
                         </div>
@@ -560,7 +582,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Book"
                               defaultValue={1.1}
                               step="0.01"
-                              onChange={setMaxPriceToBook}
+                              //onChange={setMaxPriceToBook}
                             />
                           </div>
                         </div>
@@ -579,7 +601,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Sales"
                               defaultValue={0.0}
                               step="0.01"
-                              onChange={setMinPriceSales}
+                              //onChange={setMinPriceSales}
                             />
                           </div>
                         </div>
@@ -596,7 +618,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Sales"
                               defaultValue={2.0}
                               step="0.01"
-                              onChange={setMaxPriceSales}
+                              //onChange={setMaxPriceSales}
                             />
                           </div>
                         </div>
@@ -608,16 +630,18 @@ const Home = () => {
                               Cap Size
                             </label>
                             <select
+                              id="marketCapSizeInput"
                               className="form-control"
-                              onClick={(event) => {
+                              /*onClick={(event) => {
                                 setMarketCapSize(event);
-                              }}
+                              }}*/
                               defaultValue="all"
                             >
                               <option value="all">All</option>
                               <option value="small">Small Cap</option>
                               <option value="mid">Mid Cap</option>
                               <option value="large">Large</option>
+                              <option value="mega">Mega</option>
                             </select>
                           </div>
                         </div>
@@ -627,10 +651,12 @@ const Home = () => {
                               Investment Type
                             </label>
                             <select
+                              id="selectedInvestmentTypeInput"
                               className="form-control"
-                              onClick={(event) => {
+                              /*onClick={(event) => {
                                 selectedInvestmentType(event);
                               }}
+                              */
                             >
                               <option value="cs" selected>
                                 Common Stock
