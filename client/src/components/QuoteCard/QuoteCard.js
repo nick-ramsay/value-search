@@ -115,8 +115,8 @@ const QuoteCard = (props) => {
             )) : ""}
             <div className="col-md-12">
               {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
-                <span class="badge bg-primary">
-                  {toTitleCase(portfolioEntry.status)}
+                <span class={portfolioEntry.status === "avoid" ? "badge bg-danger":portfolioEntry.status === "temporaryavoid" ? "badge bg-warning":"badge bg-primary"}>
+                  {toTitleCase(portfolioEntry.status === "temporaryavoid" ? "Temporary Avoid":portfolioEntry.status)}
                 </span>
               ) : (
                 ""
@@ -210,6 +210,15 @@ const QuoteCard = (props) => {
                         }
                       >
                         Speculative
+                      </option>
+                      <option
+                        value="temporaryavoid"
+                        selected={
+                          portfolioEntry !== undefined &&
+                          portfolioEntry.status === "temporaryavoid"
+                        }
+                      >
+                        Temporary Avoid
                       </option>
                       <option
                         value="avoid"
