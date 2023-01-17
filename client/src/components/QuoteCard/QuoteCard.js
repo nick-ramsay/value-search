@@ -72,7 +72,7 @@ const QuoteCard = (props) => {
               href={
                 "https://finviz.com/quote.ashx?t=" +
                 stock.symbol +
-                "&ty=l&ta=0&p=m&tas=0"
+                "&ty=l&ta=0&p=w&tas=0"
               }
               target="_blank"
             >
