@@ -4,6 +4,7 @@ import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
+import vsLogo from "../../images/logo-png/logo-no-background.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
 import { sha256 } from "js-sha256";
@@ -325,7 +326,7 @@ const Portfolio = () => {
       <nav className="navbar navbar-dark navbar-expand-lg">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            Value Search
+            <img src={vsLogo} className="navbar-logo"/>
           </a>
           <button
             className="navbar-toggler mb-2"
