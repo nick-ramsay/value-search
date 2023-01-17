@@ -24,6 +24,10 @@ a:hover {
   text-decoration: none;
 }
 
+.input {
+  font-size: 16px;
+}
+
 .form-control, .form-control:focus, .form-select, .form-select:focus, .input-group-text {
   background-color: #202124;
   color: white;

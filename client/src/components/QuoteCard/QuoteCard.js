@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto';
+import { Line } from "react-chartjs-2";
+import Chart from "chart.js/auto";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
-import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png"
-import removeIcon from "../../images/round_remove_circle_outline_white_24dp.png"
-import infoIcon from "../../images/round_info_white_24dp.png"
+import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png";
+import removeIcon from "../../images/round_remove_circle_outline_white_24dp.png";
+import infoIcon from "../../images/round_info_white_24dp.png";
 import motleyFoolIcon from "../../images/motley_fool_logo.png";
 import kppIcon from "../../images/kpp_logo.png";
-import valueSearchIcon from "../../images/value_search_logo.png"
-
+import valueSearchIcon from "../../images/value_search_logo.png";
 
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
@@ -22,8 +21,8 @@ const QuoteCard = (props) => {
   let portfolioEntry =
     portfolio.length > 0
       ? portfolio[
-      portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
-      ]
+          portfolio.map((Object) => Object.symbol).indexOf(props.stock.symbol)
+        ]
       : [];
   let stock = props.stock;
   let userID = props.userID;
@@ -33,7 +32,9 @@ const QuoteCard = (props) => {
   let selectedStatus = props.selectedStatus;
 
   const addLabel = (symbol, newLabel, currentLabels) => {
-    let portfolioIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
+    let portfolioIndex = portfolio
+      .map((object) => object.symbol)
+      .indexOf(symbol);
     let tempPortfolio = portfolio;
     let existingLabels = currentLabels !== undefined ? currentLabels : [];
 
@@ -46,13 +47,13 @@ const QuoteCard = (props) => {
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       findPortfolio(userID, selectedStatus);
     });
-
   };
 
   const removeLabel = (symbol, label) => {
-
     let tempPortfolio = portfolio;
-    let symbolIndex = tempPortfolio.map((object) => object.symbol).indexOf(symbol);
+    let symbolIndex = tempPortfolio
+      .map((object) => object.symbol)
+      .indexOf(symbol);
     let labelIndex = tempPortfolio[symbolIndex].labels.indexOf(label);
 
     tempPortfolio[symbolIndex].labels.splice(labelIndex, 1);
@@ -60,7 +61,6 @@ const QuoteCard = (props) => {
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       findPortfolio(userID, selectedStatus);
     });
-
   };
 
   return (
@@ -78,7 +78,26 @@ const QuoteCard = (props) => {
             >
               {stock.quote.companyName + " (" + stock.symbol + ")"}
             </a>
-            {stock.valueSearchScore !== undefined && stock.valueSearchScore.totalPossiblePoints > 0 ? <span data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"} className={stock.valueSearchScore.calculatedScorePercentage <= .33 ? "ml-2 vs-score-badge vs-score-badge-red" : stock.valueSearchScore.calculatedScorePercentage <= .66 ? "ml-2 vs-score-badge vs-score-badge-yellow" : "ml-2 vs-score-badge vs-score-badge-green"}>{Math.round((stock.valueSearchScore.calculatedScorePercentage * 100)) + "%"}</span> : ""}
+            {stock.valueSearchScore !== undefined &&
+            stock.valueSearchScore.totalPossiblePoints > 0 ? (
+              <span
+                data-bs-toggle="modal"
+                data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"}
+                className={
+                  stock.valueSearchScore.calculatedScorePercentage <= 0.33
+                    ? "ml-2 vs-score-badge vs-score-badge-red"
+                    : stock.valueSearchScore.calculatedScorePercentage <= 0.66
+                    ? "ml-2 vs-score-badge vs-score-badge-yellow"
+                    : "ml-2 vs-score-badge vs-score-badge-green"
+                }
+              >
+                {Math.round(
+                  stock.valueSearchScore.calculatedScorePercentage * 100
+                ) + "%"}
+              </span>
+            ) : (
+              ""
+            )}
             {userID !== undefined && userID !== "" ? (
               <span>
                 <img
@@ -101,22 +120,48 @@ const QuoteCard = (props) => {
             )}
           </div>
           <div className="col-md-12 mt-1">
-            {portfolioEntry !== undefined && portfolioEntry.status !== "-" && portfolioEntry.queuedForPurchase === true ? (
-              <span><img className="text-icon ml-2" src={shoppingBasketIcon} /></span>
+            {portfolioEntry !== undefined &&
+            portfolioEntry.status !== "-" &&
+            portfolioEntry.queuedForPurchase === true ? (
+              <span>
+                <img className="text-icon ml-2" src={shoppingBasketIcon} />
+              </span>
             ) : (
               ""
             )}
-            {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
-              <img
-                className="text-icon m-1"
-                title={label}
-                src={label === "Motley Fool" ? motleyFoolIcon : label === "KPP" ? kppIcon : label === "Value Search" ? valueSearchIcon : ""}
-              />
-            )) : ""}
+            {portfolioEntry !== undefined && portfolioEntry.labels !== undefined
+              ? portfolioEntry.labels.map((label, i) => (
+                  <img
+                    className="text-icon m-1"
+                    title={label}
+                    src={
+                      label === "Motley Fool"
+                        ? motleyFoolIcon
+                        : label === "KPP"
+                        ? kppIcon
+                        : label === "Value Search"
+                        ? valueSearchIcon
+                        : ""
+                    }
+                  />
+                ))
+              : ""}
             <div className="col-md-12">
               {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
-                <span class={portfolioEntry.status === "avoid" ? "badge bg-danger":portfolioEntry.status === "temporaryavoid" ? "badge bg-warning":"badge bg-primary"}>
-                  {toTitleCase(portfolioEntry.status === "temporaryavoid" ? "Temporary Avoid":portfolioEntry.status)}
+                <span
+                  class={
+                    portfolioEntry.status === "avoid"
+                      ? "badge bg-danger"
+                      : portfolioEntry.status === "temporaryavoid"
+                      ? "badge bg-warning"
+                      : "badge bg-primary"
+                  }
+                >
+                  {toTitleCase(
+                    portfolioEntry.status === "temporaryavoid"
+                      ? "Temporary Avoid"
+                      : portfolioEntry.status
+                  )}
                 </span>
               ) : (
                 ""
@@ -240,28 +285,64 @@ const QuoteCard = (props) => {
                     </div>
                     <form class="row mt-2">
                       <div class="col-md-9">
-                        <select id={stock.symbol + "newSelectedLabel"} class="form-select" aria-label="Default select example">
-                          <option value="-" selected>Select New Label</option>
+                        <select
+                          id={stock.symbol + "newSelectedLabel"}
+                          class="form-select"
+                          aria-label="Default select example"
+                        >
+                          <option value="-" selected>
+                            Select New Label
+                          </option>
                           <option value="KPP">KPP</option>
                           <option value="Motley Fool">Motley Fool</option>
                           <option value="Value Search">Value Search</option>
                         </select>
                       </div>
                       <div class="col-md-3">
-                        <button type="button" className="btn btn-sm btn-primary" onClick={() => { addLabel(stock.symbol, document.getElementById(stock.symbol + "newSelectedLabel").value, portfolioEntry.labels) }}>Add +</button>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-primary"
+                          onClick={() => {
+                            addLabel(
+                              stock.symbol,
+                              document.getElementById(
+                                stock.symbol + "newSelectedLabel"
+                              ).value,
+                              portfolioEntry.labels
+                            );
+                          }}
+                        >
+                          Add +
+                        </button>
                       </div>
                     </form>
                     <div class="input-group mt-2">
-                      {portfolioEntry !== undefined && portfolioEntry.labels !== undefined ? portfolioEntry.labels.map((label, i) => (
-                        <div className="badge badge-primary m-1"><span>{label}</span><img className="ml-2 text-icon" src={removeIcon} onClick={() => { removeLabel(stock.symbol, label) }} /></div>
-                      )) : ""}
+                      {portfolioEntry !== undefined &&
+                      portfolioEntry.labels !== undefined
+                        ? portfolioEntry.labels.map((label, i) => (
+                            <div className="badge badge-primary m-1">
+                              <span>{label}</span>
+                              <img
+                                className="ml-2 text-icon"
+                                src={removeIcon}
+                                onClick={() => {
+                                  removeLabel(stock.symbol, label);
+                                }}
+                              />
+                            </div>
+                          ))
+                        : ""}
                     </div>
                     <div class="input-group mt-2">
                       <div class="form-check">
                         <input
                           class="form-check-input"
                           type="checkbox"
-                          defaultChecked={portfolioEntry !== undefined ? portfolioEntry.queuedForPurchase : "false"}
+                          defaultChecked={
+                            portfolioEntry !== undefined
+                              ? portfolioEntry.queuedForPurchase
+                              : "false"
+                          }
                           id={"queued-for-purchase-" + stock.symbol}
                         />
                         <label
@@ -327,7 +408,7 @@ const QuoteCard = (props) => {
                   <div class="card">
                     <ul class="list-group list-group-flush">
                       {portfolioEntry !== undefined &&
-                        portfolioEntry.comments !== undefined ? (
+                      portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
                           <li class="list-group-item">
                             <p className="comment-content">
@@ -357,18 +438,53 @@ const QuoteCard = (props) => {
         </h5>
         <div className="row">
           {stock.fundamentals !== undefined &&
-            stock.fundamentals.country !== undefined &&
-            stock.fundamentals.country !== null ? (
+          stock.fundamentals.country !== undefined &&
+          stock.fundamentals.country !== null ? (
             <div className="col-md-12">
               <span>
                 <strong>Sector:</strong> {stock.fundamentals.sector} |{" "}
                 <strong>Industry:</strong> {stock.fundamentals.industry} |{" "}
                 <strong>Country:</strong> {stock.fundamentals.country}
+                {stock.fundamentals.companyDescription !== null &&
+                stock.fundamentals.companyDescription !== undefined ? (
+                  <span>
+                    {" "}
+                    <img src={infoIcon} className="text-icon mb-1" data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "company-bio-modal"} />
+                  </span>
+                ) : (
+                  ""
+                )}
               </span>
             </div>
           ) : (
             ""
           )}
+        </div>
+        <div
+          class="modal fade"
+          id={stock.symbol + "company-bio-modal"}
+          tabindex="-1"
+          aria-labelledby={stock.symbol + "company-bio-modal-label"}
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id={stock.symbol + "company-bio-modal-label"}>
+                  {stock.quote.companyName + " (" + stock.symbol + ")"}
+                </h5>
+             
+                <button
+                  type="button"
+                  className="close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body" style={{fontSize:14}}>{stock.fundamentals.companyDescription}</div>
+              
+            </div>
+          </div>
         </div>
         <div className="row">
           <div className="col-md-4">
@@ -386,12 +502,12 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-              stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
+            stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
                     stock.quote.latestPrice /
-                    stock.fundamentals["Target Price"]) *
+                      stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
               </p>
@@ -426,7 +542,7 @@ const QuoteCard = (props) => {
                   Math.round(
                     ((stock.quote.latestPrice - stock.quote.week52Low) /
                       (stock.quote.week52High - stock.quote.week52Low)) *
-                    100
+                      100
                   ) + "%",
               }}
               aria-valuenow="25"
@@ -522,14 +638,18 @@ const QuoteCard = (props) => {
                 : "-"}{" "}
             </span>
           </div>
-          <div className="col-md-4" data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}>
+          <div
+            className="col-md-4"
+            data-bs-toggle="modal"
+            data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}
+          >
             <span>
               <strong>200 Day Moving Average: </strong>
               <span
                 style={{
                   color:
                     stock.iexStats !== undefined &&
-                      stock.iexStats.day200MovingAvg < stock.quote.latestPrice
+                    stock.iexStats.day200MovingAvg < stock.quote.latestPrice
                       ? "red"
                       : "green",
                 }}
@@ -542,14 +662,18 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-4" data-bs-toggle="modal" data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}>
+          <div
+            className="col-md-4"
+            data-bs-toggle="modal"
+            data-bs-target={"#" + stock.symbol + "movingAverageTrendModal"}
+          >
             <span>
               <strong>50 Day Moving Average: </strong>
               <span
                 style={{
                   color:
                     stock.iexStats !== undefined &&
-                      stock.iexStats.day50MovingAvg < stock.quote.latestPrice
+                    stock.iexStats.day50MovingAvg < stock.quote.latestPrice
                       ? "red"
                       : "green",
                 }}
@@ -561,11 +685,22 @@ const QuoteCard = (props) => {
             </span>
           </div>
         </div>
-        <div class="modal fade" id={stock.symbol + "movingAverageTrendModal"} tabindex="-1" aria-labelledby={stock.symbol + "movingAverageTrendModalLabel"} aria-hidden="true">
+        <div
+          class="modal fade"
+          id={stock.symbol + "movingAverageTrendModal"}
+          tabindex="-1"
+          aria-labelledby={stock.symbol + "movingAverageTrendModalLabel"}
+          aria-hidden="true"
+        >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id={stock.symbol + "movingAverageTrendModalLabel"}>{"Moving Average Trend for " + stock.symbol}</h5>
+                <h5
+                  class="modal-title"
+                  id={stock.symbol + "movingAverageTrendModalLabel"}
+                >
+                  {"Moving Average Trend for " + stock.symbol}
+                </h5>
                 <button
                   type="button"
                   class="close"
@@ -578,36 +713,59 @@ const QuoteCard = (props) => {
               <div class="modal-body">
                 <div className="row text-center">
                   <Line
-                    data={
-                      {
-                        labels: ["52 Week High (" + stock.quote.week52High + ")", "200d MA", "50d MA", "Current Price (" + stock.quote.latestPrice + ")"],
-                        datasets: [
-                          {
-                            label: 'Moving Average Trend',
-                            data: [stock.quote.week52High, stock.iexStats.day200MovingAvg, stock.iexStats.day50MovingAvg, stock.quote.latestPrice],
-                            fill: false,
-                            backgroundColor: 'blue',
-                            borderColor: 'blue',
-                          },
-                        ]
-                      }}
-                    options={
-                      { scales: { y: { min: stock.quote.week52Low, max: Math.round((stock.quote.week52High + 5)) } } }
-                    }
-
+                    data={{
+                      labels: [
+                        "52 Week High (" + stock.quote.week52High + ")",
+                        "200d MA",
+                        "50d MA",
+                        "Current Price (" + stock.quote.latestPrice + ")",
+                      ],
+                      datasets: [
+                        {
+                          label: "Moving Average Trend",
+                          data: [
+                            stock.quote.week52High,
+                            stock.iexStats.day200MovingAvg,
+                            stock.iexStats.day50MovingAvg,
+                            stock.quote.latestPrice,
+                          ],
+                          fill: false,
+                          backgroundColor: "blue",
+                          borderColor: "blue",
+                        },
+                      ],
+                    }}
+                    options={{
+                      scales: {
+                        y: {
+                          min: stock.quote.week52Low,
+                          max: Math.round(stock.quote.week52High + 5),
+                        },
+                      },
+                    }}
                   />
                 </div>
-                <div class="modal-footer">
-                </div>
+                <div class="modal-footer"></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal fade" id={stock.symbol + "valueSearchScoreModal"} tabindex="-1" aria-labelledby={stock.symbol + "valueSearchScoreModalLabel"} aria-hidden="true">
+        <div
+          class="modal fade"
+          id={stock.symbol + "valueSearchScoreModal"}
+          tabindex="-1"
+          aria-labelledby={stock.symbol + "valueSearchScoreModalLabel"}
+          aria-hidden="true"
+        >
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id={stock.symbol + "valueSearchScoreModalLabel"}>{"Value Search Score for " + stock.symbol}</h5>
+                <h5
+                  class="modal-title"
+                  id={stock.symbol + "valueSearchScoreModalLabel"}
+                >
+                  {"Value Search Score for " + stock.symbol}
+                </h5>
                 <button
                   type="button"
                   class="close"
@@ -619,8 +777,7 @@ const QuoteCard = (props) => {
               </div>
               <div class="modal-body">
                 <div className="row text-center">
-                  {
-                    /*
+                  {/*
                     healthyPE: 0,
                                 healthyPEAttempted: false,
                                 healthyFuturePE: 0,
@@ -637,41 +794,123 @@ const QuoteCard = (props) => {
                                 movingAveragesGreaterThanPriceAttempted: false,
                                 movingAverageSupport: 0,
                                 movingAverageSupportAttempted: false,
-                    */
-                  }
-                  <p>{stock.valueSearchScore !== undefined ? stock.quote.companyName + " has a score of " + stock.valueSearchScore.totalCalculatedPoints + " out of a possible " + stock.valueSearchScore.totalPossiblePoints + " points, for a score percentage of " + (stock.valueSearchScore.calculatedScorePercentage * 100).toFixed(2) + "%" : ""}</p>
+                    */}
+                  <p>
+                    {stock.valueSearchScore !== undefined
+                      ? stock.quote.companyName +
+                        " has a score of " +
+                        stock.valueSearchScore.totalCalculatedPoints +
+                        " out of a possible " +
+                        stock.valueSearchScore.totalPossiblePoints +
+                        " points, for a score percentage of " +
+                        (
+                          stock.valueSearchScore.calculatedScorePercentage * 100
+                        ).toFixed(2) +
+                        "%"
+                      : ""}
+                  </p>
                   <ul class="list-group">
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPEAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.healthyPE === 0 ? "❌ Unhealthy Current PE Ratio ❌":"✅ Good Current PE Ratio ✅"}</li>:""
-                    }
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyFuturePEAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.healthyFuturePE === 0 ? "❌ Unhealthy Forward PE Ratio ❌":"✅ Good Forward PE Ratio ✅"}</li>:""
-                    }
-                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.profitMarginPositiveAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.profitMarginPositive === 0 ? "❌ Company not profitable ❌":"✅ Company is profitable ✅"}</li>:""
-                    }
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.forwardPEGreaterAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.forwardPEGreater === 0 ? "❌ Forward PE Ratio Lower Than Current ❌":"✅ Forward PE Ratio Higher Than Current ✅"}</li>:""
-                    }
-                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyDebtEquityAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.healthyDebtEquity === 0 ? "❌ Unhealthy Debt to Equity ❌":"✅ Good Debt to Equity ✅"}</li>:""
-                    }
-                     {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPriceBookAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.healthyPriceBook === 0 ? "❌ Unhealthy Price to Book ❌":"✅ Good Price to Book ✅"}</li>:""
-                    }
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.healthyPriceSalesAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.healthyPriceSales === 0 ? "❌ Unhealthy Price to Sales ❌":"✅ Good Price to Sales ✅"}</li>:""
-                    }
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.movingAveragesGreaterThanPriceAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.movingAveragesGreaterThanPrice === 0 ? "❌ Stock trading above it's 200 and 50 day moving averages ❌":"✅ Stock trading below it's 200 and 50 day moving averages ✅"}</li>:""
-                    }
-                    {stock.valueSearchScore !== undefined && stock.valueSearchScore.movingAverageSupportAttempted === true ? 
-                      <li class="list-group-item">{stock.valueSearchScore.movingAverageSupport === 0 ? "❌ Price hasn't found support with moving averages ❌":"✅ Stock may have found support with it's moving averages ✅"}</li>:""
-                    }
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.healthyPEAttempted === true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.healthyPE === 0
+                          ? "❌ Unhealthy Current PE Ratio ❌"
+                          : "✅ Good Current PE Ratio ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.healthyFuturePEAttempted === true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.healthyFuturePE === 0
+                          ? "❌ Unhealthy Forward PE Ratio ❌"
+                          : "✅ Good Forward PE Ratio ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.profitMarginPositiveAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.profitMarginPositive === 0
+                          ? "❌ Company not profitable ❌"
+                          : "✅ Company is profitable ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.forwardPEGreaterAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.forwardPEGreater === 0
+                          ? "❌ Forward PE Ratio Lower Than Current ❌"
+                          : "✅ Forward PE Ratio Higher Than Current ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.healthyDebtEquityAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.healthyDebtEquity === 0
+                          ? "❌ Unhealthy Debt to Equity ❌"
+                          : "✅ Good Debt to Equity ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.healthyPriceBookAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.healthyPriceBook === 0
+                          ? "❌ Unhealthy Price to Book ❌"
+                          : "✅ Good Price to Book ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.healthyPriceSalesAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.healthyPriceSales === 0
+                          ? "❌ Unhealthy Price to Sales ❌"
+                          : "✅ Good Price to Sales ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore
+                      .movingAveragesGreaterThanPriceAttempted === true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore
+                          .movingAveragesGreaterThanPrice === 0
+                          ? "❌ Stock trading above it's 200 and 50 day moving averages ❌"
+                          : "✅ Stock trading below it's 200 and 50 day moving averages ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                    stock.valueSearchScore.movingAverageSupportAttempted ===
+                      true ? (
+                      <li class="list-group-item">
+                        {stock.valueSearchScore.movingAverageSupport === 0
+                          ? "❌ Price hasn't found support with moving averages ❌"
+                          : "✅ Stock may have found support with it's moving averages ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
                   </ul>
                 </div>
-                <div class="modal-footer">
-                </div>
+                <div class="modal-footer"></div>
               </div>
             </div>
           </div>
