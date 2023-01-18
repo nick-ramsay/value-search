@@ -64,12 +64,16 @@ const QuoteCard = (props) => {
   };
 
   return (
-    <div className="card mb-3" style={{borderColor:
-      portfolioEntry !== undefined && portfolioEntry.status === "avoid"
-        ? "red"
-        : portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
-          ? "goldenrod"
-          : portfolioEntry !== undefined && portfolioEntry.status !== "-" ? "#007bff":"none"
+    <div className="card mb-3" style={{
+      borderColor:
+        portfolioEntry !== undefined && portfolioEntry.status === "avoid"
+          ? "red"
+          : portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
+            ? "goldenrod"
+            : portfolioEntry !== undefined && portfolioEntry.status === "-"
+              ? "transparent"
+              : portfolioEntry !== undefined && portfolioEntry.status !== "-"
+                ? "#007bff" : "transparent"
     }}>
       <div className="card-body">
         <h5 className="card-title row">
