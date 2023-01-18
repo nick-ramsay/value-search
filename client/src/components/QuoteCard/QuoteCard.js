@@ -64,7 +64,13 @@ const QuoteCard = (props) => {
   };
 
   return (
-    <div className="card mb-3">
+    <div className="card mb-3" style={{borderColor:
+      portfolioEntry !== undefined && portfolioEntry.status === "avoid"
+        ? "red"
+        : portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
+          ? "goldenrod"
+          : portfolioEntry !== undefined && portfolioEntry.status !== "-" ? "#007bff":"none"
+    }}>
       <div className="card-body">
         <h5 className="card-title row">
           <div className="col-md-12">
@@ -120,32 +126,6 @@ const QuoteCard = (props) => {
             )}
           </div>
           <div className="col-md-12 mt-1">
-            {portfolioEntry !== undefined &&
-              portfolioEntry.status !== "-" &&
-              portfolioEntry.queuedForPurchase === true ? (
-              <span>
-                <img className="text-icon ml-2" src={shoppingBasketIcon} />
-              </span>
-            ) : (
-              ""
-            )}
-            {portfolioEntry !== undefined && portfolioEntry.labels !== undefined
-              ? portfolioEntry.labels.map((label, i) => (
-                <img
-                  className="text-icon m-1"
-                  title={label}
-                  src={
-                    label === "Motley Fool"
-                      ? motleyFoolIcon
-                      : label === "KPP"
-                        ? kppIcon
-                        : label === "Value Search"
-                          ? valueSearchIcon
-                          : ""
-                  }
-                />
-              ))
-              : ""}
             <div className="col-md-12">
               {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
                 <span
@@ -153,7 +133,7 @@ const QuoteCard = (props) => {
                     portfolioEntry.status === "avoid"
                       ? "badge bg-danger"
                       : portfolioEntry.status === "temporaryavoid"
-                        ? "badge bg-warning"
+                        ? "badge badge-yellow-custom"
                         : "badge bg-primary"
                   }
                 >
@@ -167,6 +147,32 @@ const QuoteCard = (props) => {
                 ""
               )}
             </div>
+            {portfolioEntry !== undefined &&
+              portfolioEntry.status !== "-" &&
+              portfolioEntry.queuedForPurchase === true ? (
+              <span>
+                <img className="text-icon ml-2" src={shoppingBasketIcon} />
+              </span>
+            ) : (
+              ""
+            )}
+            {portfolioEntry !== undefined && portfolioEntry.labels !== undefined
+              ? portfolioEntry.labels.map((label, i) => (
+                <img
+                  className="text-icon mt-2 m-1"
+                  title={label}
+                  src={
+                    label === "Motley Fool"
+                      ? motleyFoolIcon
+                      : label === "KPP"
+                        ? kppIcon
+                        : label === "Value Search"
+                          ? valueSearchIcon
+                          : ""
+                  }
+                />
+              ))
+              : ""}
           </div>
           {/*Start: Edit Symbol Modal*/}
           <div

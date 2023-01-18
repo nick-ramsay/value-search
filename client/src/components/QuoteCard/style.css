@@ -6,6 +6,11 @@
     cursor: pointer;;
 }
 
+.badge-yellow-custom {
+    color: black;
+    background-color: goldenrod;
+}
+
 .vs-score-badge-red {
     color: red;
     font-size: 11px;
