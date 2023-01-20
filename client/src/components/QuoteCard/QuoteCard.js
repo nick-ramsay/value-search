@@ -699,6 +699,58 @@ const QuoteCard = (props) => {
               </span>
             </span>
           </div>
+          <div className="col-md-4">
+            <span>
+              <strong>Current EPS: </strong>
+              <span>
+                {stock.fundamentals !== undefined && stock.fundamentals !== null
+                  ? Number(stock.fundamentals["EPS (ttm)"]).toFixed(2)
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+          <div className="col-md-4">
+            <span>
+              <strong>Next Year EPS: </strong>
+              <span>
+                {stock.fundamentals !== undefined
+                  ? Number(stock.fundamentals["EPS next Y"]).toFixed(2) + (stock.fundamentals["EPS (ttm)"] < stock.fundamentals["EPS next Y"] ? " ⬆" : " ⬇")
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-4">
+            <span>
+              <strong>EPS past 5Y: </strong>
+              <span>
+              {stock.fundamentals !== undefined
+                  ? Number(stock.fundamentals["EPS past 5Y (%)"]).toFixed(2) + "%"
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+          <div className="col-md-4">
+          <span>
+          <strong>EPS next Y: </strong>
+              <span>
+              {stock.fundamentals !== undefined
+                  ? Number(stock.fundamentals["EPS next Y (%)"]).toFixed(2) + "%"
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+          <div className="col-md-4">
+          <span>
+          <strong>EPS next 5Y: </strong>
+              <span>
+              {stock.fundamentals !== undefined && isNaN(Number(stock.fundamentals["EPS next 5Y (%)"])) === false
+                  ? Number(stock.fundamentals["EPS next 5Y (%)"]).toFixed(2) + "%"
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
         </div>
         <div
           class="modal fade"
