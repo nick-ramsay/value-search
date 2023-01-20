@@ -18,6 +18,7 @@ import "./style.css";
 
 const QuoteCard = (props) => {
   let portfolio = props.portfolio !== undefined ? props.portfolio : [];
+  let page = props.page;
   let portfolioEntry =
     portfolio.length > 0
       ? portfolio[
@@ -66,14 +67,15 @@ const QuoteCard = (props) => {
   return (
     <div className="card mb-3" style={{
       borderColor:
-        portfolioEntry !== undefined && portfolioEntry.status === "avoid"
-          ? "red"
-          : portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
-            ? "goldenrod"
-            : portfolioEntry !== undefined && portfolioEntry.status === "-"
-              ? "transparent"
-              : portfolioEntry !== undefined && portfolioEntry.status !== "-"
-                ? "#007bff" : "transparent"
+      portfolioEntry === [] ? "transparent"
+        :portfolioEntry !== [] && portfolioEntry.status === "avoid"
+            ? "red"
+            : portfolioEntry !== [] && portfolioEntry.status === "temporaryavoid"
+              ? "goldenrod"
+              : portfolioEntry !== [] && portfolioEntry.status === "-"
+                ? "transparent"
+                : portfolioEntry !== [] && page === "Home" && (portfolioEntry.status === "watch" || portfolioEntry.status === "own" || portfolioEntry.status === "hold" || portfolioEntry.status === "icebox" || portfolioEntry.status === "speculative")
+                  ? "#007bff" : "transparent"
     }}>
       <div className="card-body">
         <h5 className="card-title row">
@@ -723,29 +725,29 @@ const QuoteCard = (props) => {
         <div className="row">
           <div className="col-md-4">
             <span>
-              <strong>EPS past 5Y: </strong>
+              <strong>EPS Q/Q: </strong>
               <span>
-              {stock.fundamentals !== undefined
-                  ? Number(stock.fundamentals["EPS past 5Y (%)"]).toFixed(2) + "%"
+                {stock.fundamentals !== undefined
+                  ? Number(stock.fundamentals["EPS Q/Q (%)"]).toFixed(2) + "%"
                   : "-"}{" "}
               </span>
             </span>
           </div>
           <div className="col-md-4">
-          <span>
-          <strong>EPS next Y: </strong>
+            <span>
+              <strong>EPS next Y: </strong>
               <span>
-              {stock.fundamentals !== undefined
+                {stock.fundamentals !== undefined
                   ? Number(stock.fundamentals["EPS next Y (%)"]).toFixed(2) + "%"
                   : "-"}{" "}
               </span>
             </span>
           </div>
           <div className="col-md-4">
-          <span>
-          <strong>EPS next 5Y: </strong>
+            <span>
+              <strong>EPS next 5Y: </strong>
               <span>
-              {stock.fundamentals !== undefined && isNaN(Number(stock.fundamentals["EPS next 5Y (%)"])) === false
+                {stock.fundamentals !== undefined && isNaN(Number(stock.fundamentals["EPS next 5Y (%)"])) === false
                   ? Number(stock.fundamentals["EPS next 5Y (%)"]).toFixed(2) + "%"
                   : "-"}{" "}
               </span>

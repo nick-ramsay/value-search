@@ -764,6 +764,7 @@ const Home = () => {
                   updatePortfolio={updatePortfolio}
                   portfolio={portfolio}
                   findPortfolio={findPortfolio}
+                  page={"Home"}
                 />
               ))
               : ""}

@@ -597,6 +597,7 @@ const Portfolio = () => {
                 portfolio={portfolio}
                 selectedStatus={selectedStatus}
                 findPortfolio={findPortfolio}
+                page={"Portfolio"}
               />
             ))
             : ""}
