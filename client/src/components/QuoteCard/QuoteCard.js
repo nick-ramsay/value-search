@@ -67,14 +67,14 @@ const QuoteCard = (props) => {
   return (
     <div className="card mb-3" style={{
       borderColor:
-      portfolioEntry === [] ? "transparent"
-        :portfolioEntry !== [] && portfolioEntry.status === "avoid"
+      portfolioEntry === [] && portfolioEntry !== undefined ? "transparent"
+        :portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "avoid"
             ? "red"
-            : portfolioEntry !== [] && portfolioEntry.status === "temporaryavoid"
+            : portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
               ? "goldenrod"
-              : portfolioEntry !== [] && portfolioEntry.status === "-"
+              : portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "-"
                 ? "transparent"
-                : portfolioEntry !== [] && page === "Home" && (portfolioEntry.status === "watch" || portfolioEntry.status === "own" || portfolioEntry.status === "hold" || portfolioEntry.status === "icebox" || portfolioEntry.status === "speculative")
+                : portfolioEntry !== [] && portfolioEntry !== undefined && page === "Home" && (portfolioEntry.status === "watch" || portfolioEntry.status === "own" || portfolioEntry.status === "hold" || portfolioEntry.status === "icebox" || portfolioEntry.status === "speculative")
                   ? "#007bff" : "transparent"
     }}>
       <div className="card-body">
