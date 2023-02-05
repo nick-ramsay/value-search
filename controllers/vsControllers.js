@@ -217,7 +217,8 @@ module.exports = {
             "fundamentals.Debt/Eq": { $gte: Number(req.body.minDebtEquity), $lte: Number(req.body.maxDebtEquity) },
             "fundamentals.P/S": { $gte: Number(req.body.minPriceSales), $lte: Number(req.body.maxPriceSales) },
             "fundamentals.P/B": { $gte: Number(req.body.minPriceToBook), $lte: Number(req.body.maxPriceToBook) },
-            "quote.marketCap": { $gte: Number(req.body.minCap), $lte: Number(req.body.maxCap) }
+            "quote.marketCap": { $gte: Number(req.body.minCap), $lte: Number(req.body.maxCap) },
+            "fundamentals.Profit Margin (%)": {$gte: Number(req.body.minProfitMargin)}
         })
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))

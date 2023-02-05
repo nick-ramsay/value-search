@@ -3,8 +3,8 @@ import axios from "axios";
 const apiURL = process.env.NODE_ENV === 'production' ? '' : '//localhost:3001'
 
 export default {
-    findSearchResults: (minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap) => {
-        return axios({ method: "post", url: apiURL + "/api/value-search/find-search-results", data: { minPE: minPE, maxPE: maxPE, minDebtEquity: minDebtEquity, maxDebtEquity: maxDebtEquity, minPriceSales: minPriceSales, maxPriceSales: maxPriceSales, minPriceToBook: minPriceToBook, maxPriceToBook: maxPriceToBook, minCap: minCap, maxCap: maxCap } });
+    findSearchResults: (minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap, minProfitMargin) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/find-search-results", data: { minPE: minPE, maxPE: maxPE, minDebtEquity: minDebtEquity, maxDebtEquity: maxDebtEquity, minPriceSales: minPriceSales, maxPriceSales: maxPriceSales, minPriceToBook: minPriceToBook, maxPriceToBook: maxPriceToBook, minCap: minCap, maxCap: maxCap, minProfitMargin: minProfitMargin } });
     },
     findSingleStock: (searchSymbol) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-single-stock", data: { searchSymbol } });
@@ -69,6 +69,6 @@ export default {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-portfolio", data: { account_id: account_id } });
     },
     syncPortfolioWithEtrade: (symbols, status) => {
-        return axios({ method: "post", url: apiURL + "/api/value-search/sync-portfolio-with-etrade", data: { symbols: symbols, status:status } });
+        return axios({ method: "post", url: apiURL + "/api/value-search/sync-portfolio-with-etrade", data: { symbols: symbols, status: status } });
     }
 }

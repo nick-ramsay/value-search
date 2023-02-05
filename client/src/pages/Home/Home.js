@@ -58,23 +58,33 @@ const Home = () => {
     let selectedMarketCapInput = document.getElementById("marketCapSizeInput").value;
     let selectedMarketCapMin = 0;
     let selectedMarketCapMax = 1000000000000000000;
-    if (selectedMarketCapInput === "all")  {
+    if (selectedMarketCapInput === "all") {
       selectedMarketCapMin = 0;
       selectedMarketCapMax = 1000000000000000000;
     } else if (selectedMarketCapInput === "small") {
       selectedMarketCapMin = 0;
       selectedMarketCapMax = 1999999999;
-    }else if (selectedMarketCapInput === "mid") {
+    } else if (selectedMarketCapInput === "mid") {
       selectedMarketCapMin = 2000000000;
       selectedMarketCapMax = 99999999999;
     }
     else if (selectedMarketCapInput === "large") {
       selectedMarketCapMin = 10000000000;
       selectedMarketCapMax = 199999999999;
-    }else if (selectedMarketCapInput === "mega") {
-      selectedMarketCapMin = 200000000000;                      
+    } else if (selectedMarketCapInput === "mega") {
+      selectedMarketCapMin = 200000000000;
       selectedMarketCapMax = 1000000000000000000;
     }
+
+    let profitabilityParameter = document.getElementById("profitableCheckbox").checked;
+    let minProfitMargin;
+    if (profitabilityParameter === true) {
+      minProfitMargin = 0;
+    } else {
+      minProfitMargin = -100
+    }
+    
+    console.log(profitabilityParameter)
 
 
     API.findSearchResults(
@@ -87,7 +97,8 @@ const Home = () => {
       minPriceToBook,
       maxPriceToBook,
       selectedMarketCapMin,
-      selectedMarketCapMax
+      selectedMarketCapMax,
+      minProfitMargin
     ).then((res) => {
       setValueSearchData((valueSearchData) => res.data);
       setLoading((loading) => false);
@@ -300,7 +311,7 @@ const Home = () => {
       <nav className="navbar navbar-dark navbar-expand-lg">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            <img src={vsLogo} className="navbar-logo"/>
+            <img src={vsLogo} className="navbar-logo" />
           </a>
           <button
             className="navbar-toggler mb-2"
@@ -495,7 +506,7 @@ const Home = () => {
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
                               defaultValue={10}
-                              //onChange={Number(setMinPE)}
+                            //onChange={Number(setMinPE)}
                             />
                           </div>
                         </div>
@@ -511,7 +522,7 @@ const Home = () => {
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
                               defaultValue={15}
-                              //onChange={setMaxPE}
+                            //onChange={setMaxPE}
                             />
                           </div>
                         </div>
@@ -530,7 +541,7 @@ const Home = () => {
                               placeholder="Minimum Debt/Equity"
                               defaultValue={0.0}
                               step="0.01"
-                              //onChange={setMinDebtEquity}
+                            //onChange={setMinDebtEquity}
                             />
                           </div>
                         </div>
@@ -547,7 +558,7 @@ const Home = () => {
                               placeholder="Maximum Debt/Equity"
                               defaultValue={2.0}
                               step="0.01"
-                              //onChange={setMaxDebtEquity}
+                            //onChange={setMaxDebtEquity}
                             />
                           </div>
                         </div>
@@ -566,7 +577,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Book"
                               defaultValue={0.95}
                               step="0.01"
-                              //onChange={setMinPriceToBook}
+                            //onChange={setMinPriceToBook}
                             />
                           </div>
                         </div>
@@ -583,7 +594,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Book"
                               defaultValue={1.1}
                               step="0.01"
-                              //onChange={setMaxPriceToBook}
+                            //onChange={setMaxPriceToBook}
                             />
                           </div>
                         </div>
@@ -602,7 +613,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Sales"
                               defaultValue={0.0}
                               step="0.01"
-                              //onChange={setMinPriceSales}
+                            //onChange={setMinPriceSales}
                             />
                           </div>
                         </div>
@@ -619,7 +630,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Sales"
                               defaultValue={2.0}
                               step="0.01"
-                              //onChange={setMaxPriceSales}
+                            //onChange={setMaxPriceSales}
                             />
                           </div>
                         </div>
@@ -654,10 +665,10 @@ const Home = () => {
                             <select
                               id="selectedInvestmentTypeInput"
                               className="form-control"
-                              /*onClick={(event) => {
-                                selectedInvestmentType(event);
-                              }}
-                              */
+                            /*onClick={(event) => {
+                              selectedInvestmentType(event);
+                            }}
+                            */
                             >
                               <option value="cs" selected>
                                 Common Stock
@@ -677,6 +688,18 @@ const Home = () => {
                               <option value="ut">Unit</option>
                               <option value="struct">Structured Product</option>
                             </select>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 mt-auto mb-auto">
+                            <div className="form-group">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="profitableCheckbox" defaultChecked="true"/>
+                                  <label class="form-check-label" for="profitableCheckbox">
+                                    Company Profitable
+                                  </label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
