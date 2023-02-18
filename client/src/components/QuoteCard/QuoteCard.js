@@ -351,9 +351,9 @@ const QuoteCard = (props) => {
                           class="form-check-input"
                           type="checkbox"
                           defaultChecked={
-                            portfolioEntry !== undefined
+                            portfolioEntry !== undefined && portfolioEntry.queuedForPurchase !== undefined
                               ? portfolioEntry.queuedForPurchase
-                              : "false"
+                              : false
                           }
                           id={"queued-for-purchase-" + stock.symbol}
                         />
