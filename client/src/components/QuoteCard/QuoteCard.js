@@ -67,8 +67,8 @@ const QuoteCard = (props) => {
   return (
     <div className="card mb-3" style={{
       borderColor:
-      portfolioEntry === [] && portfolioEntry !== undefined ? "transparent"
-        :portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "avoid"
+        portfolioEntry === [] && portfolioEntry !== undefined ? "transparent"
+          : portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "avoid"
             ? "red"
             : portfolioEntry !== [] && portfolioEntry !== undefined && portfolioEntry.status === "temporaryavoid"
               ? "goldenrod"
@@ -346,24 +346,88 @@ const QuoteCard = (props) => {
                         : ""}
                     </div>
                     <div class="input-group mt-2">
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          defaultChecked={
-                            portfolioEntry !== undefined && portfolioEntry.queuedForPurchase !== undefined
-                              ? portfolioEntry.queuedForPurchase
-                              : false
-                          }
-                          id={"queued-for-purchase-" + stock.symbol}
-                        />
+                      <div className="col-md-12 text-left">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            defaultChecked={
+                              portfolioEntry !== undefined && portfolioEntry.queuedForPurchase !== undefined
+                                ? portfolioEntry.queuedForPurchase
+                                : false
+                            }
+                            id={"queued-for-purchase-" + stock.symbol}
+                          />
+                          <label
+                            class="form-check-label"
+                            style={{ fontSize: 14 }}
+                            for={"queued-for-purchase-" + stock.symbol}
+                          >
+                            Queued for Purchase
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-group mt-2">
+                      <div className="col-md-12 mb-3">
                         <label
                           class="form-check-label"
                           style={{ fontSize: 14 }}
-                          for={"queued-for-purchase-" + stock.symbol}
+                          for={"price-target-enabled-" + stock.symbol}
                         >
-                          Queued for Purchase
+                          Price Target
                         </label>
+                      </div>
+                      <div className="col-md-2">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            defaultChecked={
+                              portfolioEntry !== undefined && portfolioEntry.priceTargetEnabled !== undefined
+                                ? portfolioEntry.priceTargetEnabled
+                                : false
+                            }
+                            id={"price-target-enabled-" + stock.symbol}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-9">
+                        <div class="input-group mb-3">
+                          <span class="input-group-text">$</span>
+                          <input id={"price-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.priceTarget !== undefined ? Number(portfolioEntry.priceTarget):0.00} type="number" min="0.00" step="0.01" className="form-control" aria-label="Amount (to the nearest dollar)" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-group mt-2">
+                      <div className="col-md-12 mb-3">
+                        <label
+                          class="form-check-label"
+                          style={{ fontSize: 14 }}
+                          for={"sell-target-enabled-" + stock.symbol}
+                        >
+                          Sell Target
+                        </label>
+                      </div>
+                      <div className="col-md-2">
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            defaultChecked={
+                              portfolioEntry !== undefined && portfolioEntry.sellTargetEnabled !== undefined
+                                ? portfolioEntry.sellTargetEnabled
+                                : false
+                            }
+                            id={"sell-target-enabled-" + stock.symbol}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-9">
+                        <div class="input-group mb-3">
+                          <span class="input-group-text">$</span>
+                          <input id={"sell-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.sellTarget !== undefined ? Number(portfolioEntry.sellTarget):0.00} type="number" min={0.00} step={0.01} className="form-control" aria-label="Amount (to the nearest dollar)" />
+                        </div>
                       </div>
                     </div>
                   </form>

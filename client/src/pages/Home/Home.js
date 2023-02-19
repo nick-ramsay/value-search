@@ -83,7 +83,7 @@ const Home = () => {
     } else {
       minProfitMargin = -100
     }
-    
+
     console.log(profitabilityParameter)
 
 
@@ -225,6 +225,22 @@ const Home = () => {
       "queued-for-purchase-" + symbol
     ).checked;
 
+    let newPriceTargetEnabled = document.getElementById(
+      "price-target-enabled-" + symbol
+    ).checked;
+
+    let newPriceTarget = document.getElementById(
+      "price-target-" + symbol
+    ).value;
+
+    let newSellTargetEnabled = document.getElementById(
+      "sell-target-enabled-" + symbol
+    ).checked;
+
+    let newSellTarget = document.getElementById(
+      "sell-target-" + symbol
+    ).value;
+
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
@@ -241,6 +257,10 @@ const Home = () => {
       tempPortfolio[symbolIndex].status = newStatus;
       tempPortfolio[symbolIndex].comments = updatedComments;
       tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
+      tempPortfolio[symbolIndex].priceTargetEnabled = newPriceTargetEnabled;
+      tempPortfolio[symbolIndex].priceTarget = Number(newPriceTarget);
+      tempPortfolio[symbolIndex].sellTargetEnabled = newSellTargetEnabled;
+      tempPortfolio[symbolIndex].sellTarget = Number(newSellTarget);
       document.getElementById("new-comment-input-" + symbol).value = "";
     } else {
       tempPortfolio.push({
@@ -248,6 +268,10 @@ const Home = () => {
         status: newStatus,
         comments: updatedComments,
         queuedForPurchase: newQueuedForPurchase,
+        priceTargetEnabled: newPriceTargetEnabled,
+        priceTarget: Number(newPriceTarget),
+        sellTargetEnabled: newSellTargetEnabled,
+        sellTarget: Number(newSellTarget)
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
@@ -694,10 +718,10 @@ const Home = () => {
                           <div className="col-md-6 mt-auto mb-auto">
                             <div className="form-group">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="profitableCheckbox" defaultChecked="true"/>
-                                  <label class="form-check-label" for="profitableCheckbox">
-                                    Company Profitable
-                                  </label>
+                                <input class="form-check-input" type="checkbox" id="profitableCheckbox" defaultChecked="true" />
+                                <label class="form-check-label" for="profitableCheckbox">
+                                  Company Profitable
+                                </label>
                               </div>
                             </div>
                           </div>

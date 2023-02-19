@@ -159,6 +159,22 @@ const Portfolio = () => {
     let newQueuedForPurchase = document.getElementById(
       "queued-for-purchase-" + symbol
     ).checked;
+
+    let newPriceTargetEnabled = document.getElementById(
+      "price-target-enabled-" + symbol
+    ).checked;
+
+    let newPriceTarget = document.getElementById(
+      "price-target-" + symbol
+    ).value;
+
+    let newSellTargetEnabled = document.getElementById(
+      "sell-target-enabled-" + symbol
+    ).checked;
+
+    let newSellTarget = document.getElementById(
+      "sell-target-" + symbol
+    ).value;
     
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
@@ -176,13 +192,21 @@ const Portfolio = () => {
       tempPortfolio[symbolIndex].status = newStatus;
       tempPortfolio[symbolIndex].comments = updatedComments;
       tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
+      tempPortfolio[symbolIndex].priceTargetEnabled = newPriceTargetEnabled;
+      tempPortfolio[symbolIndex].priceTarget = Number(newPriceTarget);
+      tempPortfolio[symbolIndex].sellTargetEnabled = newSellTargetEnabled;
+      tempPortfolio[symbolIndex].sellTarget = Number(newSellTarget);
       document.getElementById("new-comment-input-" + symbol).value = "";
     } else {
       tempPortfolio.push({
         symbol: symbol,
         status: newStatus,
         comments: updatedComments,
-        queuedForPurchase: newQueuedForPurchase
+        queuedForPurchase: newQueuedForPurchase,
+        priceTargetEnabled: newPriceTargetEnabled,
+        priceTarget: Number(newPriceTarget),
+        sellTargetEnabled: newSellTargetEnabled,
+        sellTarget: Number(newSellTarget)
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
