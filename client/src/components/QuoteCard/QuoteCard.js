@@ -12,6 +12,8 @@ import infoIcon from "../../images/round_info_white_24dp.png";
 import motleyFoolIcon from "../../images/motley_fool_logo.png";
 import kppIcon from "../../images/kpp_logo.png";
 import valueSearchIcon from "../../images/value_search_logo.png";
+import targetIcon from "../../images/outline_my_location_white_24dp.png";
+import sellIcon from "../../images/outline_sell_white_24dp.png";
 
 import { toTitleCase } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
@@ -395,7 +397,7 @@ const QuoteCard = (props) => {
                       <div className="col-md-9">
                         <div class="input-group mb-3">
                           <span class="input-group-text">$</span>
-                          <input id={"price-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.priceTarget !== undefined ? Number(portfolioEntry.priceTarget):0.00} type="number" min="0.00" step="0.01" className="form-control" aria-label="Amount (to the nearest dollar)" />
+                          <input id={"price-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.priceTarget !== undefined ? Number(portfolioEntry.priceTarget) : 0.00} type="number" min="0.00" step="0.01" className="form-control" aria-label="Amount (to the nearest dollar)" />
                         </div>
                       </div>
                     </div>
@@ -426,7 +428,7 @@ const QuoteCard = (props) => {
                       <div className="col-md-9">
                         <div class="input-group mb-3">
                           <span class="input-group-text">$</span>
-                          <input id={"sell-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.sellTarget !== undefined ? Number(portfolioEntry.sellTarget):0.00} type="number" min={0.00} step={0.01} className="form-control" aria-label="Amount (to the nearest dollar)" />
+                          <input id={"sell-target-" + stock.symbol} defaultValue={portfolioEntry !== undefined && portfolioEntry.sellTarget !== undefined ? Number(portfolioEntry.sellTarget) : 0.00} type="number" min={0.00} step={0.01} className="form-control" aria-label="Amount (to the nearest dollar)" />
                         </div>
                       </div>
                     </div>
@@ -571,6 +573,12 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <p>
               <strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}
+              {portfolioEntry !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 && portfolioEntry.priceTargetEnabled === true ?
+                <span><img className="text-icon m-2" src={targetIcon} title={"Price target set for $" + portfolioEntry.priceTarget} /><span title="Price target reached">{portfolioEntry.priceTarget >= stock.quote.latestPrice ? "✅" : ""}</span></span> : ""
+              }
+              {portfolioEntry !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 && portfolioEntry.sellTargetEnabled === true ?
+                <span><img className="text-icon m-2" src={sellIcon} title={"Sell target set for $" + portfolioEntry.sellTarget} /><span title="Sell target reached">{portfolioEntry.sellTarget <= stock.quote.latestPrice ? "✅" : ""}</span></span> : ""
+              }
             </p>
           </div>
           <div className="col-md-4">
