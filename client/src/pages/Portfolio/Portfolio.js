@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PuffLoader from "react-spinners/PuffLoader";
 import { getCookie, logout } from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
@@ -130,6 +131,7 @@ const Portfolio = () => {
   //END: User Account Creation Functions
 
   const findPortfolio = (user, selectedStatus) => {
+    setLoading((loading) => true)
     let symbolList = [];
     API.findPortfolio(user, selectedStatus).then((res) => {
       if (res.data !== null) {
@@ -175,7 +177,7 @@ const Portfolio = () => {
     let newSellTarget = document.getElementById(
       "sell-target-" + symbol
     ).value;
-    
+
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
@@ -311,7 +313,7 @@ const Portfolio = () => {
         }
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2);
-      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) =>{});
+      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => { });
       let tempPortfolio = portfolio;
       for (let i = 0; i < etradeSymbols.length; i++) {
         if (
@@ -350,7 +352,7 @@ const Portfolio = () => {
       <nav className="navbar navbar-dark navbar-expand-lg">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-            <img src={vsLogo} className="navbar-logo"/>
+            <img src={vsLogo} className="navbar-logo" />
           </a>
           <button
             className="navbar-toggler mb-2"
@@ -364,24 +366,24 @@ const Portfolio = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
-            <form className="d-flex" role="search">
-              <input
-                id="searchSymbol"
-                className="form-control form-control-sm me-2"
-                type="search"
-                placeholder="Ticker Symbol"
-                defaultValue={""}
-                aria-label="Search"
-              />
-              <button
-                className="btn btn-sm btn-outline-primary"
-                type="button"
-                onClick={findSingleStock}
-              >
-                Search
-              </button>
-            </form>
+            <ul className="navbar-nav ml-auto mb-2 mb-lg-0">
+              <form className="d-flex" role="search">
+                <input
+                  id="searchSymbol"
+                  className="form-control form-control-sm me-2"
+                  type="search"
+                  placeholder="Ticker Symbol"
+                  defaultValue={""}
+                  aria-label="Search"
+                />
+                <button
+                  className="btn btn-sm btn-outline-primary"
+                  type="button"
+                  onClick={findSingleStock}
+                >
+                  Search
+                </button>
+              </form>
             </ul>
             <ul className="navbar-nav ml-auto mb-2 mb-lg-0 text-center">
               {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
@@ -491,123 +493,128 @@ const Portfolio = () => {
         <div>
           <div>
             <div className="mb-3">
+              <div id="portfolio-loading" className={loading === false ? "d-none d-flex justify-content-center align-items-center mt-3" : "d-flex justify-content-center mt-3"}>
+                <PuffLoader color="#007bff" size="200" />
+              </div>
+              <div className={loading === true ? "d-none portfolio-body" : "portfolio-body"}>
+                <div className="accordion-flush" id="accordionFlushExample">
+                  <div className="col-md-12 text-center">
+                    <div className=" text-center">
 
-              <div className=" accordion-flush" id="accordionFlushExample">
-                <div className="col-md-12 text-center">
-                  <div className=" text-center">
-
-                    <a
-                      className="text-center collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#flush-collapseOne"
-                      aria-expanded="false"
-                      aria-controls="flush-collapseOne"
-                      style={{ fontSize: 12 }}
-                    >
-                      Upload CSV from Etrade
-                    </a>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <div
-                    id="flush-collapseOne"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="flush-headingOne"
-                    data-bs-parent="#accordionFlushExample"
-                  >
-                    <div className="accordion-body">
-                      <input
-                        className="form-control"
-                        type="file"
-                        id="etradeCSVSelect"
-                      />
+                      <a
+                        className="text-center collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne"
+                        style={{ fontSize: 12 }}
+                      >
+                        Upload CSV from Etrade
+                      </a>
                     </div>
-                    <div className="row">
-                      <div className="col-md-12">
-                        <button
-                          className="btn btn-sm btn-outline-primary mt-2"
-                          onClick={() => syncWithEtrade()}
-                        >
-                          Sync Portfolio with Etrade
-                        </button>
+                  </div>
+                  <div className="accordion-item">
+                    <div
+                      id="flush-collapseOne"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="flush-headingOne"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div className="accordion-body">
+                        <input
+                          className="form-control"
+                          type="file"
+                          id="etradeCSVSelect"
+                        />
+                      </div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <button
+                            className="btn btn-sm btn-outline-primary mt-2"
+                            onClick={() => syncWithEtrade()}
+                          >
+                            Sync Portfolio with Etrade
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-12 mt-2">
-                  <button
-                    type="button"
-                    className={
-                      selectedStatus === "icebox"
-                        ? "btn btn-sm btn-light status-button m-1"
-                        : "btn btn-sm btn-outline-light status-button m-1"
-                    }
-                    onClick={() => {
-                      findPortfolio(userID, "icebox");
-                      setSelectedStatus((selectedStatus) => "icebox");
-                    }}
-                  >
-                    Icebox
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      selectedStatus === "watch"
-                        ? "btn btn-sm btn-light status-button m-1"
-                        : "btn btn-sm btn-outline-light status-button m-1"
-                    }
-                    onClick={() => {
-                      findPortfolio(userID, "watch");
-                      setSelectedStatus((selectedStatus) => "watch");
-                    }}
-                  >
-                    Watch
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      selectedStatus === "own"
-                        ? "btn btn-sm btn-light status-button m-1"
-                        : "btn btn-sm btn-outline-light status-button m-1"
-                    }
-                    onClick={() => {
-                      findPortfolio(userID, "own");
-                      setSelectedStatus((selectedStatus) => "own");
-                    }}
-                  >
-                    Own
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      selectedStatus === "hold"
-                        ? "btn btn-sm btn-light status-button m-1"
-                        : "btn btn-sm btn-outline-light status-button m-1"
-                    }
-                    onClick={() => {
-                      findPortfolio(userID, "hold");
-                      setSelectedStatus((selectedStatus) => "hold");
-                    }}
-                  >
-                    Hold
-                  </button>
-                  <button
-                    type="button"
-                    className={
-                      selectedStatus === "speculative"
-                        ? "btn btn-sm btn-light status-button m-1"
-                        : "btn btn-sm btn-outline-light status-button m-1"
-                    }
-                    onClick={() => {
-                      findPortfolio(userID, "speculative");
-                      setSelectedStatus((selectedStatus) => "speculative");
-                    }}
-                  >
-                    Speculative
-                  </button>
+
+                <div className="row">
+                  <div className="col-md-12 mt-2">
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "icebox"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "icebox");
+                        setSelectedStatus((selectedStatus) => "icebox");
+                      }}
+                    >
+                      Icebox
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "watch"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "watch");
+                        setSelectedStatus((selectedStatus) => "watch");
+                      }}
+                    >
+                      Watch
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "own"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "own");
+                        setSelectedStatus((selectedStatus) => "own");
+                      }}
+                    >
+                      Own
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "hold"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "hold");
+                        setSelectedStatus((selectedStatus) => "hold");
+                      }}
+                    >
+                      Hold
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "speculative"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "speculative");
+                        setSelectedStatus((selectedStatus) => "speculative");
+                      }}
+                    >
+                      Speculative
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
