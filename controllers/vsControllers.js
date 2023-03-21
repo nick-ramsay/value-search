@@ -269,6 +269,13 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
     },
+    returnPortfolioSymbolData: (req, res) => {
+        console.log(req.body.symbols);
+        db.StockSymbols.find({ "symbol": { $in: req.body.symbols } })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+
+    },
     syncPortfolioWithEtrade: (req, res) => {
         /*
         db.Portfolio.updateMany({ "symbol": { $in: req.body.symbols } }, { "status": req.body.status }, { "upsert": true })

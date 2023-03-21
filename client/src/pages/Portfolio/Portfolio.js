@@ -8,6 +8,7 @@ import moment from "moment";
 import vsLogo from "../../images/logo-png/logo-no-background.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
+import analyticsIcon from "../../images/outline_analytics_white_24dp.png";
 import { sha256 } from "js-sha256";
 import "./style.css";
 
@@ -149,6 +150,21 @@ const Portfolio = () => {
     });
   };
 
+  const renderAnalytics = (vsData) => {
+    let ownedSymbols = [];
+    /*for (let i = 0; i < portfolioData.length; i++) {
+      if (vsData[i].status === "own" || vsData[i].status === "hold" || vsData[i].status === "speculative") {
+        ownedSymbols.push(portfolioData[i].symbol);
+      }
+    }*/
+    console.log(vsData);
+    /*
+    API.returnPortfolioSymbolData(ownedSymbols).then(res => {
+      console.log(res.data)
+    })
+    */
+  }
+
   const updatePortfolio = (symbol, userID) => {
     let newStatus = document.getElementById(
       symbol + "PortfolioStatusInput"
@@ -265,6 +281,7 @@ const Portfolio = () => {
   const renderValueSearchResults = (symbols, selectedStatus) => {
     API.findPortfolioQuotes(symbols, selectedStatus).then((res) => {
       setValueSearchData((valueSearchData) => res.data);
+      renderAnalytics(res.data);
       setLoading((loading) => false);
     });
   };
@@ -614,9 +631,15 @@ const Portfolio = () => {
                     >
                       Speculative
                     </button>
+                    <img id="portfolioAnalytics" className="medium-icon pointer-hover" src={analyticsIcon} type="button" data-bs-toggle="collapse" data-bs-target="#analyticsAccordion" aria-expanded="true" aria-controls="analyticsAccordion"></img>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div id="analyticsAccordion" class="accordion-collapse collapse" data-bs-parent="#portfolioAnalytics">
+            <div class="accordion-body">
+              <h6><strong>Portfolio Analysis</strong></h6>
             </div>
           </div>
           {!loading

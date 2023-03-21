@@ -94,6 +94,10 @@ router
   .post(vsControllers.findPortfolioQuotes);
 
 router
+  .route("/return-portfolio-symbol-data")
+  .post(vsControllers.returnPortfolioSymbolData);
+
+router
   .route("/sync-portfolio-with-etrade")
   .post(vsControllers.syncPortfolioWithEtrade)
 

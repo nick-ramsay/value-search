@@ -70,5 +70,8 @@ export default {
     },
     syncPortfolioWithEtrade: (symbols, status) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/sync-portfolio-with-etrade", data: { symbols: symbols, status: status } });
+    },
+    returnPortfolioSymbolData: (symbols) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/return-portfolio-symbol-data", data: { symbols: symbols } });
     }
 }

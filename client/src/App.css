@@ -4,6 +4,14 @@ body {
   font-family: Montserrat;
 }
 
+.medium-icon {
+  height: 32px;
+}
+
+.pointer-hover:hover {
+  cursor: pointer;
+}
+
 .navbar-logo {
   height: 22px;
 }
