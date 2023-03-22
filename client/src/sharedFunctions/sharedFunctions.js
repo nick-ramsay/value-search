@@ -38,16 +38,36 @@ export const logout = () => {
 };
 
 export const toTitleCase = (str) => {
-    if ((str===null) || (str==='') || (str===undefined))
-         return false;
+    if ((str === null) || (str === '') || (str === undefined))
+        return false;
     else
-     str = str.toString();
-  
-   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-  }
+        str = str.toString();
+
+    return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+}
 
 export const goBack = () => {
     window.history.back();
+};
+
+export const topOfPage = () => {
+    // Get the button
+    let mybutton = document.getElementById("top-button");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () { scrollFunction() };
+
+    const scrollFunction = () => {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+};
+
+export const topFunction = () => {
+    window.scrollTo({top:0, behavior:'smooth'});
 };
 
 

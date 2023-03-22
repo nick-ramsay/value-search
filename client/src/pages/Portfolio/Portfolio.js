@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PuffLoader from "react-spinners/PuffLoader";
-import { getCookie, logout } from "../../sharedFunctions/sharedFunctions";
+import { getCookie, logout, topOfPage, topFunction } from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
@@ -362,6 +362,7 @@ const Portfolio = () => {
 
   useEffect(() => {
     renderAccountName();
+    topOfPage();
   }, []);
 
   return (
@@ -655,6 +656,7 @@ const Portfolio = () => {
               />
             ))
             : ""}
+             <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
         </div>
       </div>
     </div>
