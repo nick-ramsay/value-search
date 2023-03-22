@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
 import PuffLoader from "react-spinners/PuffLoader";
 import { getCookie, logout, topOfPage, topFunction } from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
@@ -13,6 +15,7 @@ import { sha256 } from "js-sha256";
 import "./style.css";
 
 import QuoteCard from "../../components/QuoteCard/QuoteCard";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Portfolio = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
@@ -36,6 +39,7 @@ const Portfolio = () => {
   var [confirmPassword, setConfirmPassword] = useInput("");
   var [submissionMessage, setSubmissionMessage] = useState("");
   var [portfolio, setPortfolio] = useState([]);
+  var [industriesData, setIndustriesData] = useState({ datasets: [{ label: [], data: [] }] })
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
 
@@ -137,6 +141,7 @@ const Portfolio = () => {
     API.findPortfolio(user, selectedStatus).then((res) => {
       if (res.data !== null) {
         setPortfolio((portfolio) => res.data.portfolio);
+        renderAnalytics(res.data.portfolio);
         for (let i = 0; i < res.data.portfolio.length; i++) {
           if (
             res.data.portfolio[i].status !== "-" &&
@@ -150,19 +155,71 @@ const Portfolio = () => {
     });
   };
 
-  const renderAnalytics = (vsData) => {
+  const renderAnalytics = (portfolioData) => {
     let ownedSymbols = [];
-    /*for (let i = 0; i < portfolioData.length; i++) {
-      if (vsData[i].status === "own" || vsData[i].status === "hold" || vsData[i].status === "speculative") {
+    let ownedData = [];
+    let industries = {
+      undefined: 0
+    }
+    let industriesArray = {
+      labels: [],
+      datasets: [{
+        label: "Count of Positions",
+        data: [], backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1
+      }]
+    };
+
+    setIndustriesData(industriesData => industriesArray)
+
+    for (let i = 0; i < portfolioData.length; i++) {
+      if (portfolioData[i].status === "own" || portfolioData[i].status === "hold") {
         ownedSymbols.push(portfolioData[i].symbol);
       }
-    }*/
-    console.log(vsData);
-    /*
-    API.returnPortfolioSymbolData(ownedSymbols).then(res => {
-      console.log(res.data)
-    })
-    */
+    }
+    console.log(ownedSymbols);
+    API.findPortfolioQuotes(ownedSymbols).then((res) => {
+      ownedData = res.data;
+      console.log(ownedData)
+      for (let j = 0; j < ownedData.length; j++) {
+        if (ownedData[j].fundamentals !== undefined) {
+          let currentIndustry = ownedData[j].fundamentals.industry;
+          if (industries[currentIndustry] === undefined) {
+            industries[currentIndustry] = 1;
+          } else {
+            industries[currentIndustry] += 1;
+          }
+        } else {
+          industries.undefined += 1;
+        }
+      };
+
+      console.log(industries);
+      for (const key in industries) {
+        if (industries.hasOwnProperty(key)) {
+          //console.log(`${key}: ${industries[key]}`);
+          industriesArray.labels.push((`${key}`).toUpperCase());
+          industriesArray.datasets[0].data.push(Number(`${industries[key]}`))
+        }
+      }
+      console.log(industriesArray);
+    });
+
   }
 
   const updatePortfolio = (symbol, userID) => {
@@ -281,7 +338,6 @@ const Portfolio = () => {
   const renderValueSearchResults = (symbols, selectedStatus) => {
     API.findPortfolioQuotes(symbols, selectedStatus).then((res) => {
       setValueSearchData((valueSearchData) => res.data);
-      renderAnalytics(res.data);
       setLoading((loading) => false);
     });
   };
@@ -638,9 +694,29 @@ const Portfolio = () => {
               </div>
             </div>
           </div>
-          <div id="analyticsAccordion" class="accordion-collapse collapse" data-bs-parent="#portfolioAnalytics">
-            <div class="accordion-body">
+          <div id="analyticsAccordion" className="accordion-collapse collapse mb-2" data-bs-parent="#portfolioAnalytics">
+            <div className="accordion-body">
               <h6><strong>Portfolio Analysis</strong></h6>
+              <div id="analyticsCarouselControls" className="carousel slide" data-bs-ride="carousel">
+                <div className="carousel-inner">
+                  <div className="carousel-item active">
+                    <div className="col-md-12">
+                      <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={industriesData} />
+                    </div>
+                  </div>
+                  <div className="carousel-item">
+                    <p>Sector</p>
+                  </div>
+                </div>
+                <button className="carousel-control-prev" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="prev">
+                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Previous</span>
+                </button>
+                <button className="carousel-control-next" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="next">
+                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span className="visually-hidden">Next</span>
+                </button>
+              </div>
             </div>
           </div>
           {!loading
@@ -656,7 +732,7 @@ const Portfolio = () => {
               />
             ))
             : ""}
-             <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
+          <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
         </div>
       </div>
     </div>
