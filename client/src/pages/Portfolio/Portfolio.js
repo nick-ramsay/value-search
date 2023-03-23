@@ -40,6 +40,7 @@ const Portfolio = () => {
   var [submissionMessage, setSubmissionMessage] = useState("");
   var [portfolio, setPortfolio] = useState([]);
   var [industriesData, setIndustriesData] = useState({ datasets: [{ label: [], data: [] }] })
+  var [sectorsData, setSectorsData] = useState({ datasets: [{ label: [], data: [] }] })
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
 
@@ -161,6 +162,9 @@ const Portfolio = () => {
     let industries = {
       undefined: 0
     }
+    let sectors = {
+      undefined: 0
+    }
     let industriesArray = {
       labels: [],
       datasets: [{
@@ -185,14 +189,38 @@ const Portfolio = () => {
       }]
     };
 
+    let sectorsArray = {
+      labels: [],
+      datasets: [{
+        label: "Count of Positions",
+        data: [], backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1
+      }]
+    };
+
     setIndustriesData(industriesData => industriesArray)
+    setSectorsData(sectorsData => sectorsArray);
 
     for (let i = 0; i < portfolioData.length; i++) {
       if (portfolioData[i].status === "own" || portfolioData[i].status === "hold") {
         ownedSymbols.push(portfolioData[i].symbol);
       }
     }
-    console.log(ownedSymbols);
     API.findPortfolioQuotes(ownedSymbols).then((res) => {
       ownedData = res.data;
       console.log(ownedData)
@@ -205,11 +233,21 @@ const Portfolio = () => {
             industries[currentIndustry] += 1;
           }
         } else {
-          industries.undefined += 1;
+          sectors.undefined += 1;
+        }
+
+        if (ownedData[j].fundamentals !== undefined) {
+          let currentSector = ownedData[j].fundamentals.sector;
+          if (sectors[currentSector] === undefined) {
+            sectors[currentSector] = 1;
+          } else {
+            sectors[currentSector] += 1;
+          }
+        } else {
+          sectors.undefined += 1;
         }
       };
 
-      console.log(industries);
       for (const key in industries) {
         if (industries.hasOwnProperty(key)) {
           //console.log(`${key}: ${industries[key]}`);
@@ -217,6 +255,15 @@ const Portfolio = () => {
           industriesArray.datasets[0].data.push(Number(`${industries[key]}`))
         }
       }
+
+      for (const key in sectors) {
+        if (sectors.hasOwnProperty(key)) {
+          //console.log(`${key}: ${industries[key]}`);
+          sectorsArray.labels.push((`${key}`).toUpperCase());
+          sectorsArray.datasets[0].data.push(Number(`${sectors[key]}`))
+        }
+      }
+      console.log(sectorsArray);
       console.log(industriesArray);
     });
 
@@ -705,7 +752,9 @@ const Portfolio = () => {
                     </div>
                   </div>
                   <div className="carousel-item">
-                    <p>Sector</p>
+                  <div className="col-md-12">
+                  <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={sectorsData} />
+                  </div>
                   </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="prev">
