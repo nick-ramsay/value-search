@@ -103,7 +103,7 @@ const QuoteCard = (props) => {
             <a
               href={
                 "https://finviz.com/quote.ashx?t=" +
-                stock.symbol +
+                stock.symbol.replace(".","-") +
                 "&ty=l&ta=0&p=w&tas=0"
               }
               target="_blank"
@@ -114,7 +114,7 @@ const QuoteCard = (props) => {
               stock.valueSearchScore.totalPossiblePoints > 0 ? (
               <span
                 data-bs-toggle="modal"
-                data-bs-target={"#" + stock.symbol + "valueSearchScoreModal"}
+                data-bs-target={"#" + stock.symbol.replace(".","-") + "valueSearchScoreModal"}
                 className={
                   stock.valueSearchScore.calculatedScorePercentage <= 0.33
                     ? "ml-2 vs-score-badge vs-score-badge-red"
@@ -1007,9 +1007,9 @@ const QuoteCard = (props) => {
         </div>
         <div
           class="modal fade"
-          id={stock.symbol + "valueSearchScoreModal"}
+          id={stock.symbol.replace(".","-") + "valueSearchScoreModal"}
           tabindex="-1"
-          aria-labelledby={stock.symbol + "valueSearchScoreModalLabel"}
+          aria-labelledby={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
           aria-hidden="true"
         >
           <div class="modal-dialog">
@@ -1017,7 +1017,7 @@ const QuoteCard = (props) => {
               <div class="modal-header">
                 <h5
                   class="modal-title"
-                  id={stock.symbol + "valueSearchScoreModalLabel"}
+                  id={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
                 >
                   {"Value Search Score for " + stock.symbol}
                 </h5>
