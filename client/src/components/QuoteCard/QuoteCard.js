@@ -155,7 +155,7 @@ const QuoteCard = (props) => {
             <div className="col-md-12">
               {portfolioEntry !== undefined && portfolioEntry.status !== "-" ? (
                 <span
-                  class={
+                  className={
                     portfolioEntry.status === "avoid"
                       ? "badge bg-danger"
                       : portfolioEntry.status === "temporaryavoid"
@@ -202,33 +202,33 @@ const QuoteCard = (props) => {
           </div>
           {/*Start: Edit Symbol Modal*/}
           <div
-            class="modal fade"
+            className="modal fade"
             id={stock.symbol + "editModal"}
             tabindex="-1"
             role="dialog"
             aria-labelledby={stock.symbol + "editModalLabel"}
             aria-hidden="true"
           >
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id={stock.symbol + "editModalLabel"}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id={stock.symbol + "editModalLabel"}>
                     Edit {stock.quote.companyName + " (" + stock.symbol + ")"}
                   </h5>
                   <button
                     type="button"
-                    class="close"
+                    className="close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body">
+                <div className="modal-body">
                   <form>
                     <select
                       id={stock.symbol + "PortfolioStatusInput"}
-                      class="form-select"
+                      className="form-select"
                       defaultValue={
                         portfolioEntry != undefined ? portfolioEntry.status : ""
                       }
@@ -307,19 +307,19 @@ const QuoteCard = (props) => {
                         Avoid
                       </option>
                     </select>
-                    <div class="input-group mt-2">
-                      <span class="input-group-text">Comment</span>
+                    <div className="input-group mt-2">
+                      <span className="input-group-text">Comment</span>
                       <textarea
                         id={"new-comment-input-" + stock.symbol}
-                        class="form-control form-control-small"
+                        className="form-control form-control-small"
                         aria-label="With textarea"
                       ></textarea>
                     </div>
-                    <form class="row mt-2">
-                      <div class="col-md-9">
+                    <form className="row mt-2">
+                      <div className="col-md-9">
                         <select
                           id={stock.symbol + "newSelectedLabel"}
-                          class="form-select"
+                          className="form-select"
                           aria-label="Default select example"
                         >
                           <option value="-" selected>
@@ -330,7 +330,7 @@ const QuoteCard = (props) => {
                           <option value="Value Search">Value Search</option>
                         </select>
                       </div>
-                      <div class="col-md-3">
+                      <div className="col-md-3">
                         <button
                           type="button"
                           className="btn btn-sm btn-primary"
@@ -348,7 +348,7 @@ const QuoteCard = (props) => {
                         </button>
                       </div>
                     </form>
-                    <div class="input-group mt-2">
+                    <div className="input-group mt-2">
                       {portfolioEntry !== undefined &&
                         portfolioEntry.labels !== undefined
                         ? portfolioEntry.labels.map((label, i) => (
@@ -365,11 +365,11 @@ const QuoteCard = (props) => {
                         ))
                         : ""}
                     </div>
-                    <div class="input-group mt-2">
+                    <div className="input-group mt-2">
                       <div className="col-md-12 text-left">
-                        <div class="form-check">
+                        <div className="form-check">
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             defaultChecked={
                               portfolioEntry !== undefined &&
@@ -380,29 +380,29 @@ const QuoteCard = (props) => {
                             id={"queued-for-purchase-" + stock.symbol}
                           />
                           <label
-                            class="form-check-label"
+                            className="form-check-label"
                             style={{ fontSize: 14 }}
-                            for={"queued-for-purchase-" + stock.symbol}
+                            htmlFor={"queued-for-purchase-" + stock.symbol}
                           >
                             Queued for Purchase
                           </label>
                         </div>
                       </div>
                     </div>
-                    <div class={"input-group mt-2" /*+ portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "":"d-none") : "d-none"*/}>
+                    <div className={"input-group mt-2" /*+ portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "":"d-none") : "d-none"*/}>
                       <div className="col-md-12 mb-3">
                         <label
-                          class="form-check-label"
+                          className="form-check-label"
                           style={{ fontSize: 14 }}
-                          for={"price-target-enabled-" + stock.symbol}
+                          htmlFor={"price-target-enabled-" + stock.symbol}
                         >
                           Price Target
                         </label>
                       </div>
                       <div className="col-md-2">
-                        <div class="form-check">
+                        <div className="form-check">
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             defaultChecked={
                               portfolioEntry !== undefined &&
@@ -415,8 +415,8 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                       <div className="col-md-9">
-                        <div class="input-group mb-3">
-                          <span class="input-group-text">$</span>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">$</span>
                           <input
                             id={"price-target-" + stock.symbol}
                             defaultValue={
@@ -442,20 +442,20 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div class={"input-group mt-2" /*+ portfolioEntry !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"*/}>
+                    <div className={"input-group mt-2" /*+ portfolioEntry !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"*/}>
                       <div className="col-md-12 mb-3">
                         <label
-                          class="form-check-label"
+                          className="form-check-label"
                           style={{ fontSize: 14 }}
-                          for={"sell-target-enabled-" + stock.symbol}
+                          htmlFor={"sell-target-enabled-" + stock.symbol}
                         >
                           Sell Target
                         </label>
                       </div>
                       <div className="col-md-2">
-                        <div class="form-check">
+                        <div className="form-check">
                           <input
-                            class="form-check-input"
+                            className="form-check-input"
                             type="checkbox"
                             defaultChecked={
                               portfolioEntry !== undefined &&
@@ -468,8 +468,8 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                       <div className="col-md-9">
-                        <div class="input-group mb-3">
-                          <span class="input-group-text">$</span>
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">$</span>
                           <input
                             id={"sell-target-" + stock.symbol}
                             defaultValue={
@@ -489,17 +489,17 @@ const QuoteCard = (props) => {
                     </div>
                   </form>
                 </div>
-                <div class="modal-footer">
+                <div className="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-sm btn-secondary"
+                    className="btn btn-sm btn-secondary"
                     data-bs-dismiss="modal"
                   >
                     Close
                   </button>
                   <button
                     type="button"
-                    class="btn btn-sm btn-primary"
+                    className="btn btn-sm btn-primary"
                     data-bs-dismiss="modal"
                     onClick={() => updatePortfolio(stock.symbol, userID)}
                   >
@@ -512,18 +512,18 @@ const QuoteCard = (props) => {
           {/*End: Edit Symbol Modal*/}
           {/*Start: Comment Modal */}
           <div
-            class="modal fade"
+            className="modal fade"
             id={stock.symbol + "commentModal"}
             tabindex="-1"
             role="dialog"
             aria-labelledby={stock.symbol + "commentModalLabel"}
             aria-hidden="true"
           >
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
                   <h5
-                    class="modal-title"
+                    className="modal-title"
                     id={stock.symbol + "commentModalLabel"}
                   >
                     Comments for{" "}
@@ -531,20 +531,20 @@ const QuoteCard = (props) => {
                   </h5>
                   <button
                     type="button"
-                    class="close"
+                    className="close"
                     data-bs-dismiss="modal"
                     aria-label="Close"
                   >
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div class="modal-body">
-                  <div class="card">
-                    <ul class="list-group list-group-flush">
+                <div className="modal-body">
+                  <div className="card">
+                    <ul className="list-group list-group-flush">
                       {portfolioEntry !== undefined &&
                         portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
-                          <li class="list-group-item">
+                          <li className="list-group-item">
                             <p className="comment-content">
                               {'"' + comment.comment + '"'}
                             </p>
@@ -552,15 +552,15 @@ const QuoteCard = (props) => {
                           </li>
                         ))
                       ) : (
-                        <li class="list-group-item">No Comments</li>
+                        <li className="list-group-item">No Comments</li>
                       )}
                     </ul>
                   </div>
                 </div>
-                <div class="modal-footer">
+                <div className="modal-footer">
                   <button
                     type="button"
-                    class="btn btn-sm btn-secondary"
+                    className="btn btn-sm btn-secondary"
                     data-bs-dismiss="modal"
                   >
                     Close
@@ -600,17 +600,17 @@ const QuoteCard = (props) => {
           )}
         </div>
         <div
-          class="modal fade"
+          className="modal fade"
           id={stock.symbol + "company-bio-modal"}
           tabindex="-1"
           aria-labelledby={stock.symbol + "company-bio-modal-label"}
           aria-hidden="true"
         >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
                 <h5
-                  class="modal-title"
+                  className="modal-title"
                   id={stock.symbol + "company-bio-modal-label"}
                 >
                   {stock.quote.companyName + " (" + stock.symbol + ")"}
@@ -618,14 +618,14 @@ const QuoteCard = (props) => {
 
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body" style={{ fontSize: 14 }}>
+              <div className="modal-body" style={{ fontSize: 14 }}>
                 {stock.fundamentals !== undefined &&
                   stock.fundamentals.companyDescription !== undefined &&
                   stock.fundamentals.companyDescription !== null
@@ -634,7 +634,7 @@ const QuoteCard = (props) => {
               </div>
               <button
                 type="button"
-                class="btn btn-sm btn-secondary"
+                className="btn btn-sm btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
@@ -751,18 +751,18 @@ const QuoteCard = (props) => {
         </div>
         <div
           id={"fiftyTwoWeekPriceValues" + stock.symbol}
-          class="accordion-collapse collapse"
+          className="accordion-collapse collapse"
           aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol}
           data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol}
         >
           <div className="row">
             <div className="col-md-6">
-              <span class="badge badge-danger">
+              <span className="badge badge-danger">
                 {"52 Week Low: $" + stock.quote.week52Low.toFixed(2)}
               </span>
             </div>
             <div className="col-md-6">
-              <span class="badge bg-success">
+              <span className="badge bg-success">
                 {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
               </span>
             </div>
@@ -941,31 +941,31 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div
-          class="modal fade"
+          className="modal fade"
           id={stock.symbol + "movingAverageTrendModal"}
           tabindex="-1"
           aria-labelledby={stock.symbol + "movingAverageTrendModalLabel"}
           aria-hidden="true"
         >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
                 <h5
-                  class="modal-title"
+                  className="modal-title"
                   id={stock.symbol + "movingAverageTrendModalLabel"}
                 >
                   {"Moving Average Trend for " + stock.symbol}
                 </h5>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <div className="row text-center">
                   <Line
                     data={{
@@ -1000,37 +1000,37 @@ const QuoteCard = (props) => {
                     }}
                   />
                 </div>
-                <div class="modal-footer"></div>
+                <div className="modal-footer"></div>
               </div>
             </div>
           </div>
         </div>
         <div
-          class="modal fade"
+          className="modal fade"
           id={stock.symbol.replace(".","-") + "valueSearchScoreModal"}
           tabindex="-1"
           aria-labelledby={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
           aria-hidden="true"
         >
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
                 <h5
-                  class="modal-title"
+                  className="modal-title"
                   id={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
                 >
                   {"Value Search Score for " + stock.symbol}
                 </h5>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-bs-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <div className="row text-center">
                   {/*
                     healthyPE: 0,
@@ -1064,10 +1064,10 @@ const QuoteCard = (props) => {
                       "%"
                       : ""}
                   </p>
-                  <ul class="list-group">
+                  <ul className="list-group">
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.healthyPEAttempted === true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.healthyPE === 0
                           ? "❌ Unhealthy Current PE Ratio ❌"
                           : "✅ Good Current PE Ratio ✅"}
@@ -1077,7 +1077,7 @@ const QuoteCard = (props) => {
                     )}
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.healthyFuturePEAttempted === true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.healthyFuturePE === 0
                           ? "❌ Unhealthy Forward PE Ratio ❌"
                           : "✅ Good Forward PE Ratio ✅"}
@@ -1088,7 +1088,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.profitMarginPositiveAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.profitMarginPositive === 0
                           ? "❌ Company not profitable ❌"
                           : "✅ Company is profitable ✅"}
@@ -1099,7 +1099,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.forwardPEGreaterAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.forwardPEGreater === 0
                           ? "❌ Forward PE Ratio Lower Than Current ❌"
                           : "✅ Forward PE Ratio Higher Than Current ✅"}
@@ -1110,7 +1110,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.healthyDebtEquityAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.healthyDebtEquity === 0
                           ? "❌ Unhealthy Debt to Equity ❌"
                           : "✅ Good Debt to Equity ✅"}
@@ -1121,7 +1121,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.healthyPriceBookAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.healthyPriceBook === 0
                           ? "❌ Unhealthy Price to Book ❌"
                           : "✅ Good Price to Book ✅"}
@@ -1132,7 +1132,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.healthyPriceSalesAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.healthyPriceSales === 0
                           ? "❌ Unhealthy Price to Sales ❌"
                           : "✅ Good Price to Sales ✅"}
@@ -1143,7 +1143,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore
                         .movingAveragesGreaterThanPriceAttempted === true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore
                           .movingAveragesGreaterThanPrice === 0
                           ? "❌ Stock trading above it's 200 and 50 day moving averages ❌"
@@ -1155,7 +1155,7 @@ const QuoteCard = (props) => {
                     {stock.valueSearchScore !== undefined &&
                       stock.valueSearchScore.movingAverageSupportAttempted ===
                       true ? (
-                      <li class="list-group-item">
+                      <li className="list-group-item">
                         {stock.valueSearchScore.movingAverageSupport === 0
                           ? "❌ Price hasn't found support with moving averages ❌"
                           : "✅ Stock may have found support with it's moving averages ✅"}
@@ -1165,7 +1165,7 @@ const QuoteCard = (props) => {
                     )}
                   </ul>
                 </div>
-                <div class="modal-footer"></div>
+                <div className="modal-footer"></div>
               </div>
             </div>
           </div>

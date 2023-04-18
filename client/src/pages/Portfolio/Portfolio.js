@@ -43,6 +43,7 @@ const Portfolio = () => {
   var [sectorsData, setSectorsData] = useState({ datasets: [{ label: [], data: [] }] })
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
+  var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({})
 
   const findSingleStock = () => {
     let selectedSymbol = document.getElementById("searchSymbol").value;
@@ -137,12 +138,27 @@ const Portfolio = () => {
   //END: User Account Creation Functions
 
   const findPortfolio = (user, selectedStatus) => {
-    setLoading((loading) => true)
     let symbolList = [];
     API.findPortfolio(user, selectedStatus).then((res) => {
       if (res.data !== null) {
         setPortfolio((portfolio) => res.data.portfolio);
         renderAnalytics(res.data.portfolio);
+        let statusCount = {
+          own: 0,
+          hold: 0,
+          speculative: 0
+        };
+
+        for (let j = 0; j < res.data.portfolio.length; j++) {
+          if (res.data.portfolio[j].status === "own") {
+            statusCount.own += 1
+          } else if (res.data.portfolio[j].status === "hold") {
+            statusCount.hold += 1
+          } else if (res.data.portfolio[j].status === "speculative") {
+            statusCount.speculative += 1
+          }
+        }
+        setPortfolioStatusCounts(portfolioStatusCounts => statusCount)
         for (let i = 0; i < res.data.portfolio.length; i++) {
           if (
             res.data.portfolio[i].status !== "-" &&
@@ -223,7 +239,6 @@ const Portfolio = () => {
     }
     API.findPortfolioQuotes(ownedSymbols).then((res) => {
       ownedData = res.data;
-      console.log(ownedData)
       for (let j = 0; j < ownedData.length; j++) {
         if (ownedData[j].fundamentals !== undefined) {
           let currentIndustry = ownedData[j].fundamentals.industry;
@@ -263,8 +278,6 @@ const Portfolio = () => {
           sectorsArray.datasets[0].data.push(Number(`${sectors[key]}`))
         }
       }
-      console.log(sectorsArray);
-      console.log(industriesArray);
     });
 
   }
@@ -615,7 +628,7 @@ const Portfolio = () => {
           <div>
             <div className="mb-3">
               <div id="portfolio-loading" className={loading === false ? "d-none d-flex justify-content-center align-items-center mt-3" : "d-flex justify-content-center mt-3"}>
-                <PuffLoader color="#007bff" size="200" />
+                <PuffLoader color="#007bff" size="200px" />
               </div>
               <div className={loading === true ? "d-none portfolio-body" : "portfolio-body"}>
                 <div className="accordion-flush" id="accordionFlushExample">
@@ -705,7 +718,7 @@ const Portfolio = () => {
                         setSelectedStatus((selectedStatus) => "own");
                       }}
                     >
-                      Own
+                     {"Own (" + portfolioStatusCounts.own + ")"}
                     </button>
                     <button
                       type="button"
@@ -719,7 +732,7 @@ const Portfolio = () => {
                         setSelectedStatus((selectedStatus) => "hold");
                       }}
                     >
-                      Hold
+                      {"Hold (" + portfolioStatusCounts.hold + ")"}
                     </button>
                     <button
                       type="button"
@@ -733,7 +746,7 @@ const Portfolio = () => {
                         setSelectedStatus((selectedStatus) => "speculative");
                       }}
                     >
-                      Speculative
+                      {"Speculative (" + portfolioStatusCounts.speculative + ")"}
                     </button>
                     <img id="portfolioAnalytics" className="medium-icon pointer-hover" src={analyticsIcon} type="button" data-bs-toggle="collapse" data-bs-target="#analyticsAccordion" aria-expanded="true" aria-controls="analyticsAccordion"></img>
                   </div>
@@ -752,9 +765,9 @@ const Portfolio = () => {
                     </div>
                   </div>
                   <div className="carousel-item">
-                  <div className="col-md-12">
-                  <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={sectorsData} />
-                  </div>
+                    <div className="col-md-12">
+                      <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={sectorsData} />
+                    </div>
                   </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="prev">
