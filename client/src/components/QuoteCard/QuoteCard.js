@@ -76,11 +76,11 @@ const QuoteCard = (props) => {
             : portfolioEntry !== [] &&
               portfolioEntry !== undefined &&
               portfolioEntry.status === "avoid"
-              ? "red"
+              ? "#cf6679"
               : portfolioEntry !== [] &&
                 portfolioEntry !== undefined &&
                 portfolioEntry.status === "temporaryavoid"
-                ? "goldenrod"
+                ? "#fdfd96"
                 : portfolioEntry !== [] &&
                   portfolioEntry !== undefined &&
                   portfolioEntry.status === "-"
@@ -157,7 +157,7 @@ const QuoteCard = (props) => {
                 <span
                   className={
                     portfolioEntry.status === "avoid"
-                      ? "badge bg-danger"
+                      ? "badge badge-danger"
                       : portfolioEntry.status === "temporaryavoid"
                         ? "badge badge-yellow-custom"
                         : "badge bg-primary"
@@ -846,8 +846,8 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day200MovingAvg < stock.quote.latestPrice
-                      ? "red"
-                      : "green",
+                      ? "#cf6679"
+                      : "#03DAC6",
                 }}
               >
                 {stock.iexStats !== undefined
@@ -870,8 +870,8 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day50MovingAvg < stock.quote.latestPrice
-                      ? "red"
-                      : "green",
+                      ? "#cf6679"
+                      : "#03DAC6",
                 }}
               >
                 {stock.iexStats !== undefined

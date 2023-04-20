@@ -627,10 +627,7 @@ const Portfolio = () => {
         <div>
           <div>
             <div className="mb-3">
-              <div id="portfolio-loading" className={loading === false ? "d-none d-flex justify-content-center align-items-center mt-3" : "d-flex justify-content-center mt-3"}>
-                <PuffLoader color="#007bff" size="200px" />
-              </div>
-              <div className={loading === true ? "d-none portfolio-body" : "portfolio-body"}>
+              <div className={"portfolio-body"}>
                 <div className="accordion-flush" id="accordionFlushExample">
                   <div className="col-md-12 text-center">
                     <div className=" text-center">
@@ -675,7 +672,6 @@ const Portfolio = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="row">
                   <div className="col-md-12 mt-2">
                     <button
@@ -688,6 +684,7 @@ const Portfolio = () => {
                       onClick={() => {
                         findPortfolio(userID, "icebox");
                         setSelectedStatus((selectedStatus) => "icebox");
+                        setLoading(loading => true);
                       }}
                     >
                       Icebox
@@ -702,6 +699,7 @@ const Portfolio = () => {
                       onClick={() => {
                         findPortfolio(userID, "watch");
                         setSelectedStatus((selectedStatus) => "watch");
+                        setLoading(loading => true);
                       }}
                     >
                       Watch
@@ -716,9 +714,10 @@ const Portfolio = () => {
                       onClick={() => {
                         findPortfolio(userID, "own");
                         setSelectedStatus((selectedStatus) => "own");
+                        setLoading(loading => true);
                       }}
                     >
-                     {"Own (" + portfolioStatusCounts.own + ")"}
+                      {"Own (" + portfolioStatusCounts.own + ")"}
                     </button>
                     <button
                       type="button"
@@ -729,7 +728,8 @@ const Portfolio = () => {
                       }
                       onClick={() => {
                         findPortfolio(userID, "hold");
-                        setSelectedStatus((selectedStatus) => "hold");
+                        setSelectedStatus((selectedStatus) => "hold")
+                        setLoading(loading => true);
                       }}
                     >
                       {"Hold (" + portfolioStatusCounts.hold + ")"}
@@ -744,6 +744,7 @@ const Portfolio = () => {
                       onClick={() => {
                         findPortfolio(userID, "speculative");
                         setSelectedStatus((selectedStatus) => "speculative");
+                        setLoading(loading => true);
                       }}
                     >
                       {"Speculative (" + portfolioStatusCounts.speculative + ")"}
@@ -794,6 +795,9 @@ const Portfolio = () => {
               />
             ))
             : ""}
+          <div id="portfolio-loading" className={loading === false ? "d-none d-flex justify-content-center align-items-center align-middle mt-3" : "d-flex justify-content-center mt-3"}>
+            <PuffLoader color="#bb86fc" size="200px" />
+          </div>
           <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
         </div>
       </div>
