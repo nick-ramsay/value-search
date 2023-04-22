@@ -762,7 +762,7 @@ const QuoteCard = (props) => {
               </span>
             </div>
             <div className="col-md-6">
-              <span className="badge bg-success">
+              <span className="badge badge-success">
                 {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
               </span>
             </div>
@@ -1136,6 +1136,39 @@ const QuoteCard = (props) => {
                         {stock.valueSearchScore.healthyPriceSales === 0
                           ? "❌ Unhealthy Price to Sales ❌"
                           : "✅ Good Price to Sales ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                      stock.valueSearchScore.returnOnEquityAttempted ===
+                      true ? (
+                      <li className="list-group-item">
+                        {stock.valueSearchScore.returnOnEquity === 0
+                          ? "❌ Unhealthy Return on Equity ❌"
+                          : "✅ Good Return on Equity ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                      stock.valueSearchScore.priceToEarningsGrowthAttempted ===
+                      true ? (
+                      <li className="list-group-item">
+                        {stock.valueSearchScore.priceToEarningsGrowth === 0
+                          ? "❌ Unhealthy Price to Earnings Growth (PEG) ❌"
+                          : "✅ Good Price to Earnings Growth (PEG) ✅"}
+                      </li>
+                    ) : (
+                      ""
+                    )}
+                    {stock.valueSearchScore !== undefined &&
+                      stock.valueSearchScore.relativeStengthIndexAttempted ===
+                      true ? (
+                      <li className="list-group-item">
+                        {stock.valueSearchScore.relativeStrengthIndex === 0
+                          ? "❌ Unhealthy Relative Strength Index (RSI) ❌"
+                          : (stock.valueSearchScore.relativeStrengthIndex === 1 ? "✅ Good Relative Strength Index (RSI) (30 - 70) ✅":"✅ Great Relative Strength Index (RSI) (< 30) ✅")}
                       </li>
                     ) : (
                       ""
