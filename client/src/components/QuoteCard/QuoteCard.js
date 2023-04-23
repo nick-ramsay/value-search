@@ -160,7 +160,7 @@ const QuoteCard = (props) => {
                       ? "badge badge-danger"
                       : portfolioEntry.status === "temporaryavoid"
                         ? "badge badge-yellow-custom"
-                        : "badge bg-primary"
+                        : "badge badge-primary"
                   }
                 >
                   {toTitleCase(
