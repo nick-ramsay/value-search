@@ -940,6 +940,41 @@ const QuoteCard = (props) => {
             </span>
           </div>
         </div>
+        <div className="row">
+          <div className="col-md-4">
+            <span>
+              <strong>Price to Earnings Growth (PEG): </strong>
+              <span>
+                {stock.fundamentals !== undefined && isNaN(stock.fundamentals["PEG"]) === false
+                  ? Number(stock.fundamentals["PEG"]).toFixed(2)
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+          <div className="col-md-4">
+            <span>
+              <strong>Return on Equity (ROE): </strong>
+              <span>
+                {stock.fundamentals !== undefined && isNaN(stock.fundamentals["ROE (%)"]) === false
+                  ? Number(stock.fundamentals["ROE (%)"]).toFixed(2) +
+                  "%"
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+          <div className="col-md-4">
+            <span>
+              <strong>Relative Strength Index (RSI): </strong>
+              <span>
+                {stock.fundamentals !== undefined &&
+                  isNaN(Number(stock.fundamentals["RSI (14)"])) === false
+                  ? Number(stock.fundamentals["RSI (14)"]).toFixed(2) +
+                  "%"
+                  : "-"}{" "}
+              </span>
+            </span>
+          </div>
+        </div>
         <div
           className="modal fade"
           id={stock.symbol + "movingAverageTrendModal"}
@@ -1166,9 +1201,10 @@ const QuoteCard = (props) => {
                       stock.valueSearchScore.relativeStengthIndexAttempted ===
                       true ? (
                       <li className="list-group-item">
-                        {stock.valueSearchScore.relativeStrengthIndex === 0
+                        {stock.valueSearchScore.relativeStengthIndex == 0
                           ? "❌ Unhealthy Relative Strength Index (RSI) ❌"
-                          : (stock.valueSearchScore.relativeStrengthIndex === 1 ? "✅ Good Relative Strength Index (RSI) (30 - 70) ✅":"✅ Great Relative Strength Index (RSI) (< 30) ✅")}
+                          : stock.valueSearchScore.relativeStengthIndex === 1 ? "✅ Good Relative Strength Index (RSI) (30 - 70) ✅":"✅ Great Relative Strength Index (RSI) (< 30) ✅"
+                          }
                       </li>
                     ) : (
                       ""
