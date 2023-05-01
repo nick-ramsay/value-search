@@ -5,6 +5,7 @@ const StockDataSchema = new Schema({
     symbol: { type: String },
     quote: { type: Object },
     fundamentals: { type: Object },
+    valueSearchScore: {type: Object},
     quoteLastUpdated: { type: Date },
     fundamentalsLastUpdated: { type: Date }
 })

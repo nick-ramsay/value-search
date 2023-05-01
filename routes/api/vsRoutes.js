@@ -66,6 +66,10 @@ router
   .post(vsControllers.findSearchResults);
 
 router
+  .route("/find-score-search-results")
+  .post(vsControllers.findScoreSearchResults);
+
+router
   .route("/find-single-stock")
   .post(vsControllers.findSingleStock);
 
