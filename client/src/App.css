@@ -33,7 +33,7 @@ body {
 
 .btn-outline-primary:hover {
   background-color: #bb86fc;
-  color:#202124
+  color:#202124;
 }
 
 .btn:focus, .btn-outline-primary:focus {
@@ -71,6 +71,12 @@ input:focus {
   background-color: #fdfd96;
 }
 
+.badge-warning-outline {
+  background-color: inherit;
+  color: #fdfd96;
+  border: #fdfd96 1px solid;
+}
+
 .badge-success {
   background-color: #03DAC6;
   color:#121212;
@@ -79,6 +85,12 @@ input:focus {
 .badge-primary, .bg-primary {
   background-color: #bb86fc;
   color:#121212;
+}
+
+.badge-primary-outline, .bg-primary {
+  color: #bb86fc;
+  background-color: inherit;
+  border: #bb86fc 1px solid;
 }
 
 a {

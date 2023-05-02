@@ -103,7 +103,7 @@ const QuoteCard = (props) => {
             <a
               href={
                 "https://finviz.com/quote.ashx?t=" +
-                stock.symbol.replace(".","-") +
+                stock.symbol.replace(".", "-") +
                 "&ty=l&ta=0&p=w&tas=0"
               }
               target="_blank"
@@ -114,7 +114,7 @@ const QuoteCard = (props) => {
               stock.valueSearchScore.totalPossiblePoints > 0 ? (
               <span
                 data-bs-toggle="modal"
-                data-bs-target={"#" + stock.symbol.replace(".","-") + "valueSearchScoreModal"}
+                data-bs-target={"#" + stock.symbol.replace(".", "-") + "valueSearchScoreModal"}
                 className={
                   stock.valueSearchScore.calculatedScorePercentage <= 0.33
                     ? "ml-2 vs-score-badge vs-score-badge-red"
@@ -389,7 +389,8 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2" /*+ portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "":"d-none") : "d-none"*/}>
+                    {console.log(portfolioEntry)}
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none"):" d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -399,50 +400,52 @@ const QuoteCard = (props) => {
                           Price Target
                         </label>
                       </div>
-                      <div className="col-md-2">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            defaultChecked={
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.priceTargetEnabled !== undefined
-                                ? portfolioEntry.priceTargetEnabled
-                                : false
-                            }
-                            id={"price-target-enabled-" + stock.symbol}
-                          />
+                      <div className="row">
+                        <div className="col-md-2">
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              defaultChecked={
+                                portfolioEntry !== undefined &&
+                                  portfolioEntry.priceTargetEnabled !== undefined
+                                  ? portfolioEntry.priceTargetEnabled
+                                  : false
+                              }
+                              id={"price-target-enabled-" + stock.symbol}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-9">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">$</span>
-                          <input
-                            id={"price-target-" + stock.symbol}
-                            defaultValue={
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.priceTarget !== undefined
-                                ? Number(portfolioEntry.priceTarget)
-                                : 0.00
-                            }
-                            placeholder={
+                        <div className="col-md-9">
+                          <div className="input-group mb-3">
+                            <span className="input-group-text">$</span>
+                            <input
+                              id={"price-target-" + stock.symbol}
+                              defaultValue={
+                                portfolioEntry !== undefined &&
+                                  portfolioEntry.priceTarget !== undefined
+                                  ? Number(portfolioEntry.priceTarget)
+                                  : 0.00
+                              }
+                              placeholder={
 
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.priceTarget !== undefined
-                                ? Number(portfolioEntry.priceTarget)
-                                : 0.00
+                                portfolioEntry !== undefined &&
+                                  portfolioEntry.priceTarget !== undefined
+                                  ? Number(portfolioEntry.priceTarget)
+                                  : 0.00
 
-                            }
-                            type="number"
-                            min="0.00"
-                            step="0.01"
-                            className="form-control"
-                            aria-label="Amount (to the nearest dollar)"
-                          />
+                              }
+                              type="number"
+                              min="0.00"
+                              step="0.01"
+                              className="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2" /*+ portfolioEntry !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"*/}>
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined  && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"):" d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -452,38 +455,40 @@ const QuoteCard = (props) => {
                           Sell Target
                         </label>
                       </div>
-                      <div className="col-md-2">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            defaultChecked={
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.sellTargetEnabled !== undefined
-                                ? portfolioEntry.sellTargetEnabled
-                                : false
-                            }
-                            id={"sell-target-enabled-" + stock.symbol}
-                          />
+                      <div className="row">
+                        <div className="col-md-2">
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              defaultChecked={
+                                portfolioEntry !== undefined &&
+                                  portfolioEntry.sellTargetEnabled !== undefined
+                                  ? portfolioEntry.sellTargetEnabled
+                                  : false
+                              }
+                              id={"sell-target-enabled-" + stock.symbol}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-9">
-                        <div className="input-group mb-3">
-                          <span className="input-group-text">$</span>
-                          <input
-                            id={"sell-target-" + stock.symbol}
-                            defaultValue={
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.sellTarget !== undefined
-                                ? Number(portfolioEntry.sellTarget)
-                                : 0.0
-                            }
-                            type="number"
-                            min={0.0}
-                            step={0.01}
-                            className="form-control"
-                            aria-label="Amount (to the nearest dollar)"
-                          />
+                        <div className="col-md-9">
+                          <div className="input-group mb-3">
+                            <span className="input-group-text">$</span>
+                            <input
+                              id={"sell-target-" + stock.symbol}
+                              defaultValue={
+                                portfolioEntry !== undefined &&
+                                  portfolioEntry.sellTarget !== undefined
+                                  ? Number(portfolioEntry.sellTarget)
+                                  : 0.0
+                              }
+                              type="number"
+                              min={0.0}
+                              step={0.01}
+                              className="form-control"
+                              aria-label="Amount (to the nearest dollar)"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -650,20 +655,8 @@ const QuoteCard = (props) => {
                 ["own", "hold", "speculative"].indexOf(portfolioEntry.status) ===
                 -1 &&
                 portfolioEntry.priceTargetEnabled === true ? (
-                <span>
-                  <img
-                    className="text-icon m-2"
-                    src={targetIcon}
-                    title={
-                      "Price target set for $" + portfolioEntry.priceTarget
-                    }
-                  />
-                  <span title="Price target reached">
-                    {portfolioEntry.priceTarget >= stock.quote.latestPrice
-                      ? "✅"
-                      : ""}
-                  </span>
-                </span>
+                portfolioEntry.priceTarget >= stock.quote.latestPrice ?
+                  <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.priceTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.priceTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
               )}
@@ -671,18 +664,8 @@ const QuoteCard = (props) => {
                 ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !==
                 -1 &&
                 portfolioEntry.sellTargetEnabled === true ? (
-                <span>
-                  <img
-                    className="text-icon m-2"
-                    src={sellIcon}
-                    title={"Sell target set for $" + portfolioEntry.sellTarget}
-                  />
-                  <span title="Sell target reached">
-                    {portfolioEntry.sellTarget <= stock.quote.latestPrice
-                      ? "✅"
-                      : ""}
-                  </span>
-                </span>
+                portfolioEntry.sellTarget <= stock.quote.latestPrice ?
+                  <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.sellTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.sellTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
               )}
@@ -1042,9 +1025,9 @@ const QuoteCard = (props) => {
         </div>
         <div
           className="modal fade"
-          id={stock.symbol.replace(".","-") + "valueSearchScoreModal"}
+          id={stock.symbol.replace(".", "-") + "valueSearchScoreModal"}
           tabindex="-1"
-          aria-labelledby={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
+          aria-labelledby={stock.symbol.replace(".", "-") + "valueSearchScoreModalLabel"}
           aria-hidden="true"
         >
           <div className="modal-dialog">
@@ -1052,7 +1035,7 @@ const QuoteCard = (props) => {
               <div className="modal-header">
                 <h5
                   className="modal-title"
-                  id={stock.symbol.replace(".","-") + "valueSearchScoreModalLabel"}
+                  id={stock.symbol.replace(".", "-") + "valueSearchScoreModalLabel"}
                 >
                   {"Value Search Score for " + stock.symbol}
                 </h5>
@@ -1203,8 +1186,8 @@ const QuoteCard = (props) => {
                       <li className="list-group-item">
                         {stock.valueSearchScore.relativeStengthIndex == 0
                           ? "❌ Unhealthy Relative Strength Index (RSI) ❌"
-                          : stock.valueSearchScore.relativeStengthIndex === 1 ? "✅ Good Relative Strength Index (RSI) (30 - 70) ✅":"✅ Great Relative Strength Index (RSI) (< 30) ✅"
-                          }
+                          : stock.valueSearchScore.relativeStengthIndex === 1 ? "✅ Good Relative Strength Index (RSI) (30 - 70) ✅" : "✅ Great Relative Strength Index (RSI) (< 30) ✅"
+                        }
                       </li>
                     ) : (
                       ""
