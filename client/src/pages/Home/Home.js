@@ -5,6 +5,8 @@ import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
 import vsLogo from "../../images/logo-png/logo-no-background.png";
+import finvizLogo from "../../images/finviz-logo.png";
+import iexCloudLogo from "../../images/iex-cloud-logo.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
 import { sha256 } from "js-sha256";
@@ -802,6 +804,9 @@ const Home = () => {
                 >
                   Run Value Search
                 </button>
+              </div>
+              <div className="row">
+                <span style={{fontSize:11}}>All data sourced from <img style={{height:12}} src={iexCloudLogo} /> and <img style={{height:9}} src={finvizLogo}></img></span>
               </div>
             </div>
             {!loading
