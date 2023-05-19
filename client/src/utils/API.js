@@ -6,6 +6,9 @@ export default {
     findSearchResults: (minPE, maxPE, minDebtEquity, maxDebtEquity, minPriceSales, maxPriceSales, minPriceToBook, maxPriceToBook, minCap, maxCap, minProfitMargin) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-search-results", data: { minPE: minPE, maxPE: maxPE, minDebtEquity: minDebtEquity, maxDebtEquity: maxDebtEquity, minPriceSales: minPriceSales, maxPriceSales: maxPriceSales, minPriceToBook: minPriceToBook, maxPriceToBook: maxPriceToBook, minCap: minCap, maxCap: maxCap, minProfitMargin: minProfitMargin } });
     },
+    findScoreSearchResults: (maSupportParameter) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/find-score-search-results", data: { maSupportParameter:maSupportParameter } });
+    },
     findSingleStock: (searchSymbol) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-single-stock", data: { searchSymbol } });
     },

@@ -223,6 +223,18 @@ module.exports = {
             .then(dbModel => res.json(dbModel))
             .catch(err => console.log(err))
     },
+    findScoreSearchResults: (req, res) => {
+        //let movingAverageSupport = req.body.maSupportParameter === true ? 1:99
+       // console.log(movingAverageSupport)
+        db.StockData.find({
+            "valueSearchScore.profitMarginPositive":2,
+            "valueSearchScore.healthyDebtEquity":2,
+            "valueSearchScore.movingAverageSupport":1,
+            "valueSearchScore.calculatedScorePercentage": {"$gte": .8}
+        })
+            .then(dbModel => res.json(dbModel))
+            .catch(err => console.log(err))
+    },
     findSingleStock: (req, res) => {
         console.log("Find Single Stock")
         db.StockData.find({ "symbol": req.body.searchSymbol })
