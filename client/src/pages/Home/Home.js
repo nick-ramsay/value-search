@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { getCookie, logout, topOfPage, topFunction } from "../../sharedFunctions/sharedFunctions";
+import {
+  getCookie,
+  logout,
+  topOfPage,
+  topFunction,
+} from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
@@ -37,8 +42,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
+  const setMarketCapSize = (event) => {};
+  const selectedInvestmentType = (event) => {};
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -57,7 +62,8 @@ const Home = () => {
   var [submissionMessage, setSubmissionMessage] = useState("");
 
   const renderValueSearchResults = () => {
-    let selectedMarketCapInput = document.getElementById("marketCapSizeInput").value;
+    let selectedMarketCapInput =
+      document.getElementById("marketCapSizeInput").value;
     let selectedMarketCapMin = 0;
     let selectedMarketCapMax = 1000000000000000000;
     if (selectedMarketCapInput === "all") {
@@ -69,8 +75,7 @@ const Home = () => {
     } else if (selectedMarketCapInput === "mid") {
       selectedMarketCapMin = 2000000000;
       selectedMarketCapMax = 99999999999;
-    }
-    else if (selectedMarketCapInput === "large") {
+    } else if (selectedMarketCapInput === "large") {
       selectedMarketCapMin = 10000000000;
       selectedMarketCapMax = 199999999999;
     } else if (selectedMarketCapInput === "mega") {
@@ -78,16 +83,16 @@ const Home = () => {
       selectedMarketCapMax = 1000000000000000000;
     }
 
-    let profitabilityParameter = document.getElementById("profitableCheckbox").checked;
+    let profitabilityParameter =
+      document.getElementById("profitableCheckbox").checked;
     let minProfitMargin;
     if (profitabilityParameter === true) {
       minProfitMargin = 0;
     } else {
-      minProfitMargin = -100
+      minProfitMargin = -100;
     }
 
-    console.log(profitabilityParameter)
-
+    console.log(profitabilityParameter);
 
     API.findSearchResults(
       minPE,
@@ -136,8 +141,7 @@ const Home = () => {
               "Looks like an account already exists with this e-mail. Try logging in."
           );
         } else {
-          API.setEmailVerificationToken(email).then((res) => {
-          });
+          API.setEmailVerificationToken(email).then((res) => {});
         }
       });
     } else {
@@ -239,14 +243,13 @@ const Home = () => {
       "sell-target-enabled-" + symbol
     ).checked;
 
-    let newSellTarget = document.getElementById(
-      "sell-target-" + symbol
-    ).value;
+    let newSellTarget = document.getElementById("sell-target-" + symbol).value;
 
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
-      tempPortfolio[symbolIndex] !== undefined && tempPortfolio[symbolIndex].comments !== undefined
+      tempPortfolio[symbolIndex] !== undefined &&
+      tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
@@ -273,7 +276,7 @@ const Home = () => {
         priceTargetEnabled: newPriceTargetEnabled,
         priceTarget: Number(newPriceTarget),
         sellTargetEnabled: newSellTargetEnabled,
-        sellTarget: Number(newSellTarget)
+        sellTarget: Number(newSellTarget),
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
@@ -489,11 +492,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                     : () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                      }
                 }
               >
                 Value Search Parameters{" "}
@@ -533,7 +536,7 @@ const Home = () => {
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
                               defaultValue={10}
-                            //onChange={Number(setMinPE)}
+                              //onChange={Number(setMinPE)}
                             />
                           </div>
                         </div>
@@ -549,7 +552,7 @@ const Home = () => {
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
                               defaultValue={15}
-                            //onChange={setMaxPE}
+                              //onChange={setMaxPE}
                             />
                           </div>
                         </div>
@@ -568,7 +571,7 @@ const Home = () => {
                               placeholder="Minimum Debt/Equity"
                               defaultValue={0.0}
                               step="0.01"
-                            //onChange={setMinDebtEquity}
+                              //onChange={setMinDebtEquity}
                             />
                           </div>
                         </div>
@@ -585,7 +588,7 @@ const Home = () => {
                               placeholder="Maximum Debt/Equity"
                               defaultValue={2.0}
                               step="0.01"
-                            //onChange={setMaxDebtEquity}
+                              //onChange={setMaxDebtEquity}
                             />
                           </div>
                         </div>
@@ -604,7 +607,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Book"
                               defaultValue={0.95}
                               step="0.01"
-                            //onChange={setMinPriceToBook}
+                              //onChange={setMinPriceToBook}
                             />
                           </div>
                         </div>
@@ -621,7 +624,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Book"
                               defaultValue={1.1}
                               step="0.01"
-                            //onChange={setMaxPriceToBook}
+                              //onChange={setMaxPriceToBook}
                             />
                           </div>
                         </div>
@@ -640,7 +643,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Sales"
                               defaultValue={0.0}
                               step="0.01"
-                            //onChange={setMinPriceSales}
+                              //onChange={setMinPriceSales}
                             />
                           </div>
                         </div>
@@ -657,7 +660,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Sales"
                               defaultValue={2.0}
                               step="0.01"
-                            //onChange={setMaxPriceSales}
+                              //onChange={setMaxPriceSales}
                             />
                           </div>
                         </div>
@@ -692,7 +695,7 @@ const Home = () => {
                             <select
                               id="selectedInvestmentTypeInput"
                               className="form-control"
-                            /*onClick={(event) => {
+                              /*onClick={(event) => {
                               selectedInvestmentType(event);
                             }}
                             */
@@ -721,8 +724,16 @@ const Home = () => {
                           <div className="col-md-6 mt-auto mb-auto">
                             <div className="form-group">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="profitableCheckbox" defaultChecked="true" />
-                                <label class="form-check-label" for="profitableCheckbox">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  id="profitableCheckbox"
+                                  defaultChecked="true"
+                                />
+                                <label
+                                  class="form-check-label"
+                                  for="profitableCheckbox"
+                                >
                                   Company Profitable
                                 </label>
                               </div>
@@ -780,7 +791,22 @@ const Home = () => {
             ) : (
               ""
             )}
-            {!loading ? <p>{valueSearchData.length} Results Found</p> : ""}
+            <div className="row">
+              {!loading ? <span>{valueSearchData.length} Results Found</span> : ""}
+            </div>
+            <div className="row mb-2">
+              <span style={{ fontSize: 10 }}>
+                All data sourced from{" "}
+                <a href="https://www.iexcloud.io/" target="_blank">
+                  <img style={{ height: 11 }} src={iexCloudLogo} />
+                </a>{" "}
+                and{" "}
+                <a href="https://finviz.com/" target="_blank">
+                  {" "}
+                  <img style={{ height: 8 }} src={finvizLogo} />
+                </a>
+              </span>
+            </div>
             <div className="row mb-1">
               <div className="col-md-12">
                 {userID !== "" ? (
@@ -805,23 +831,27 @@ const Home = () => {
                   Run Value Search
                 </button>
               </div>
-              <div className="row">
-                <span style={{fontSize:11}}>All data sourced from <img style={{height:12}} src={iexCloudLogo} /> and <img style={{height:9}} src={finvizLogo}></img></span>
-              </div>
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                  findPortfolio={findPortfolio}
-                  page={"Home"}
-                />
-              ))
+                  <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                    findPortfolio={findPortfolio}
+                    page={"Home"}
+                  />
+                ))
               : ""}
-            <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
+            <button
+              onClick={() => topFunction()}
+              className="btn btn btn-danger"
+              id="top-button"
+              title="Go to top"
+            >
+              Top
+            </button>
           </div>
         </div>
       </div>

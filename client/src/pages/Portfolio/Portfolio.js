@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Doughnut } from "react-chartjs-2";
 import PuffLoader from "react-spinners/PuffLoader";
-import { getCookie, logout, topOfPage, topFunction } from "../../sharedFunctions/sharedFunctions";
+import {
+  getCookie,
+  logout,
+  topOfPage,
+  topFunction,
+} from "../../sharedFunctions/sharedFunctions";
 import BarLoader from "react-spinners/BarLoader";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
 import vsLogo from "../../images/logo-png/logo-no-background.png";
+import finvizLogo from "../../images/finviz-logo.png";
+import iexCloudLogo from "../../images/iex-cloud-logo.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
 import analyticsIcon from "../../images/outline_analytics_white_24dp.png";
@@ -39,11 +46,15 @@ const Portfolio = () => {
   var [confirmPassword, setConfirmPassword] = useInput("");
   var [submissionMessage, setSubmissionMessage] = useState("");
   var [portfolio, setPortfolio] = useState([]);
-  var [industriesData, setIndustriesData] = useState({ datasets: [{ label: [], data: [] }] })
-  var [sectorsData, setSectorsData] = useState({ datasets: [{ label: [], data: [] }] })
+  var [industriesData, setIndustriesData] = useState({
+    datasets: [{ label: [], data: [] }],
+  });
+  var [sectorsData, setSectorsData] = useState({
+    datasets: [{ label: [], data: [] }],
+  });
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
-  var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({})
+  var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({});
 
   const findSingleStock = () => {
     let selectedSymbol = document.getElementById("searchSymbol").value;
@@ -67,8 +78,7 @@ const Portfolio = () => {
               "Looks like an account already exists with this e-mail. Try logging in."
           );
         } else {
-          API.setEmailVerificationToken(email).then((res) => {
-          });
+          API.setEmailVerificationToken(email).then((res) => {});
         }
       });
     } else {
@@ -146,19 +156,19 @@ const Portfolio = () => {
         let statusCount = {
           own: 0,
           hold: 0,
-          speculative: 0
+          speculative: 0,
         };
 
         for (let j = 0; j < res.data.portfolio.length; j++) {
           if (res.data.portfolio[j].status === "own") {
-            statusCount.own += 1
+            statusCount.own += 1;
           } else if (res.data.portfolio[j].status === "hold") {
-            statusCount.hold += 1
+            statusCount.hold += 1;
           } else if (res.data.portfolio[j].status === "speculative") {
-            statusCount.speculative += 1
+            statusCount.speculative += 1;
           }
         }
-        setPortfolioStatusCounts(portfolioStatusCounts => statusCount)
+        setPortfolioStatusCounts((portfolioStatusCounts) => statusCount);
         for (let i = 0; i < res.data.portfolio.length; i++) {
           if (
             res.data.portfolio[i].status !== "-" &&
@@ -176,64 +186,73 @@ const Portfolio = () => {
     let ownedSymbols = [];
     let ownedData = [];
     let industries = {
-      undefined: 0
-    }
+      undefined: 0,
+    };
     let sectors = {
-      undefined: 0
-    }
+      undefined: 0,
+    };
     let industriesArray = {
       labels: [],
-      datasets: [{
-        label: "Count of Positions",
-        data: [], backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          label: "Count of Positions",
+          data: [],
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
     };
 
     let sectorsArray = {
       labels: [],
-      datasets: [{
-        label: "Count of Positions",
-        data: [], backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          label: "Count of Positions",
+          data: [],
+          backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)",
+          ],
+          borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)",
+          ],
+          borderWidth: 1,
+        },
+      ],
     };
 
-    setIndustriesData(industriesData => industriesArray)
-    setSectorsData(sectorsData => sectorsArray);
+    setIndustriesData((industriesData) => industriesArray);
+    setSectorsData((sectorsData) => sectorsArray);
 
     for (let i = 0; i < portfolioData.length; i++) {
-      if (portfolioData[i].status === "own" || portfolioData[i].status === "hold") {
+      if (
+        portfolioData[i].status === "own" ||
+        portfolioData[i].status === "hold"
+      ) {
         ownedSymbols.push(portfolioData[i].symbol);
       }
     }
@@ -261,26 +280,25 @@ const Portfolio = () => {
         } else {
           sectors.undefined += 1;
         }
-      };
+      }
 
       for (const key in industries) {
         if (industries.hasOwnProperty(key)) {
           //console.log(`${key}: ${industries[key]}`);
-          industriesArray.labels.push((`${key}`).toUpperCase());
-          industriesArray.datasets[0].data.push(Number(`${industries[key]}`))
+          industriesArray.labels.push(`${key}`.toUpperCase());
+          industriesArray.datasets[0].data.push(Number(`${industries[key]}`));
         }
       }
 
       for (const key in sectors) {
         if (sectors.hasOwnProperty(key)) {
           //console.log(`${key}: ${industries[key]}`);
-          sectorsArray.labels.push((`${key}`).toUpperCase());
-          sectorsArray.datasets[0].data.push(Number(`${sectors[key]}`))
+          sectorsArray.labels.push(`${key}`.toUpperCase());
+          sectorsArray.datasets[0].data.push(Number(`${sectors[key]}`));
         }
       }
     });
-
-  }
+  };
 
   const updatePortfolio = (symbol, userID) => {
     let newStatus = document.getElementById(
@@ -307,9 +325,7 @@ const Portfolio = () => {
       "sell-target-enabled-" + symbol
     ).checked;
 
-    let newSellTarget = document.getElementById(
-      "sell-target-" + symbol
-    ).value;
+    let newSellTarget = document.getElementById("sell-target-" + symbol).value;
 
     let tempPortfolio = portfolio;
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
@@ -341,7 +357,7 @@ const Portfolio = () => {
         priceTargetEnabled: newPriceTargetEnabled,
         priceTarget: Number(newPriceTarget),
         sellTargetEnabled: newSellTargetEnabled,
-        sellTarget: Number(newSellTarget)
+        sellTarget: Number(newSellTarget),
       });
       document.getElementById("new-comment-input-" + symbol).value = "";
     }
@@ -403,7 +419,6 @@ const Portfolio = () => {
   };
 
   const syncWithEtrade = () => {
-
     var file = document.querySelector("#etradeCSVSelect").files[0];
     var reader = new FileReader();
     reader.readAsText(file);
@@ -446,7 +461,7 @@ const Portfolio = () => {
         }
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2);
-      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => { });
+      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => {});
       let tempPortfolio = portfolio;
       for (let i = 0; i < etradeSymbols.length; i++) {
         if (
@@ -628,10 +643,101 @@ const Portfolio = () => {
           <div>
             <div className="mb-3">
               <div className={"portfolio-body"}>
+                
+                <div className="row">
+                  <div className="col-md-12 mt-2">
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "icebox"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "icebox");
+                        setSelectedStatus((selectedStatus) => "icebox");
+                        setLoading((loading) => true);
+                      }}
+                    >
+                      Icebox
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "watch"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "watch");
+                        setSelectedStatus((selectedStatus) => "watch");
+                        setLoading((loading) => true);
+                      }}
+                    >
+                      Watch
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "own"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "own");
+                        setSelectedStatus((selectedStatus) => "own");
+                        setLoading((loading) => true);
+                      }}
+                    >
+                      {"Own (" + portfolioStatusCounts.own + ")"}
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "hold"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "hold");
+                        setSelectedStatus((selectedStatus) => "hold");
+                        setLoading((loading) => true);
+                      }}
+                    >
+                      {"Hold (" + portfolioStatusCounts.hold + ")"}
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectedStatus === "speculative"
+                          ? "btn btn-sm btn-light status-button m-1"
+                          : "btn btn-sm btn-outline-light status-button m-1"
+                      }
+                      onClick={() => {
+                        findPortfolio(userID, "speculative");
+                        setSelectedStatus((selectedStatus) => "speculative");
+                        setLoading((loading) => true);
+                      }}
+                    >
+                      {"Speculative (" +
+                        portfolioStatusCounts.speculative +
+                        ")"}
+                    </button>
+                    <img
+                      id="portfolioAnalytics"
+                      className="medium-icon pointer-hover"
+                      src={analyticsIcon}
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#analyticsAccordion"
+                      aria-expanded="true"
+                      aria-controls="analyticsAccordion"
+                    ></img>
+                  </div>
+                </div>
                 <div className="accordion-flush" id="accordionFlushExample">
                   <div className="col-md-12 text-center">
                     <div className=" text-center">
-
                       <a
                         className="text-center collapsed"
                         type="button"
@@ -662,7 +768,7 @@ const Portfolio = () => {
                       <div className="row">
                         <div className="col-md-12">
                           <button
-                            className="btn btn-sm btn-outline-primary mt-2"
+                            className="btn btn-sm btn-outline-primary mt-2 mb-1"
                             onClick={() => syncWithEtrade()}
                           >
                             Sync Portfolio with Etrade
@@ -672,111 +778,80 @@ const Portfolio = () => {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-12 mt-2">
-                    <button
-                      type="button"
-                      className={
-                        selectedStatus === "icebox"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
-                      }
-                      onClick={() => {
-                        findPortfolio(userID, "icebox");
-                        setSelectedStatus((selectedStatus) => "icebox");
-                        setLoading(loading => true);
-                      }}
-                    >
-                      Icebox
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        selectedStatus === "watch"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
-                      }
-                      onClick={() => {
-                        findPortfolio(userID, "watch");
-                        setSelectedStatus((selectedStatus) => "watch");
-                        setLoading(loading => true);
-                      }}
-                    >
-                      Watch
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        selectedStatus === "own"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
-                      }
-                      onClick={() => {
-                        findPortfolio(userID, "own");
-                        setSelectedStatus((selectedStatus) => "own");
-                        setLoading(loading => true);
-                      }}
-                    >
-                      {"Own (" + portfolioStatusCounts.own + ")"}
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        selectedStatus === "hold"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
-                      }
-                      onClick={() => {
-                        findPortfolio(userID, "hold");
-                        setSelectedStatus((selectedStatus) => "hold")
-                        setLoading(loading => true);
-                      }}
-                    >
-                      {"Hold (" + portfolioStatusCounts.hold + ")"}
-                    </button>
-                    <button
-                      type="button"
-                      className={
-                        selectedStatus === "speculative"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
-                      }
-                      onClick={() => {
-                        findPortfolio(userID, "speculative");
-                        setSelectedStatus((selectedStatus) => "speculative");
-                        setLoading(loading => true);
-                      }}
-                    >
-                      {"Speculative (" + portfolioStatusCounts.speculative + ")"}
-                    </button>
-                    <img id="portfolioAnalytics" className="medium-icon pointer-hover" src={analyticsIcon} type="button" data-bs-toggle="collapse" data-bs-target="#analyticsAccordion" aria-expanded="true" aria-controls="analyticsAccordion"></img>
-                  </div>
+                <div className="row mb-2">
+                  <span style={{ fontSize: 10 }}>
+                    All data sourced from{" "}
+                    <a href="https://www.iexcloud.io/" target="_blank">
+                      <img style={{ height: 11 }} src={iexCloudLogo} />
+                    </a>{" "}
+                    and{" "}
+                    <a href="https://finviz.com/" target="_blank">
+                      {" "}
+                      <img style={{ height: 8 }} src={finvizLogo} />
+                    </a>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-          <div id="analyticsAccordion" className="accordion-collapse collapse mb-2" data-bs-parent="#portfolioAnalytics">
+          <div
+            id="analyticsAccordion"
+            className="accordion-collapse collapse mb-2"
+            data-bs-parent="#portfolioAnalytics"
+          >
             <div className="accordion-body">
-              <h6><strong>Portfolio Analysis</strong></h6>
-              <div id="analyticsCarouselControls" className="carousel slide" data-bs-ride="carousel">
+              <h6>
+                <strong>Portfolio Analysis</strong>
+              </h6>
+              <div
+                id="analyticsCarouselControls"
+                className="carousel slide"
+                data-bs-ride="carousel"
+              >
                 <div className="carousel-inner">
                   <div className="carousel-item active">
                     <div className="col-md-12">
-                      <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={industriesData} />
+                      <Doughnut
+                        width={30}
+                        height={30}
+                        options={{ maintainAspectRatio: false }}
+                        data={industriesData}
+                      />
                     </div>
                   </div>
                   <div className="carousel-item">
                     <div className="col-md-12">
-                      <Doughnut width={30} height={30} options={{ maintainAspectRatio: false }} data={sectorsData} />
+                      <Doughnut
+                        width={30}
+                        height={30}
+                        options={{ maintainAspectRatio: false }}
+                        data={sectorsData}
+                      />
                     </div>
                   </div>
                 </div>
-                <button className="carousel-control-prev" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="prev">
-                  <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <button
+                  className="carousel-control-prev"
+                  type="button"
+                  data-bs-target="#analyticsCarouselControls"
+                  data-bs-slide="prev"
+                >
+                  <span
+                    className="carousel-control-prev-icon"
+                    aria-hidden="true"
+                  ></span>
                   <span className="visually-hidden">Previous</span>
                 </button>
-                <button className="carousel-control-next" type="button" data-bs-target="#analyticsCarouselControls" data-bs-slide="next">
-                  <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <button
+                  className="carousel-control-next"
+                  type="button"
+                  data-bs-target="#analyticsCarouselControls"
+                  data-bs-slide="next"
+                >
+                  <span
+                    className="carousel-control-next-icon"
+                    aria-hidden="true"
+                  ></span>
                   <span className="visually-hidden">Next</span>
                 </button>
               </div>
@@ -784,21 +859,35 @@ const Portfolio = () => {
           </div>
           {!loading
             ? valueSearchData.map((stock, i) => (
-              <QuoteCard
-                stock={stock}
-                userID={userID}
-                updatePortfolio={updatePortfolio}
-                portfolio={portfolio}
-                selectedStatus={selectedStatus}
-                findPortfolio={findPortfolio}
-                page={"Portfolio"}
-              />
-            ))
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                  selectedStatus={selectedStatus}
+                  findPortfolio={findPortfolio}
+                  page={"Portfolio"}
+                />
+              ))
             : ""}
-          <div id="portfolio-loading" className={loading === false ? "d-none d-flex justify-content-center align-items-center align-middle mt-3" : "d-flex justify-content-center mt-3"}>
+          <div
+            id="portfolio-loading"
+            className={
+              loading === false
+                ? "d-none d-flex justify-content-center align-items-center align-middle mt-3"
+                : "d-flex justify-content-center mt-3"
+            }
+          >
             <PuffLoader color="#bb86fc" size="200px" />
           </div>
-          <button onClick={() => topFunction()} className="btn btn btn-danger" id="top-button" title="Go to top">Top</button>
+          <button
+            onClick={() => topFunction()}
+            className="btn btn btn-danger"
+            id="top-button"
+            title="Go to top"
+          >
+            Top
+          </button>
         </div>
       </div>
     </div>
