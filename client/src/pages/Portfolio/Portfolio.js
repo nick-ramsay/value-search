@@ -735,6 +735,19 @@ const Portfolio = () => {
                     ></img>
                   </div>
                 </div>
+                <div className="row mb-2">
+                  <span style={{ fontSize: 10 }}>
+                    All data sourced from{" "}
+                    <a href="https://www.iexcloud.io/" target="_blank">
+                      <img style={{ height: 11 }} src={iexCloudLogo} />
+                    </a>{" "}
+                    and{" "}
+                    <a href="https://finviz.com/" target="_blank">
+                      {" "}
+                      <img style={{ height: 8 }} src={finvizLogo} />
+                    </a>
+                  </span>
+                </div>
                 <div className="accordion-flush" id="accordionFlushExample">
                   <div className="col-md-12 text-center">
                     <div className=" text-center">
@@ -777,19 +790,6 @@ const Portfolio = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row mb-2">
-                  <span style={{ fontSize: 10 }}>
-                    All data sourced from{" "}
-                    <a href="https://www.iexcloud.io/" target="_blank">
-                      <img style={{ height: 11 }} src={iexCloudLogo} />
-                    </a>{" "}
-                    and{" "}
-                    <a href="https://finviz.com/" target="_blank">
-                      {" "}
-                      <img style={{ height: 8 }} src={finvizLogo} />
-                    </a>
-                  </span>
                 </div>
               </div>
             </div>

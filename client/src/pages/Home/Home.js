@@ -747,7 +747,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="col-md-12 mt-3">
+          <div className="col-md-12 mt-3 mb-0">
             <div className="row w-100">
               <input
                 type="range"
@@ -769,13 +769,13 @@ const Home = () => {
                 }}
               />
             </div>
-            <div className="row w-100 justify-content-center">
-              <p>
+            <div className="row w-100 justify-content-center mb-1">
+              <span style={{fontSize:14}}>
                 <strong>
                   {(metricVariationPercentage.toString() * 100).toFixed(0)}%
                   Variance Range
                 </strong>
-              </p>
+              </span>
             </div>
           </div>
           <div className="col-md-12">
@@ -791,12 +791,8 @@ const Home = () => {
             ) : (
               ""
             )}
-            <div className="row">
-              {!loading ? <span>{valueSearchData.length} Results Found</span> : ""}
-            </div>
             <div className="row mb-2">
-              <span style={{ fontSize: 10 }}>
-                All data sourced from{" "}
+              <span style={{ fontSize: 10 }}>All data sourced from{" "}
                 <a href="https://www.iexcloud.io/" target="_blank">
                   <img style={{ height: 11 }} src={iexCloudLogo} />
                 </a>{" "}
@@ -806,6 +802,13 @@ const Home = () => {
                   <img style={{ height: 8 }} src={finvizLogo} />
                 </a>
               </span>
+            </div>
+            <div className="row">
+              {!loading ? (
+                <span>{valueSearchData.length} Results Found</span>
+              ) : (
+                ""
+              )}
             </div>
             <div className="row mb-1">
               <div className="col-md-12">
