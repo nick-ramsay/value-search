@@ -17,7 +17,7 @@ const CreateAccountRequest = () => {
                     } else {
                         API.setEmailVerificationToken(email)
                             .then(res => {
-                                window.location = "./create-account"
+                                window.location = "/create-account"
                             })
                     }
                 }
