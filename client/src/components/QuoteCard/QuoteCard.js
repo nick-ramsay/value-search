@@ -389,7 +389,6 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    {console.log(portfolioEntry)}
                     <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none"):" d-none")}>
                       <div className="col-md-12 mb-3">
                         <label

@@ -378,10 +378,11 @@ const Portfolio = () => {
   };
 
   const login = () => {
-    let cookieExpiryDate = moment().add("60", "minutes").format();
+    let cookieExpiryDate = moment().add("24", "hours").format();
 
     if (loginEmail && loginPassword) {
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
+        console.log(res.data)
         if (res.data) {
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =

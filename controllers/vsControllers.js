@@ -197,6 +197,7 @@ module.exports = {
   },
   login: function (req, res) {
     console.log("Called login controller...");
+    console.log(req.body);
 
     db.Accounts.find(
       { email: req.body.email, password: req.body.password },

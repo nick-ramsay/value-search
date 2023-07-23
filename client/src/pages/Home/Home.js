@@ -297,11 +297,16 @@ const Home = () => {
   };
 
   const login = () => {
-    let cookieExpiryDate = moment().add("60", "minutes").format();
+    let cookieExpiryDate = moment().add("24", "hours").format();
+    console.log(cookieExpiryDate);
+
+    console.log("Called login");
 
     if (loginEmail && loginPassword) {
+
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
         if (res.data) {
+          console.log(res.data)
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =
             "auth_expiry=" +
