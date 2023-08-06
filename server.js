@@ -5,6 +5,7 @@ const tracer = require('dd-trace').init({
 });
 
 const express = require("express");
+var bodyparser = require("body-parser");
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 require("dotenv").config();
@@ -15,6 +16,8 @@ const routes = require("./routes");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+
+app.use(bodyparser.json({limit: '500kb'}));
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
