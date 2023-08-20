@@ -78,7 +78,7 @@ const Portfolio = () => {
               "Looks like an account already exists with this e-mail. Try logging in."
           );
         } else {
-          API.setEmailVerificationToken(email).then((res) => {});
+          API.setEmailVerificationToken(email).then((res) => { });
         }
       });
     } else {
@@ -462,7 +462,7 @@ const Portfolio = () => {
         }
       }
       etradeSymbols.splice(etradeSymbols.length - 2, 2);
-      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => {});
+      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => { });
       let tempPortfolio = portfolio;
       for (let i = 0; i < etradeSymbols.length; i++) {
         if (
@@ -644,20 +644,22 @@ const Portfolio = () => {
           <div>
             <div className="mb-3">
               <div className={"portfolio-body"}>
-                
+
                 <div className="row">
                   <div className="col-md-12 mt-2">
                     <button
                       type="button"
                       className={
                         selectedStatus === "icebox"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
-                        findPortfolio(userID, "icebox");
-                        setSelectedStatus((selectedStatus) => "icebox");
-                        setLoading((loading) => true);
+                        if (loading === false) {
+                          findPortfolio(userID, "icebox");
+                          setSelectedStatus((selectedStatus) => "icebox");
+                          setLoading((loading) => true);
+                        }
                       }}
                     >
                       Icebox
@@ -666,13 +668,15 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "watch"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
-                        findPortfolio(userID, "watch");
-                        setSelectedStatus((selectedStatus) => "watch");
-                        setLoading((loading) => true);
+                        if (loading === false) {
+                          findPortfolio(userID, "watch");
+                          setSelectedStatus((selectedStatus) => "watch");
+                          setLoading((loading) => true);
+                        }
                       }}
                     >
                       Watch
@@ -681,13 +685,15 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "own"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
-                        findPortfolio(userID, "own");
-                        setSelectedStatus((selectedStatus) => "own");
-                        setLoading((loading) => true);
+                        if (loading === false) {
+                          findPortfolio(userID, "own");
+                          setSelectedStatus((selectedStatus) => "own");
+                          setLoading((loading) => true);
+                        }
                       }}
                     >
                       {"Own (" + portfolioStatusCounts.own + ")"}
@@ -696,13 +702,15 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "hold"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
-                        findPortfolio(userID, "hold");
-                        setSelectedStatus((selectedStatus) => "hold");
-                        setLoading((loading) => true);
+                        if (loading === false) {
+                          findPortfolio(userID, "hold");
+                          setSelectedStatus((selectedStatus) => "hold");
+                          setLoading((loading) => true);
+                        }
                       }}
                     >
                       {"Hold (" + portfolioStatusCounts.hold + ")"}
@@ -711,13 +719,15 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "speculative"
-                          ? "btn btn-sm btn-light status-button m-1"
-                          : "btn btn-sm btn-outline-light status-button m-1"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
-                        findPortfolio(userID, "speculative");
-                        setSelectedStatus((selectedStatus) => "speculative");
-                        setLoading((loading) => true);
+                        if (loading === false) {
+                          findPortfolio(userID, "speculative");
+                          setSelectedStatus((selectedStatus) => "speculative");
+                          setLoading((loading) => true);
+                        }
                       }}
                     >
                       {"Speculative (" +
@@ -860,16 +870,16 @@ const Portfolio = () => {
           </div>
           {!loading
             ? valueSearchData.map((stock, i) => (
-                <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                  selectedStatus={selectedStatus}
-                  findPortfolio={findPortfolio}
-                  page={"Portfolio"}
-                />
-              ))
+              <QuoteCard
+                stock={stock}
+                userID={userID}
+                updatePortfolio={updatePortfolio}
+                portfolio={portfolio}
+                selectedStatus={selectedStatus}
+                findPortfolio={findPortfolio}
+                page={"Portfolio"}
+              />
+            ))
             : ""}
           <div
             id="portfolio-loading"

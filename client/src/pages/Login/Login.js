@@ -19,11 +19,13 @@ const Login = () => {
             console.log("Email and PW Exist")
             API.login(email, sha256(password)).then(
                 res => {
+                    console.log("Login response")
                     console.log(res.data);
                     if (res.data) {
                         setSubmissionMessage(submissionMessage => "");
                         document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
                         document.cookie = "account_id=" + res.data._id + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+                        document.cookie = "sessionAccessToken=" + res.data.sessionAccessToken + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
                         window.location = "/";
                     } else {
                         setSubmissionMessage(submissionMessage => "Hmm... this is incorrect. Enter your username and password again.");

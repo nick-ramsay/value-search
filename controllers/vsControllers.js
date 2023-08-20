@@ -195,15 +195,42 @@ module.exports = {
       .then((dbModel) => res.json(dbModel[0]))
       .catch((err) => res.status(422).json(err));
   },
+  setSessionAccessToken: function (accountId) {
+    console.log("Called session token set controller...");
+
+    let sessionAccessToken = Math.floor(
+      (Math.random() * 999999) + req.body.id + (Math.random() * 999999)
+    ).toString();
+
+    db.Accounts.updateOne(
+      { _id: accountId },
+      { sessionAccessToken: sha256(sessionAccessToken) }
+    )
+
+      .then((dbModel) => res.json(dbModel[0]))
+      .catch((err) => res.status(422).json(err));
+  },
   login: function (req, res) {
     console.log("Called login controller...");
-    console.log(req.body);
-
     db.Accounts.find(
       { email: req.body.email, password: req.body.password },
       { _id: 1 }
     )
-      .then((dbModel) => res.json(dbModel[0]))
+      .then((dbModel) => {
+        let currentAccountID = dbModel[0]._id.toString();
+        let sessionAccessToken = sha256((Math.floor(Math.random() * 999999)) + currentAccountID + Math.floor(Math.random() * 999999));
+        db.Accounts.updateOne(
+          { _id: dbModel[0]._id },
+          { sessionAccessToken: sessionAccessToken }
+        ).then(() =>
+          db.Accounts.find(
+            { _id: currentAccountID },
+            {_id:1, sessionAccessToken:1}
+          ))
+          //.then((dbModel) => console.log(dbModel[0]))
+          .then((dbModel) => res.json(dbModel[0]))
+          .catch((err) => res.status(422).json(err));
+      })
       .catch((err) => res.status(422).json(err));
   },
   findUserName: (req, res) => {
@@ -212,25 +239,6 @@ module.exports = {
       { _id: -1, firstname: 1, lastname: 1 }
     )
       .then((dbModel) => res.json(dbModel[0]))
-      .catch((err) => res.status(422).json(err));
-  },
-  setSessionAccessToken: function (req, res) {
-    console.log("Called session token set controller...");
-
-    let sessionAccessToken = Math.floor(
-      Math.random() * 999999 + 100000
-    ).toString();
-
-    db.Accounts.updateOne(
-      { _id: req.body.id },
-      { sessionAccessToken: sha256(sessionAccessToken) }
-    )
-      .then((dbModel) => {
-        res.json({
-          dbModel: dbModel[0],
-          sessionAccessToken: sha256(sessionAccessToken),
-        });
-      })
       .catch((err) => res.status(422).json(err));
   },
   fetchAccountDetails: function (req, res) {

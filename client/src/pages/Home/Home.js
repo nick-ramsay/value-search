@@ -42,8 +42,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => {};
-  const selectedInvestmentType = (event) => {};
+  const setMarketCapSize = (event) => { };
+  const selectedInvestmentType = (event) => { };
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -141,7 +141,7 @@ const Home = () => {
               "Looks like an account already exists with this e-mail. Try logging in."
           );
         } else {
-          API.setEmailVerificationToken(email).then((res) => {});
+          API.setEmailVerificationToken(email).then((res) => { });
         }
       });
     } else {
@@ -249,7 +249,7 @@ const Home = () => {
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
       tempPortfolio[symbolIndex] !== undefined &&
-      tempPortfolio[symbolIndex].comments !== undefined
+        tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
@@ -316,6 +316,11 @@ const Home = () => {
           document.cookie =
             "vs_id=" +
             res.data._id +
+            "; expires=" +
+            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
+          document.cookie =
+            "session_access_token=" +
+            res.data.sessionAccessToken +
             "; expires=" +
             moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
           setUserID((userID) => res.data._id);
@@ -497,11 +502,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                    }
                     : () => {
-                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                      }
+                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                    }
                 }
               >
                 Value Search Parameters{" "}
@@ -541,7 +546,7 @@ const Home = () => {
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
                               defaultValue={10}
-                              //onChange={Number(setMinPE)}
+                            //onChange={Number(setMinPE)}
                             />
                           </div>
                         </div>
@@ -557,7 +562,7 @@ const Home = () => {
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
                               defaultValue={15}
-                              //onChange={setMaxPE}
+                            //onChange={setMaxPE}
                             />
                           </div>
                         </div>
@@ -576,7 +581,7 @@ const Home = () => {
                               placeholder="Minimum Debt/Equity"
                               defaultValue={0.0}
                               step="0.01"
-                              //onChange={setMinDebtEquity}
+                            //onChange={setMinDebtEquity}
                             />
                           </div>
                         </div>
@@ -593,7 +598,7 @@ const Home = () => {
                               placeholder="Maximum Debt/Equity"
                               defaultValue={2.0}
                               step="0.01"
-                              //onChange={setMaxDebtEquity}
+                            //onChange={setMaxDebtEquity}
                             />
                           </div>
                         </div>
@@ -612,7 +617,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Book"
                               defaultValue={0.95}
                               step="0.01"
-                              //onChange={setMinPriceToBook}
+                            //onChange={setMinPriceToBook}
                             />
                           </div>
                         </div>
@@ -629,7 +634,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Book"
                               defaultValue={1.1}
                               step="0.01"
-                              //onChange={setMaxPriceToBook}
+                            //onChange={setMaxPriceToBook}
                             />
                           </div>
                         </div>
@@ -648,7 +653,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Sales"
                               defaultValue={0.0}
                               step="0.01"
-                              //onChange={setMinPriceSales}
+                            //onChange={setMinPriceSales}
                             />
                           </div>
                         </div>
@@ -665,7 +670,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Sales"
                               defaultValue={2.0}
                               step="0.01"
-                              //onChange={setMaxPriceSales}
+                            //onChange={setMaxPriceSales}
                             />
                           </div>
                         </div>
@@ -700,10 +705,10 @@ const Home = () => {
                             <select
                               id="selectedInvestmentTypeInput"
                               className="form-control"
-                              /*onClick={(event) => {
-                              selectedInvestmentType(event);
-                            }}
-                            */
+                            /*onClick={(event) => {
+                            selectedInvestmentType(event);
+                          }}
+                          */
                             >
                               <option value="cs" selected>
                                 Common Stock
@@ -775,7 +780,7 @@ const Home = () => {
               />
             </div>
             <div className="row w-100 justify-content-center mb-1">
-              <span style={{fontSize:14}}>
+              <span style={{ fontSize: 14 }}>
                 <strong>
                   {(metricVariationPercentage.toString() * 100).toFixed(0)}%
                   Variance Range
@@ -842,15 +847,15 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    portfolio={portfolio}
-                    findPortfolio={findPortfolio}
-                    page={"Home"}
-                  />
-                ))
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                  findPortfolio={findPortfolio}
+                  page={"Home"}
+                />
+              ))
               : ""}
             <button
               onClick={() => topFunction()}
