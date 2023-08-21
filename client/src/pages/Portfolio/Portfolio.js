@@ -696,7 +696,7 @@ const Portfolio = () => {
                         }
                       }}
                     >
-                      {"Own (" + portfolioStatusCounts.own + ")"}
+                      {"Own (" + (portfolioStatusCounts.own != undefined ? portfolioStatusCounts.own:"-") + ")"}
                     </button>
                     <button
                       type="button"
@@ -713,7 +713,7 @@ const Portfolio = () => {
                         }
                       }}
                     >
-                      {"Hold (" + portfolioStatusCounts.hold + ")"}
+                      {"Hold (" + (portfolioStatusCounts.hold != undefined ? portfolioStatusCounts.hold:"-") + ")"}
                     </button>
                     <button
                       type="button"
@@ -731,7 +731,7 @@ const Portfolio = () => {
                       }}
                     >
                       {"Speculative (" +
-                        portfolioStatusCounts.speculative +
+                        (portfolioStatusCounts.speculative != undefined ? portfolioStatusCounts.speculative:"-") +
                         ")"}
                     </button>
                     <img
