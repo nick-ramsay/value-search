@@ -204,7 +204,7 @@ const QuoteCard = (props) => {
           <div
             className="modal fade"
             id={stock.symbol + "editModal"}
-            tabindex="-1"
+            tabIndex="-1"
             role="dialog"
             aria-labelledby={stock.symbol + "editModalLabel"}
             aria-hidden="true"
@@ -518,7 +518,7 @@ const QuoteCard = (props) => {
           <div
             className="modal fade"
             id={stock.symbol + "commentModal"}
-            tabindex="-1"
+            tabIndex="-1"
             role="dialog"
             aria-labelledby={stock.symbol + "commentModalLabel"}
             aria-hidden="true"
@@ -606,7 +606,7 @@ const QuoteCard = (props) => {
         <div
           className="modal fade"
           id={stock.symbol + "company-bio-modal"}
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby={stock.symbol + "company-bio-modal-label"}
           aria-hidden="true"
         >
@@ -960,7 +960,7 @@ const QuoteCard = (props) => {
         <div
           className="modal fade"
           id={stock.symbol + "movingAverageTrendModal"}
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby={stock.symbol + "movingAverageTrendModalLabel"}
           aria-hidden="true"
         >
@@ -1025,7 +1025,7 @@ const QuoteCard = (props) => {
         <div
           className="modal fade"
           id={stock.symbol.replace(".", "-") + "valueSearchScoreModal"}
-          tabindex="-1"
+          tabIndex="-1"
           aria-labelledby={stock.symbol.replace(".", "-") + "valueSearchScoreModalLabel"}
           aria-hidden="true"
         >

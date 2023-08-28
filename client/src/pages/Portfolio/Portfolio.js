@@ -54,6 +54,7 @@ const Portfolio = () => {
   });
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
+  var [watchOnlyPriceTargets, setWatchOnlyPriceTargets] = useState(false);
   var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({});
 
   const findSingleStock = () => {
@@ -382,7 +383,6 @@ const Portfolio = () => {
 
     if (loginEmail && loginPassword) {
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
-        console.log(res.data)
         if (res.data) {
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =
@@ -651,8 +651,8 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "icebox"
-                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
-                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
                         if (loading === false) {
@@ -685,8 +685,8 @@ const Portfolio = () => {
                       type="button"
                       className={
                         selectedStatus === "own"
-                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
-                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
                         if (loading === false) {
@@ -696,14 +696,14 @@ const Portfolio = () => {
                         }
                       }}
                     >
-                      {"Own (" + (portfolioStatusCounts.own != undefined ? portfolioStatusCounts.own:"-") + ")"}
+                      {"Own (" + (portfolioStatusCounts.own != undefined ? portfolioStatusCounts.own : "-") + ")"}
                     </button>
                     <button
                       type="button"
                       className={
                         selectedStatus === "hold"
-                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
-                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
                         if (loading === false) {
@@ -713,14 +713,14 @@ const Portfolio = () => {
                         }
                       }}
                     >
-                      {"Hold (" + (portfolioStatusCounts.hold != undefined ? portfolioStatusCounts.hold:"-") + ")"}
+                      {"Hold (" + (portfolioStatusCounts.hold != undefined ? portfolioStatusCounts.hold : "-") + ")"}
                     </button>
                     <button
                       type="button"
                       className={
                         selectedStatus === "speculative"
-                          ? loading === false ? "btn btn-sm btn-light status-button m-1":"btn btn-sm btn-light status-button m-1 disabled"
-                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1":"btn btn-sm btn-outline-light status-button m-1 disabled"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
                       }
                       onClick={() => {
                         if (loading === false) {
@@ -731,7 +731,7 @@ const Portfolio = () => {
                       }}
                     >
                       {"Speculative (" +
-                        (portfolioStatusCounts.speculative != undefined ? portfolioStatusCounts.speculative:"-") +
+                        (portfolioStatusCounts.speculative != undefined ? portfolioStatusCounts.speculative : "-") +
                         ")"}
                     </button>
                     <img
@@ -868,17 +868,47 @@ const Portfolio = () => {
               </div>
             </div>
           </div>
+          {selectedStatus === "watch" ?
+            <div className="row">
+              <div className="col-md-12">
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" defaultChecked={watchOnlyPriceTargets} id="watchOnlyPriceTargetsTickbox" onClick={() => {
+                    let currentlyChecked = document.getElementById("watchOnlyPriceTargetsTickbox").checked;
+                    setWatchOnlyPriceTargets(watchOnlyPriceTargets => currentlyChecked);
+                  }} />
+                  <label className="form-check-label" htmlFor="watchOnlyPriceTargetsTickbox">
+                    With Price Targets
+                  </label>
+                </div>
+              </div>
+            </div>
+            : ""}
           {!loading
             ? valueSearchData.map((stock, i) => (
-              <QuoteCard
-                stock={stock}
-                userID={userID}
-                updatePortfolio={updatePortfolio}
-                portfolio={portfolio}
-                selectedStatus={selectedStatus}
-                findPortfolio={findPortfolio}
-                page={"Portfolio"}
-              />
+              watchOnlyPriceTargets === true
+              && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTargetEnabled === true
+              && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= 0
+              && selectedStatus === "watch"
+               ?
+                <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                  selectedStatus={selectedStatus}
+                  findPortfolio={findPortfolio}
+                  watchOnlyPriceTargets={watchOnlyPriceTargets}
+                  page={"Portfolio"}
+                />
+                : watchOnlyPriceTargets === false || selectedStatus !== "watch" ? <QuoteCard
+                  stock={stock}
+                  userID={userID}
+                  updatePortfolio={updatePortfolio}
+                  portfolio={portfolio}
+                  selectedStatus={selectedStatus}
+                  findPortfolio={findPortfolio}
+                  page={"Portfolio"}
+                />:""
             ))
             : ""}
           <div
