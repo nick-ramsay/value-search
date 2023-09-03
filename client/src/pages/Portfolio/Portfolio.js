@@ -55,6 +55,7 @@ const Portfolio = () => {
 
   var [selectedStatus, setSelectedStatus] = useState("watch");
   var [watchOnlyPriceTargets, setWatchOnlyPriceTargets] = useState(false);
+  var [watchOnlyPriceTargetsMet, setWatchOnlyPriceTargetsMet] = useState(false);
   var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({});
 
   const findSingleStock = () => {
@@ -870,14 +871,27 @@ const Portfolio = () => {
           </div>
           {selectedStatus === "watch" ?
             <div className="row">
-              <div className="col-md-12">
+              <div className="col-md-6">
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox" defaultChecked={watchOnlyPriceTargets} id="watchOnlyPriceTargetsTickbox" onClick={() => {
+                  <input className="form-check-input" type="checkbox" defaultChecked={watchOnlyPriceTargets} checked={watchOnlyPriceTargets} id="watchOnlyPriceTargetsTickbox" onClick={() => {
                     let currentlyChecked = document.getElementById("watchOnlyPriceTargetsTickbox").checked;
+                    watchOnlyPriceTargetsMet === true && watchOnlyPriceTargetsMet === true ? setWatchOnlyPriceTargetsMet(watchOnlyPriceTargetsMet => currentlyChecked) : setWatchOnlyPriceTargetsMet(watchOnlyPriceTargetsMet => false);
                     setWatchOnlyPriceTargets(watchOnlyPriceTargets => currentlyChecked);
                   }} />
                   <label className="form-check-label" htmlFor="watchOnlyPriceTargetsTickbox">
-                    With Price Targets
+                    Price Target Set
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" defaultChecked={watchOnlyPriceTargetsMet} checked={watchOnlyPriceTargetsMet} id="watchOnlyPriceTargetsMetTickbox" onClick={() => {
+                    let currentlyChecked = document.getElementById("watchOnlyPriceTargetsMetTickbox").checked;
+                    watchOnlyPriceTargets === false ? setWatchOnlyPriceTargets(watchOnlyPriceTargets => currentlyChecked) : setWatchOnlyPriceTargets(watchOnlyPriceTargets => true);;
+                    setWatchOnlyPriceTargetsMet(watchOnlyPriceTargetsMet => currentlyChecked);
+                  }} />
+                  <label className="form-check-label" htmlFor="watchOnlyPriceTargetsTickbox">
+                    Price Target Met
                   </label>
                 </div>
               </div>
@@ -885,11 +899,13 @@ const Portfolio = () => {
             : ""}
           {!loading
             ? valueSearchData.map((stock, i) => (
-              watchOnlyPriceTargets === true
-              && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTargetEnabled === true
-              && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= 0
-              && selectedStatus === "watch"
-               ?
+              selectedStatus === "watch"
+                && watchOnlyPriceTargets === true
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTargetEnabled === true
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget !== undefined
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= 0
+                && (watchOnlyPriceTargetsMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= stock.quote.latestPrice : true)
+                ?
                 <QuoteCard
                   stock={stock}
                   userID={userID}
@@ -908,7 +924,7 @@ const Portfolio = () => {
                   selectedStatus={selectedStatus}
                   findPortfolio={findPortfolio}
                   page={"Portfolio"}
-                />:""
+                /> : ""
             ))
             : ""}
           <div
