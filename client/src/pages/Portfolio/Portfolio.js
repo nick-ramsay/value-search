@@ -56,6 +56,7 @@ const Portfolio = () => {
   var [selectedStatus, setSelectedStatus] = useState("watch");
   var [watchOnlyPriceTargets, setWatchOnlyPriceTargets] = useState(false);
   var [watchOnlyPriceTargetsMet, setWatchOnlyPriceTargetsMet] = useState(false);
+  var [sellTargetMet, setSellTargetMet] = useState(false);
   var [portfolioStatusCounts, setPortfolioStatusCounts] = useState({});
 
   const findSingleStock = () => {
@@ -897,6 +898,23 @@ const Portfolio = () => {
               </div>
             </div>
             : ""}
+          {selectedStatus === "own" ?
+            <div className="row">
+              <div className="col-md-12">
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" defaultChecked={sellTargetMet} checked={sellTargetMet} id="sellTargetMetTickbox" onClick={() => {
+                    let currentlyChecked = document.getElementById("sellTargetMetTickbox").checked;
+                    console.log(sellTargetMet);
+                    sellTargetMet === true && sellTargetMet === true ? setSellTargetMet(sellTargetMet => currentlyChecked) : setSellTargetMet(sellTargetMet => false);
+                    setSellTargetMet(sellTargetMet => currentlyChecked);
+                  }} />
+                  <label className="form-check-label" htmlFor="sellTargetMetTickbox">
+                    Sell Target Met
+                  </label>
+                </div>
+              </div>
+            </div>
+            : ""}
           {!loading
             ? valueSearchData.map((stock, i) => (
               selectedStatus === "watch"
@@ -916,7 +934,22 @@ const Portfolio = () => {
                   watchOnlyPriceTargets={watchOnlyPriceTargets}
                   page={"Portfolio"}
                 />
-                : watchOnlyPriceTargets === false || selectedStatus !== "watch" ? <QuoteCard
+                : selectedStatus === "own"
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget !== undefined
+                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget >= 0
+                && (sellTargetMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice:true) ?
+                < QuoteCard
+                  stock = { stock }
+                  userID = { userID }
+                  updatePortfolio = { updatePortfolio }
+                  portfolio = { portfolio }
+                  selectedStatus = { selectedStatus }
+                  findPortfolio = { findPortfolio }
+                  watchOnlyPriceTargets = { watchOnlyPriceTargets }
+                  page = { "Portfolio"}
+            /> : 
+                (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold","speculative","icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
                   stock={stock}
                   userID={userID}
                   updatePortfolio={updatePortfolio}
@@ -924,7 +957,7 @@ const Portfolio = () => {
                   selectedStatus={selectedStatus}
                   findPortfolio={findPortfolio}
                   page={"Portfolio"}
-                /> : ""
+                />:""
             ))
             : ""}
           <div
