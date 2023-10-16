@@ -27,6 +27,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const PortfolioBeta = () => {
   var [valueSearchData, setValueSearchData] = useState([]);
   var [userID, setUserID] = useState("");
+  var [accountID, setAccountID] = useState("");
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
@@ -39,11 +40,7 @@ const PortfolioBeta = () => {
 
   var [firstname, setFirstname] = useState("");
   var [lastname, setLastname] = useState("");
-  var [phone, setPhone] = useInput("");
-  var [email, setEmail] = useInput("");
-  var [emailVerificationToken, setEmailVerficationToken] = useInput("");
-  var [password, setPassword] = useInput("");
-  var [confirmPassword, setConfirmPassword] = useInput("");
+
   var [submissionMessage, setSubmissionMessage] = useState("");
   var [portfolio, setPortfolio] = useState([]);
   var [industriesData, setIndustriesData] = useState({
@@ -66,319 +63,36 @@ const PortfolioBeta = () => {
       API.findSingleStock(selectedSymbol.toUpperCase()).then((res) => {
         document.getElementById("searchSymbol").value = "";
         setValueSearchData((valueSearchData) => res.data);
-        setLoading((loading) => false);
+        setLoading((loading) => true);
       });
     }
   };
 
-  //START: Account Creation Functions
-  const checkEmailAvailability = () => {
-    if (email !== "") {
-      API.checkExistingAccountEmails(email.toLowerCase()).then((res) => {
-        if (res.data !== "") {
-          setSubmissionMessage(
-            (submissionMessage) =>
-              "Looks like an account already exists with this e-mail. Try logging in."
-          );
-        } else {
-          API.setEmailVerificationToken(email).then((res) => { });
-        }
-      });
-    } else {
-      setSubmissionMessage(
-        (submissionMessage) => "Please enter an email address"
-      );
-    }
-  };
-
-  const createNewAccount = () => {
-    let currentAccountInfo = {
-      email: email,
-      phone: phone,
-      firstname: firstname,
-      lastname: lastname,
-      password: sha256(password),
-      sessionAccessToken: null,
-      passwordResetToken: null,
-    };
-
-    if (
-      firstname !== "" &&
-      lastname !== "" &&
-      email !== "" &&
-      password !== "" &&
-      emailVerificationToken !== "" &&
-      confirmPassword !== "" &&
-      password === confirmPassword
-    ) {
-      setSubmissionMessage((submissionMessage) => "");
-      API.checkEmailVerificationToken(email, emailVerificationToken).then(
-        (res) => {
-          if (res.data !== "") {
-            API.checkExistingAccountEmails(currentAccountInfo.email).then(
-              (res) => {
-                if (res.data === "") {
-                  API.createAccount(currentAccountInfo).then((res) => {
-                    API.deleteEmailVerificationToken(email).then(
-                      (res) => (window.location.href = "/")
-                    );
-                  });
-                } else {
-                  setSubmissionMessage(
-                    (submissionMessage) =>
-                      "Sorry... an account already exists for this email."
-                  );
-                }
-              }
-            );
-          } else {
-            setSubmissionMessage(
-              (submissionMessage) =>
-                "Hmm... reset code doesn't appear correct for email. Please make sure you've properly entered the email and reset code."
-            );
-          }
-        }
-      );
-    } else if (password !== confirmPassword) {
-      setSubmissionMessage(
-        (submissionMessage) =>
-          "Password and confirm password fields don't match..."
-      );
-    } else {
-      setSubmissionMessage((submissionMessage) => "Not enough info entered...");
-    }
-  };
-  //END: User Account Creation Functions
-
-  const findPortfolio = (user, selectedStatus) => {
-    let symbolList = [];
-    API.findPortfolio(user, selectedStatus).then((res) => {
-      if (res.data !== null) {
-        console.log(res.data.portfolio);
-        setPortfolio((portfolio) => res.data.portfolio);
-        renderAnalytics(res.data.portfolio);
-        let statusCount = {
-          own: 0,
-          hold: 0,
-          speculative: 0,
-        };
-
-        for (let j = 0; j < res.data.portfolio.length; j++) {
-          if (res.data.portfolio[j].status === "own") {
-            statusCount.own += 1;
-          } else if (res.data.portfolio[j].status === "hold") {
-            statusCount.hold += 1;
-          } else if (res.data.portfolio[j].status === "speculative") {
-            statusCount.speculative += 1;
-          }
-        }
-        setPortfolioStatusCounts((portfolioStatusCounts) => statusCount);
-        for (let i = 0; i < res.data.portfolio.length; i++) {
-          if (
-            res.data.portfolio[i].status !== "-" &&
-            res.data.portfolio[i].status === selectedStatus
-          ) {
-            symbolList.push(res.data.portfolio[i].symbol);
-          }
-        }
-        renderValueSearchResults(symbolList, selectedStatus);
-      }
+  const findPortfolio = (account_id, selectedStatus) => {
+    API.getPortfolio(account_id).then((res) => {
+      console.log(res.data);
+      setLoading(loading => false)
     });
   };
 
   const renderAnalytics = (portfolioData) => {
-    let ownedSymbols = [];
-    let ownedData = [];
-    let industries = {
-      undefined: 0,
-    };
-    let sectors = {
-      undefined: 0,
-    };
-    let industriesArray = {
-      labels: [],
-      datasets: [
-        {
-          label: "Count of Positions",
-          data: [],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
 
-    let sectorsArray = {
-      labels: [],
-      datasets: [
-        {
-          label: "Count of Positions",
-          data: [],
-          backgroundColor: [
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-          ],
-          borderColor: [
-            "rgba(255, 99, 132, 1)",
-            "rgba(54, 162, 235, 1)",
-            "rgba(255, 206, 86, 1)",
-            "rgba(75, 192, 192, 1)",
-            "rgba(153, 102, 255, 1)",
-            "rgba(255, 159, 64, 1)",
-          ],
-          borderWidth: 1,
-        },
-      ],
-    };
-
-    setIndustriesData((industriesData) => industriesArray);
-    setSectorsData((sectorsData) => sectorsArray);
-
-    for (let i = 0; i < portfolioData.length; i++) {
-      if (
-        portfolioData[i].status === "own" ||
-        portfolioData[i].status === "hold"
-      ) {
-        ownedSymbols.push(portfolioData[i].symbol);
-      }
-    }
-    API.findPortfolioQuotes(ownedSymbols).then((res) => {
-      ownedData = res.data;
-      for (let j = 0; j < ownedData.length; j++) {
-        if (ownedData[j].fundamentals !== undefined) {
-          let currentIndustry = ownedData[j].fundamentals.industry;
-          if (industries[currentIndustry] === undefined) {
-            industries[currentIndustry] = 1;
-          } else {
-            industries[currentIndustry] += 1;
-          }
-        } else {
-          sectors.undefined += 1;
-        }
-
-        if (ownedData[j].fundamentals !== undefined) {
-          let currentSector = ownedData[j].fundamentals.sector;
-          if (sectors[currentSector] === undefined) {
-            sectors[currentSector] = 1;
-          } else {
-            sectors[currentSector] += 1;
-          }
-        } else {
-          sectors.undefined += 1;
-        }
-      }
-
-      for (const key in industries) {
-        if (industries.hasOwnProperty(key)) {
-          //console.log(`${key}: ${industries[key]}`);
-          industriesArray.labels.push(`${key}`.toUpperCase());
-          industriesArray.datasets[0].data.push(Number(`${industries[key]}`));
-        }
-      }
-
-      for (const key in sectors) {
-        if (sectors.hasOwnProperty(key)) {
-          //console.log(`${key}: ${industries[key]}`);
-          sectorsArray.labels.push(`${key}`.toUpperCase());
-          sectorsArray.datasets[0].data.push(Number(`${sectors[key]}`));
-        }
-      }
-    });
   };
 
   const updatePortfolio = (symbol, userID) => {
-    let newStatus = document.getElementById(
-      symbol + "PortfolioStatusInput"
-    ).value;
 
-    let newComment = document.getElementById(
-      "new-comment-input-" + symbol
-    ).value;
-
-    let newQueuedForPurchase = document.getElementById(
-      "queued-for-purchase-" + symbol
-    ).checked;
-
-    let newPriceTargetEnabled = document.getElementById(
-      "price-target-enabled-" + symbol
-    ).checked;
-
-    let newPriceTarget = document.getElementById(
-      "price-target-" + symbol
-    ).value;
-
-    let newSellTargetEnabled = document.getElementById(
-      "sell-target-enabled-" + symbol
-    ).checked;
-
-    let newSellTarget = document.getElementById("sell-target-" + symbol).value;
-
-    let tempPortfolio = portfolio;
-    let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
-    let currentComments =
-      tempPortfolio[symbolIndex].comments !== undefined
-        ? tempPortfolio[symbolIndex].comments
-        : [];
-
-    let updatedComments = currentComments;
-    if (newComment !== "") {
-      updatedComments.unshift({ date: new Date(), comment: newComment });
-    }
-
-    if (symbolIndex !== -1) {
-      tempPortfolio[symbolIndex].status = newStatus;
-      tempPortfolio[symbolIndex].comments = updatedComments;
-      tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
-      tempPortfolio[symbolIndex].priceTargetEnabled = newPriceTargetEnabled;
-      tempPortfolio[symbolIndex].priceTarget = Number(newPriceTarget);
-      tempPortfolio[symbolIndex].sellTargetEnabled = newSellTargetEnabled;
-      tempPortfolio[symbolIndex].sellTarget = Number(newSellTarget);
-      document.getElementById("new-comment-input-" + symbol).value = "";
-    } else {
-      tempPortfolio.push({
-        symbol: symbol,
-        status: newStatus,
-        comments: updatedComments,
-        queuedForPurchase: newQueuedForPurchase,
-        priceTargetEnabled: newPriceTargetEnabled,
-        priceTarget: Number(newPriceTarget),
-        sellTargetEnabled: newSellTargetEnabled,
-        sellTarget: Number(newSellTarget),
-      });
-      document.getElementById("new-comment-input-" + symbol).value = "";
-    }
-    API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID, selectedStatus);
-    });
   };
 
   //START: Login functions
 
   const renderAccountName = () => {
-    setUserID((userID) => getCookie("vs_id"));
-    API.findUserName(getCookie("vs_id")).then((res) => {
+    API.getAccountID(getCookie("session_access_token")).then((res) => {
+      setAccountID(accountID, setAccountID(res.data._id));
       setFirstname((firstname) => res.data.firstname);
       setLastname((lastname) => res.data.lastname);
-      findPortfolio(getCookie("vs_id"), selectedStatus);
+      findPortfolio(res.data._id, selectedStatus);
     });
+
   };
 
   const login = () => {
@@ -416,83 +130,11 @@ const PortfolioBeta = () => {
   //END: Login functions
 
   const renderValueSearchResults = (symbols, selectedStatus) => {
-    API.findPortfolioQuotes(symbols, selectedStatus).then((res) => {
-      setValueSearchData((valueSearchData) => res.data);
-      setLoading((loading) => false);
-    });
+
   };
 
   const syncWithEtrade = () => {
-    var file = document.querySelector("#etradeCSVSelect").files[0];
-    var reader = new FileReader();
-    reader.readAsText(file);
 
-    //if you need to read a csv file with a 'ISO-8859-1' encoding
-    /*reader.readAsText(file,'ISO-8859-1');*/
-
-    //When the file finish load
-    reader.onload = function (event) {
-      //get the file.
-      var csv = event.target.result;
-
-      //split and get the rows in an array
-      var cols;
-      var rows = csv.split("\n");
-
-      var symbolCount = 0;
-      var etradeSymbols = [];
-
-      //move line by line
-      for (var i = 1; i < rows.length; i++) {
-        //split by separator (,) and get the columns
-        cols = rows[i].split(",");
-
-        //move column by column
-        for (var j = 0; j < 1; j++) {
-          /*the value of the current column.
-          Do whatever you want with the value*/
-          var value = cols[j];
-          if (value === "Symbol" && symbolCount <= 2) {
-            symbolCount += 1;
-          } else if (
-            value !== "Symbol" &&
-            value !== "\r" &&
-            value.slice(0, 9) !== "Generated" &&
-            symbolCount === 2
-          ) {
-            etradeSymbols.push(value);
-          }
-        }
-      }
-      etradeSymbols.splice(etradeSymbols.length - 2, 2);
-      API.syncPortfolioWithEtrade(etradeSymbols, "own").then((res) => { });
-      let tempPortfolio = portfolio;
-      for (let i = 0; i < etradeSymbols.length; i++) {
-        if (
-          portfolio.map((object) => object.symbol).indexOf(etradeSymbols[i]) ===
-          -1
-        ) {
-          tempPortfolio.push({
-            symbol: etradeSymbols[i],
-            status: "own",
-          });
-        }
-      }
-      //If symbol is in portfolio and NOT in etrade, set symbol to "watch" status
-      for (let j = 0; j < tempPortfolio.length; j++) {
-        if (
-          etradeSymbols.indexOf(tempPortfolio[j].symbol) === -1 &&
-          (tempPortfolio[j].status === "own" ||
-            tempPortfolio[j].status === "hold" ||
-            tempPortfolio[j].status === "speculative")
-        ) {
-          tempPortfolio[j].status = "watch";
-        }
-      }
-      API.updatePortfolio(userID, tempPortfolio).then((res) => {
-        findPortfolio(userID);
-      });
-    };
   };
 
   useEffect(() => {
@@ -936,29 +578,29 @@ const PortfolioBeta = () => {
                   page={"Portfolio"}
                 />
                 : selectedStatus === "own"
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget !== undefined
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget >= 0
-                && (sellTargetMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice:true) ?
-                < QuoteCard
-                  stock = { stock }
-                  userID = { userID }
-                  updatePortfolio = { updatePortfolio }
-                  portfolio = { portfolio }
-                  selectedStatus = { selectedStatus }
-                  findPortfolio = { findPortfolio }
-                  watchOnlyPriceTargets = { watchOnlyPriceTargets }
-                  page = { "Portfolio"}
-            /> : 
-                (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold","speculative","icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                  selectedStatus={selectedStatus}
-                  findPortfolio={findPortfolio}
-                  page={"Portfolio"}
-                />:""
+                  && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true
+                  && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget !== undefined
+                  && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget >= 0
+                  && (sellTargetMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice : true) ?
+                  < QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                    selectedStatus={selectedStatus}
+                    findPortfolio={findPortfolio}
+                    watchOnlyPriceTargets={watchOnlyPriceTargets}
+                    page={"Portfolio"}
+                  /> :
+                  (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                    selectedStatus={selectedStatus}
+                    findPortfolio={findPortfolio}
+                    page={"Portfolio"}
+                  /> : ""
             ))
             : ""}
           <div

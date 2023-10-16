@@ -112,4 +112,14 @@ router
   .route("/sync-portfolio-with-etrade")
   .post(vsControllers.syncPortfolioWithEtrade)
 
+//Portfolio Beta Routes
+
+router
+  .route("/get-account-id")
+  .post(vsControllers.getAccountId)
+
+router
+  .route("/get-portfolio")
+  .post(vsControllers.getPortfolio)
+
 module.exports = router;

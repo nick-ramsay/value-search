@@ -225,7 +225,7 @@ module.exports = {
         ).then(() =>
           db.Accounts.find(
             { _id: currentAccountID },
-            {_id:1, sessionAccessToken:1}
+            { _id: 1, sessionAccessToken: 1 }
           ))
           //.then((dbModel) => console.log(dbModel[0]))
           .then((dbModel) => res.json(dbModel[0]))
@@ -371,4 +371,16 @@ module.exports = {
             .catch(err => console.log(err))
             */
   },
+  //Portfolio Beta API Endpoints
+  getAccountId: (req, res) => {
+    db.Accounts.findOne({ "sessionAccessToken": req.body.sessionAccessToken }, { "accountId": 1, "firstname":1, "lastname":1 })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => console.log(err))
+  },
+  getPortfolio: (req, res) => {
+    db.PortfolioItems.find({ "account_id": req.body.account_id, status: {$nin:["-","avoid","temporaryavoid"]} })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => console.log(err))
+  },
 };
+

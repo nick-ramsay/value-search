@@ -7,7 +7,7 @@ export default {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-search-results", data: { minPE: minPE, maxPE: maxPE, minDebtEquity: minDebtEquity, maxDebtEquity: maxDebtEquity, minPriceSales: minPriceSales, maxPriceSales: maxPriceSales, minPriceToBook: minPriceToBook, maxPriceToBook: maxPriceToBook, minCap: minCap, maxCap: maxCap, minProfitMargin: minProfitMargin } });
     },
     findScoreSearchResults: (maSupportParameter) => {
-        return axios({ method: "post", url: apiURL + "/api/value-search/find-score-search-results", data: { maSupportParameter:maSupportParameter } });
+        return axios({ method: "post", url: apiURL + "/api/value-search/find-score-search-results", data: { maSupportParameter: maSupportParameter } });
     },
     findSingleStock: (searchSymbol) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/find-single-stock", data: { searchSymbol } });
@@ -76,5 +76,12 @@ export default {
     },
     returnPortfolioSymbolData: (symbols) => {
         return axios({ method: "post", url: apiURL + "/api/value-search/return-portfolio-symbol-data", data: { symbols: symbols } });
-    }
+    },
+    //Portfolio Beta
+    getAccountID: (sessionAccessToken) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/get-account-id", data: { sessionAccessToken: sessionAccessToken } });
+    },
+    getPortfolio: (account_id) => {
+        return axios({ method: "post", url: apiURL + "/api/value-search/get-portfolio", data: { account_id: account_id } });
+    },
 }
