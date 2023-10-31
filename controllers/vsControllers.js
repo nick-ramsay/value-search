@@ -8,6 +8,7 @@ const axios = require("axios");
 const keys = require("../keys");
 const { Portfolio } = require("../models");
 
+const gmailUserId = keys.gmail_credentials.gmailUserId;
 const gmailClientId = keys.gmail_credentials.gmailClientId;
 const gmailClientSecret = keys.gmail_credentials.gmailClientSecret;
 const gmailRefreshToken = keys.gmail_credentials.gmailRefreshToken;
@@ -30,7 +31,7 @@ const smtpTransport = nodemailer.createTransport({
   secure: true,
   auth: {
     type: "OAuth2",
-    user: "applications.nickramsay@gmail.com",
+    user: gmailUserId,
     //user: gmailUserId,
     //pass: gmailPassword,
     clientId: gmailClientId,
@@ -50,7 +51,7 @@ module.exports = {
 
     let messageParameters = req.body[0];
 
-    let msg = {
+    /*let msg = {
       to: messageParameters.recipientEmail,
       from: "applications.nickramsay@gmail.com",
       subject:
@@ -65,7 +66,7 @@ module.exports = {
 
     if (useSendgrid) {
       sgMail.send(msg);
-    }
+    }*/
 
     //GMAIL CREDENTIALS BELOW...
 
