@@ -160,11 +160,14 @@ const Portfolio = () => {
           own: 0,
           hold: 0,
           speculative: 0,
+          tradableOwn: 0,
         };
 
         for (let j = 0; j < res.data.portfolio.length; j++) {
           if (res.data.portfolio[j].status === "own") {
             statusCount.own += 1;
+          } else if (res.data.portfolio[j].status === "tradableOwn") {
+            statusCount.tradableOwn += 1;
           } else if (res.data.portfolio[j].status === "hold") {
             statusCount.hold += 1;
           } else if (res.data.portfolio[j].status === "speculative") {
@@ -254,6 +257,7 @@ const Portfolio = () => {
     for (let i = 0; i < portfolioData.length; i++) {
       if (
         portfolioData[i].status === "own" ||
+        portfolioData[i].status === "tradableOwn" ||
         portfolioData[i].status === "hold"
       ) {
         ownedSymbols.push(portfolioData[i].symbol);
@@ -686,6 +690,23 @@ const Portfolio = () => {
                     <button
                       type="button"
                       className={
+                        selectedStatus === "tradableOwn"
+                          ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
+                          : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                      }
+                      onClick={() => {
+                        if (loading === false) {
+                          findPortfolio(userID, "tradableOwn");
+                          setSelectedStatus((selectedStatus) => "tradableOwn");
+                          setLoading((loading) => true);
+                        }
+                      }}
+                    >
+                      {"Tradable Own (" + (portfolioStatusCounts.tradableOwn != undefined ? portfolioStatusCounts.tradableOwn : "-") + ")"}
+                    </button>
+                    <button
+                      type="button"
+                      className={
                         selectedStatus === "own"
                           ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
                           : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
@@ -898,7 +919,7 @@ const Portfolio = () => {
               </div>
             </div>
             : ""}
-          {selectedStatus === "own" ?
+          {selectedStatus === "own" || selectedStatus === "tradableOwn" ?
             <div className="row">
               <div className="col-md-12">
                 <div className="form-check">
@@ -935,29 +956,38 @@ const Portfolio = () => {
                   page={"Portfolio"}
                 />
                 : selectedStatus === "own"
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget !== undefined
-                && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget >= 0
-                && (sellTargetMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice:true) ?
-                < QuoteCard
-                  stock = { stock }
-                  userID = { userID }
-                  updatePortfolio = { updatePortfolio }
-                  portfolio = { portfolio }
-                  selectedStatus = { selectedStatus }
-                  findPortfolio = { findPortfolio }
-                  watchOnlyPriceTargets = { watchOnlyPriceTargets }
-                  page = { "Portfolio"}
-            /> : 
-                (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold","speculative","icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                  selectedStatus={selectedStatus}
-                  findPortfolio={findPortfolio}
-                  page={"Portfolio"}
-                />:""
+                  && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) : true) ?
+                  < QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                    selectedStatus={selectedStatus}
+                    findPortfolio={findPortfolio}
+                    watchOnlyPriceTargets={watchOnlyPriceTargets}
+                    page={"Portfolio"}
+                  />
+                  : selectedStatus === "tradableOwn" 
+                  && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) : true) ?
+                    < QuoteCard
+                      stock={stock}
+                      userID={userID}
+                      updatePortfolio={updatePortfolio}
+                      portfolio={portfolio}
+                      selectedStatus={selectedStatus}
+                      findPortfolio={findPortfolio}
+                      watchOnlyPriceTargets={watchOnlyPriceTargets}
+                      page={"Portfolio"}
+                    /> :
+                    (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
+                      stock={stock}
+                      userID={userID}
+                      updatePortfolio={updatePortfolio}
+                      portfolio={portfolio}
+                      selectedStatus={selectedStatus}
+                      findPortfolio={findPortfolio}
+                      page={"Portfolio"}
+                    /> : ""
             ))
             : ""}
           <div

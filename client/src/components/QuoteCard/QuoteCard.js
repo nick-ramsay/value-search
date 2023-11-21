@@ -90,6 +90,7 @@ const QuoteCard = (props) => {
                     page === "Home" &&
                     (portfolioEntry.status === "watch" ||
                       portfolioEntry.status === "own" ||
+                      portfolioEntry.status === "tradableOwn" ||
                       portfolioEntry.status === "hold" ||
                       portfolioEntry.status === "icebox" ||
                       portfolioEntry.status === "speculative")
@@ -166,7 +167,7 @@ const QuoteCard = (props) => {
                   {toTitleCase(
                     portfolioEntry.status === "temporaryavoid"
                       ? "Temporary Avoid"
-                      : portfolioEntry.status
+                      : portfolioEntry.status === "tradableOwn" ? "Tradable Own": portfolioEntry.status
                   )}
                 </span>
               ) : (
@@ -251,6 +252,15 @@ const QuoteCard = (props) => {
                         }
                       >
                         Watch
+                      </option>
+                      <option
+                        value="tradableOwn"
+                        selected={
+                          portfolioEntry !== undefined &&
+                          portfolioEntry.status === "tradableOwn"
+                        }
+                      >
+                        Tradable Own
                       </option>
                       <option
                         value="own"
@@ -389,7 +399,7 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none"):" d-none")}>
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none"):" d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -444,7 +454,7 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined  && ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"):" d-none")}>
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined  && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"):" d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -651,7 +661,7 @@ const QuoteCard = (props) => {
             <p>
               <strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}
               {portfolioEntry !== undefined &&
-                ["own", "hold", "speculative"].indexOf(portfolioEntry.status) ===
+                ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) ===
                 -1 &&
                 portfolioEntry.priceTargetEnabled === true ? (
                 portfolioEntry.priceTarget >= stock.quote.latestPrice ?
@@ -660,7 +670,7 @@ const QuoteCard = (props) => {
                 ""
               )}
               {portfolioEntry !== undefined &&
-                ["own", "hold", "speculative"].indexOf(portfolioEntry.status) !==
+                ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !==
                 -1 &&
                 portfolioEntry.sellTargetEnabled === true ? (
                 portfolioEntry.sellTarget <= stock.quote.latestPrice ?
