@@ -1070,7 +1070,7 @@ const QuoteCard = (props) => {
                   className="modal-title"
                   id={stock.symbol + "valueSearchHistoryModalLabel"}
                 >
-                  {"Moving Average Trend for " + stock.symbol}
+                  {"Value Search Score Trend for " + stock.symbol}
                 </h5>
                 <button
                   type="button"
