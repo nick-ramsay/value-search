@@ -4,6 +4,7 @@ import Chart from "chart.js/auto";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
+import TimelineIcon from '@mui/icons-material/Timeline';
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
 import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png";
@@ -51,6 +52,18 @@ const QuoteCard = (props) => {
       findPortfolio(userID, selectedStatus);
     });
   };
+
+  console.log(props.stock.valueSearchScoreHistory);
+
+  let valueSearchHistoryDates = [];
+  let valueSearchHistoryScores = [];
+
+  for (let i = 0; i < props.stock.valueSearchScoreHistory.length; i++) {
+    console.log(props.stock.valueSearchScoreHistory[i]);
+    valueSearchHistoryDates.push(props.stock.valueSearchScoreHistory[i].date)
+    valueSearchHistoryScores.push((props.stock.valueSearchScoreHistory[i].score * 100))
+
+  }
 
   const removeLabel = (symbol, label) => {
     let tempPortfolio = portfolio;
@@ -131,6 +144,14 @@ const QuoteCard = (props) => {
             ) : (
               ""
             )}
+            <span>
+              <TimelineIcon className="ml-3 text-icon"
+                src={TimelineIcon}
+                alt="TimelineIcon"
+                data-bs-toggle="modal"
+                data-bs-target={"#" + stock.symbol + "valueSearchHistoryModal"}
+              />
+            </span>
             {userID !== undefined && userID !== "" ? (
               <span>
                 <img
@@ -167,7 +188,7 @@ const QuoteCard = (props) => {
                   {toTitleCase(
                     portfolioEntry.status === "temporaryavoid"
                       ? "Temporary Avoid"
-                      : portfolioEntry.status === "tradableOwn" ? "Tradable Own": portfolioEntry.status
+                      : portfolioEntry.status === "tradableOwn" ? "Tradable Own" : portfolioEntry.status
                   )}
                 </span>
               ) : (
@@ -399,7 +420,7 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none"):" d-none")}>
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none") : " d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -454,7 +475,7 @@ const QuoteCard = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined  && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none"):" d-none")}>
+                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none") : " d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -967,6 +988,7 @@ const QuoteCard = (props) => {
             </span>
           </div>
         </div>
+        {/* Start MA Trend Modal*/}
         <div
           className="modal fade"
           id={stock.symbol + "movingAverageTrendModal"}
@@ -1032,6 +1054,64 @@ const QuoteCard = (props) => {
             </div>
           </div>
         </div>
+        {/* END: Moving Average Trend Modal */}
+        {/* START: Value Search History Modal */}
+        <div
+          className="modal fade"
+          id={stock.symbol + "valueSearchHistoryModal"}
+          tabIndex="-1"
+          aria-labelledby={stock.symbol + "valueSearchHistoryLabel"}
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5
+                  className="modal-title"
+                  id={stock.symbol + "valueSearchHistoryModalLabel"}
+                >
+                  {"Moving Average Trend for " + stock.symbol}
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="row text-center">
+                  <Line
+                    data={{
+                      labels: valueSearchHistoryDates,
+                      datasets: [
+                        {
+                          label: "Value Search Scores",
+                          data: valueSearchHistoryScores,
+                          fill: false,
+                          backgroundColor: "blue",
+                          borderColor: "blue",
+                        },
+                      ],
+                    }}
+                    options={{
+                      scales: {
+                        y: {
+                          min: 0,
+                          max: 100,
+                        },
+                      },
+                    }}
+                  />
+                </div>
+                <div className="modal-footer"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* END: Value Search History Modal */}
         <div
           className="modal fade"
           id={stock.symbol.replace(".", "-") + "valueSearchScoreModal"}
