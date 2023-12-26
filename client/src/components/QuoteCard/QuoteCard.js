@@ -53,16 +53,15 @@ const QuoteCard = (props) => {
     });
   };
 
-  console.log(props.stock.valueSearchScoreHistory);
+  //console.log(props.stock.valueSearchScoreHistory);
 
   let valueSearchHistoryDates = [];
   let valueSearchHistoryScores = [];
 
   for (let i = 0; i < props.stock.valueSearchScoreHistory.length; i++) {
-    console.log(props.stock.valueSearchScoreHistory[i]);
+    //console.log(props.stock.valueSearchScoreHistory[i]);
     valueSearchHistoryDates.push(props.stock.valueSearchScoreHistory[i].date)
     valueSearchHistoryScores.push((props.stock.valueSearchScoreHistory[i].score * 100))
-
   }
 
   const removeLabel = (symbol, label) => {
@@ -1036,6 +1035,9 @@ const QuoteCard = (props) => {
                           fill: false,
                           backgroundColor: "blue",
                           borderColor: "blue",
+                          borderWidth: 1,
+                          pointRadius: 2,
+                          pointHoverRadius: 4
                         },
                       ],
                     }}
@@ -1093,6 +1095,9 @@ const QuoteCard = (props) => {
                           fill: false,
                           backgroundColor: "blue",
                           borderColor: "blue",
+                          borderWidth: 1,
+                          pointRadius: 2,
+                          pointHoverRadius: 4
                         },
                       ],
                     }}
