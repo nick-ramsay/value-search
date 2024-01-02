@@ -200,7 +200,7 @@ module.exports = {
     console.log("Called session token set controller...");
 
     let sessionAccessToken = Math.floor(
-      (Math.random() * 999999) + req.body.id + (Math.random() * 999999)
+      Math.random() * 999999 + req.body.id + Math.random() * 999999
     ).toString();
 
     db.Accounts.updateOne(
@@ -219,15 +219,21 @@ module.exports = {
     )
       .then((dbModel) => {
         let currentAccountID = dbModel[0]._id.toString();
-        let sessionAccessToken = sha256((Math.floor(Math.random() * 999999)) + currentAccountID + Math.floor(Math.random() * 999999));
+        let sessionAccessToken = sha256(
+          Math.floor(Math.random() * 999999) +
+            currentAccountID +
+            Math.floor(Math.random() * 999999)
+        );
         db.Accounts.updateOne(
           { _id: dbModel[0]._id },
           { sessionAccessToken: sessionAccessToken }
-        ).then(() =>
-          db.Accounts.find(
-            { _id: currentAccountID },
-            { _id: 1, sessionAccessToken: 1 }
-          ))
+        )
+          .then(() =>
+            db.Accounts.find(
+              { _id: currentAccountID },
+              { _id: 1, sessionAccessToken: 1 }
+            )
+          )
           //.then((dbModel) => console.log(dbModel[0]))
           .then((dbModel) => res.json(dbModel[0]))
           .catch((err) => res.status(422).json(err));
@@ -262,6 +268,16 @@ module.exports = {
   },
   //END: User Account Controllers...
   findSearchResults: (req, res) => {
+    let potentialBottomParameter = (req.body.potentialBottomParameter === 1) ? {
+      $or: [
+        {
+          "valueSearchScore.movingAverageSupport": Number(
+            req.body.potentialBottomParameter
+          ),
+        },
+        { "valueSearchScore.movingAverageSupport": { $exists: false } },
+      ],
+    }:"";
     db.StockData.find({
       "fundamentals.Forward P/E": {
         $gte: Number(req.body.minPE),
@@ -285,7 +301,7 @@ module.exports = {
       },
       "fundamentals.Profit Margin (%)": {
         $gte: Number(req.body.minProfitMargin),
-      },
+      }
     })
       .then((dbModel) => res.json(dbModel))
       .catch((err) => console.log(err));
@@ -374,14 +390,19 @@ module.exports = {
   },
   //Portfolio Beta API Endpoints
   getAccountId: (req, res) => {
-    db.Accounts.findOne({ "sessionAccessToken": req.body.sessionAccessToken }, { "accountId": 1, "firstname":1, "lastname":1 })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => console.log(err))
+    db.Accounts.findOne(
+      { sessionAccessToken: req.body.sessionAccessToken },
+      { accountId: 1, firstname: 1, lastname: 1 }
+    )
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => console.log(err));
   },
   getPortfolio: (req, res) => {
-    db.PortfolioItems.find({ "account_id": req.body.account_id, status: {$nin:["-","avoid","temporaryavoid"]} })
-      .then(dbModel => res.json(dbModel))
-      .catch(err => console.log(err))
+    db.PortfolioItems.find({
+      account_id: req.body.account_id,
+      status: { $nin: ["-", "avoid", "temporaryavoid"] },
+    })
+      .then((dbModel) => res.json(dbModel))
+      .catch((err) => console.log(err));
   },
 };
-

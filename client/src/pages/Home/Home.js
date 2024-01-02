@@ -42,8 +42,8 @@ const Home = () => {
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
+  const setMarketCapSize = (event) => {};
+  const selectedInvestmentType = (event) => {};
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
@@ -94,6 +94,11 @@ const Home = () => {
 
     console.log(profitabilityParameter);
 
+    let potentialBottomParameterChecked = document.getElementById(
+      "potentialBottomCheckbox"
+    ).checked;
+    console.log(potentialBottomParameterChecked);
+
     API.findSearchResults(
       minPE,
       maxPE,
@@ -105,9 +110,20 @@ const Home = () => {
       maxPriceToBook,
       selectedMarketCapMin,
       selectedMarketCapMax,
-      minProfitMargin
+      minProfitMargin,
     ).then((res) => {
-      setValueSearchData((valueSearchData) => res.data);
+      console.log(res.data);
+      let tempValueSearchData = [];
+      if (potentialBottomParameterChecked === true) {
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].valueSearchScore.movingAverageSupport === 1) {
+            tempValueSearchData.push(res.data[i])
+        }
+      }
+      } else(
+        tempValueSearchData = res.data
+      )
+      setValueSearchData((valueSearchData) => tempValueSearchData);
       setLoading((loading) => false);
     });
   };
@@ -141,7 +157,7 @@ const Home = () => {
               "Looks like an account already exists with this e-mail. Try logging in."
           );
         } else {
-          API.setEmailVerificationToken(email).then((res) => { });
+          API.setEmailVerificationToken(email).then((res) => {});
         }
       });
     } else {
@@ -249,7 +265,7 @@ const Home = () => {
     let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
     let currentComments =
       tempPortfolio[symbolIndex] !== undefined &&
-        tempPortfolio[symbolIndex].comments !== undefined
+      tempPortfolio[symbolIndex].comments !== undefined
         ? tempPortfolio[symbolIndex].comments
         : [];
 
@@ -303,10 +319,9 @@ const Home = () => {
     console.log("Called login");
 
     if (loginEmail && loginPassword) {
-
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
         if (res.data) {
-          console.log(res.data)
+          console.log(res.data);
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =
             "auth_expiry=" +
@@ -502,11 +517,11 @@ const Home = () => {
                 onClick={
                   advancedOptionsOpen === false
                     ? () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => true);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => true);
+                      }
                     : () => {
-                      setAdvancedOptionsOpen((advancedOptionsOpen) => false);
-                    }
+                        setAdvancedOptionsOpen((advancedOptionsOpen) => false);
+                      }
                 }
               >
                 Value Search Parameters{" "}
@@ -546,7 +561,7 @@ const Home = () => {
                               aria-describedby="minPEInput"
                               placeholder="Minimum PE Ratio"
                               defaultValue={10}
-                            //onChange={Number(setMinPE)}
+                              //onChange={Number(setMinPE)}
                             />
                           </div>
                         </div>
@@ -562,7 +577,7 @@ const Home = () => {
                               aria-describedby="maxPEInput"
                               placeholder="Maximum PE Ratio"
                               defaultValue={15}
-                            //onChange={setMaxPE}
+                              //onChange={setMaxPE}
                             />
                           </div>
                         </div>
@@ -581,7 +596,7 @@ const Home = () => {
                               placeholder="Minimum Debt/Equity"
                               defaultValue={0.0}
                               step="0.01"
-                            //onChange={setMinDebtEquity}
+                              //onChange={setMinDebtEquity}
                             />
                           </div>
                         </div>
@@ -598,7 +613,7 @@ const Home = () => {
                               placeholder="Maximum Debt/Equity"
                               defaultValue={2.0}
                               step="0.01"
-                            //onChange={setMaxDebtEquity}
+                              //onChange={setMaxDebtEquity}
                             />
                           </div>
                         </div>
@@ -617,7 +632,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Book"
                               defaultValue={0.95}
                               step="0.01"
-                            //onChange={setMinPriceToBook}
+                              //onChange={setMinPriceToBook}
                             />
                           </div>
                         </div>
@@ -634,7 +649,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Book"
                               defaultValue={1.1}
                               step="0.01"
-                            //onChange={setMaxPriceToBook}
+                              //onChange={setMaxPriceToBook}
                             />
                           </div>
                         </div>
@@ -653,7 +668,7 @@ const Home = () => {
                               placeholder="Minimum Price-to-Sales"
                               defaultValue={0.0}
                               step="0.01"
-                            //onChange={setMinPriceSales}
+                              //onChange={setMinPriceSales}
                             />
                           </div>
                         </div>
@@ -670,7 +685,7 @@ const Home = () => {
                               placeholder="Maximum Price-to-Sales"
                               defaultValue={2.0}
                               step="0.01"
-                            //onChange={setMaxPriceSales}
+                              //onChange={setMaxPriceSales}
                             />
                           </div>
                         </div>
@@ -705,7 +720,7 @@ const Home = () => {
                             <select
                               id="selectedInvestmentTypeInput"
                               className="form-control"
-                            /*onClick={(event) => {
+                              /*onClick={(event) => {
                             selectedInvestmentType(event);
                           }}
                           */
@@ -730,26 +745,45 @@ const Home = () => {
                             </select>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 mt-auto mb-auto">
+                      </div>
+                      <div className="row pr-3 pl-3">
+                        <div className="col-md-6 mt-auto mb-auto">
+                          <div className="form-group">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="profitableCheckbox"
+                                defaultChecked={true}
+                              />
+                              <label
+                                class="form-check-label"
+                                for="profitableCheckbox"
+                              >
+                                Company Profitable
+                              </label>
+                            </div>
+                          </div>
+                          
+                        </div>
+                        <div className="col-md-6 mt-auto mb-auto">
                             <div className="form-group">
                               <div class="form-check">
                                 <input
                                   class="form-check-input"
                                   type="checkbox"
-                                  id="profitableCheckbox"
-                                  defaultChecked="true"
+                                  id="potentialBottomCheckbox"
+                                  defaultChecked={true}
                                 />
                                 <label
                                   class="form-check-label"
-                                  for="profitableCheckbox"
+                                  for="potentialBottomCheckbox"
                                 >
-                                  Company Profitable
+                                  Potential Bottom
                                 </label>
                               </div>
                             </div>
                           </div>
-                        </div>
                       </div>
                     </form>
                   </div>
@@ -834,7 +868,8 @@ const Home = () => {
               )}
             </div>
             <div className="row mb-2 mt-1">
-              <span style={{ fontSize: 10 }}>All data sourced from{" "}
+              <span style={{ fontSize: 10 }}>
+                All data sourced from{" "}
                 <a href="https://www.iexcloud.io/" target="_blank">
                   <img style={{ height: 11 }} src={iexCloudLogo} />
                 </a>{" "}
@@ -847,15 +882,15 @@ const Home = () => {
             </div>
             {!loading
               ? valueSearchData.map((stock, i) => (
-                <QuoteCard
-                  stock={stock}
-                  userID={userID}
-                  updatePortfolio={updatePortfolio}
-                  portfolio={portfolio}
-                  findPortfolio={findPortfolio}
-                  page={"Home"}
-                />
-              ))
+                  <QuoteCard
+                    stock={stock}
+                    userID={userID}
+                    updatePortfolio={updatePortfolio}
+                    portfolio={portfolio}
+                    findPortfolio={findPortfolio}
+                    page={"Home"}
+                  />
+                ))
               : ""}
             <button
               onClick={() => topFunction()}
