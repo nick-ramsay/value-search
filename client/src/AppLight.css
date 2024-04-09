@@ -1,12 +1,289 @@
+
+
 body {
     background-color: whitesmoke;
     color: black;
+}
+
+.navbar {
+    background-color: #880085;
+}
+
+.navbar-button {
+    border-color:green;
+    background-color: green;
+    color: white
 }
 
 .card {
     background-color: white;
 }
 
+.form-control, .form-control:focus, .form-select, .form-select:focus, .input-group-text {
+    background-color: whitesmoke;
+    color: black;
+    border-color: black;
+  }
+
 a {
-    color: black
+    color: #880085;
 }
+
+a:hover {
+  color: #880085;
+}
+
+.status-button {
+  background-color: white;
+  color: black;
+  border-color: #880085;
+}
+
+.status-button:hover {
+    background-color: #880085;
+    color: white;
+}
+
+.selected-status-button, .selected-status-button:hover, .status-button:focus {
+  background-color: gold;
+  border-color: gold;
+  color: black
+}
+
+.standard-button {
+  color:white;
+  background-color: green;
+  border-color:green;
+}
+
+.standard-button:hover {
+  color:white;
+  background-color: darkgreen;
+  border-color:darkgreen
+}
+
+.btn-red {
+    color: white;
+    background-color: #a50500;
+    border: 1px #a50500 solid;
+  }
+  
+  .btn-red-inverted {
+    color: #a50500;
+    background-color: inherit;
+    border: 1px #a50500 solid;
+  }
+  
+  .btn-red-inverted:hover {
+    color: white;
+    background-color: #a50500;
+    border: 1px #a50500 solid;
+  }
+  .btn-red:active,
+  .btn-red:hover,
+  .btn-red-inverted:active,
+  .btn-red-inverted:hover,
+  .btn-red:focus,
+  .btn-red-inverted:focus {
+    outline: none;
+    box-shadow: none;
+    box-shadow: 1px 1px 5px #A50500;
+  }
+  
+  .btn-green {
+    color: white;
+    background-color: #0aa200;
+    border: 1px #0aa200 solid;
+  }
+  
+  .btn-green:active,
+  .btn-green:hover,
+  .btn-green:focus {
+    outline: none;
+    box-shadow: none;
+    box-shadow: 1px 1px 5px #0aa200;
+  }
+  
+  .btn-gold {
+    color: white;
+    background-color: #e8a735;
+    border: 1px #e8a735 solid;
+  }
+  
+  .btn-gold:active,
+  .btn-gold:hover,
+  .btn-gold:focus {
+    outline: none;
+    box-shadow: none;
+    box-shadow: 1px 1px 5px #e8a735;
+  }
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+  color: black;
+}
+
+.progress {
+    background-color: whitesmoke!important;
+}
+
+.progress-bar {
+    color:white;
+    background-color: #880085;
+}
+
+.badge-yellow-custom {
+  color: #121212;
+  background-color: #fdd663;
+}
+
+.badge-primary {
+  background-color: #880085;
+  color: white
+}
+
+.badge-primary-outline {
+  border: 2px #880085 solid;
+  color: black
+}
+
+.badge-danger {
+  background-color: #cf6679;
+  color: white;
+}
+
+.badge-success {
+  background-color: green;
+  color: white;
+}
+
+.vs-score-badge-red {
+  background-color: #cf6679;
+  font-size: 11px;
+  border: #cf6679 1px solid;
+  border-radius: 10%;
+  color:white;
+  padding: 2px;
+}
+
+.vs-score-badge-yellow {
+  background-color: #fdd663;
+  color: black;
+  font-size: 11px;
+  border: #fdd663 1px solid;
+  border-radius: 10%;
+  padding: 2px;
+}
+
+.vs-score-badge-green {
+  background-color: green;
+  color: white;
+  font-size: 11px;
+  border: green 1px solid;
+  border-radius: 10%;
+  padding: 2px;
+}
+
+.vs-score-badge:hover {
+  cursor: pointer;
+}
+
+.list-group-item {
+  background-color: inherit;
+  color: black;
+  border-color:transparent;
+  text-align: left;
+}
+
+.modal {
+    border: none;
+    backdrop-filter: blur(6px) brightness(125%);
+  }
+  
+  .modal-content {
+    color: black;
+    background-color: rgba(243, 243, 243, 0.80);
+    border-radius: 20px;
+    border: none;
+  }
+  
+  .modal-header {
+    border-bottom: none;
+  }
+  
+  .modal-footer {
+    border-top: none;
+  }
+  
+  .modal-content {
+    backdrop-filter: blur(4px);
+  }
+  
+  .modal-body {
+    color: black;
+  }
+  
+  button.close {
+    color:black;
+  }
+
+  button.close:hover {
+    color: red;
+  }
+
+  .close-modal-icon {
+    color: #0e0f14;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: inherit;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #708090;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #596673;
+  }
+  
+  .form-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: rgb(187, 187, 187);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+  }
+  
+  .form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #008080;
+    cursor: pointer;
+  }
+  
+  .form-range::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #008080;
+    cursor: pointer;
+  }
+
+  .form-check-input:checked {
+    background-color: #880085;
+  }
+
+  .form-check-input:focus {
+    box-shadow: none;
+  }

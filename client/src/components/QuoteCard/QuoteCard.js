@@ -5,6 +5,11 @@ import { useInput } from "../../sharedFunctions/sharedFunctions";
 import API from "../../utils/API";
 import moment from "moment";
 import TimelineIcon from '@mui/icons-material/Timeline';
+import InfoIcon from '@mui/icons-material/Info';
+import EditIcon from '@mui/icons-material/Edit';
+import NotesIcon from '@mui/icons-material/Notes';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
 import shoppingBasketIcon from "../../images/round_shopping_basket_white_24dp.png";
@@ -153,20 +158,21 @@ const QuoteCard = (props) => {
             </span>
             {userID !== undefined && userID !== "" ? (
               <span>
-                <img
+                <EditIcon
                   className="ml-3 text-icon"
                   src={editIcon}
                   alt="editIcon"
                   data-bs-toggle="modal"
                   data-bs-target={"#" + stock.symbol + "editModal"}
                 />
-                <img
-                  className="ml-3 text-icon"
-                  src={commentsIcon}
-                  alt="commentIcon"
-                  data-bs-toggle="modal"
-                  data-bs-target={"#" + stock.symbol + "commentModal"}
+                <NotesIcon 
+                className="ml-3 text-icon"
+                src={commentsIcon}
+                alt="commentIcon"
+                data-bs-toggle="modal"
+                data-bs-target={"#" + stock.symbol + "commentModal"}
                 />
+                
               </span>
             ) : (
               ""
@@ -198,7 +204,7 @@ const QuoteCard = (props) => {
               portfolioEntry.status !== "-" &&
               portfolioEntry.queuedForPurchase === true ? (
               <span>
-                <img className="text-icon ml-2" src={shoppingBasketIcon} />
+                <ShoppingBasketIcon className="text-icon ml-2" src={shoppingBasketIcon} />
               </span>
             ) : (
               ""
@@ -578,7 +584,7 @@ const QuoteCard = (props) => {
                       {portfolioEntry !== undefined &&
                         portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
-                          <li className="list-group-item">
+                          <li className="list-group-item" style={{"border-color":"black"}}>
                             <p className="comment-content">
                               {'"' + comment.comment + '"'}
                             </p>
@@ -617,7 +623,7 @@ const QuoteCard = (props) => {
                   stock.fundamentals.companyDescription !== undefined ? (
                   <span>
                     {" "}
-                    <img
+                    <InfoIcon
                       src={infoIcon}
                       className="text-icon mb-1"
                       data-bs-toggle="modal"
@@ -666,13 +672,6 @@ const QuoteCard = (props) => {
                   ? stock.fundamentals.companyDescription
                   : "No company description available"}
               </div>
-              <button
-                type="button"
-                className="btn btn-sm btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Close
-              </button>
             </div>
           </div>
         </div>
@@ -858,8 +857,9 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day200MovingAvg < stock.quote.latestPrice
-                      ? "#cf6679"
-                      : "#03DAC6",
+                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679":"green")
+                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6":"red"),
+                    fontWeight: "bold"
                 }}
               >
                 {stock.iexStats !== undefined
@@ -882,8 +882,9 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day50MovingAvg < stock.quote.latestPrice
-                      ? "#cf6679"
-                      : "#03DAC6",
+                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679":"green")
+                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6":"red"),
+                    fontWeight: "bold"
                 }}
               >
                 {stock.iexStats !== undefined

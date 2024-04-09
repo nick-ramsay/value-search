@@ -21,7 +21,7 @@ function Navbar(props) {
       }
     }
     return (
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand pl-2" href="/">Value Search</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ function Navbar(props) {
                             aria-label="Search"
                         />
                         <button
-                            className="btn btn-sm btn-outline-primary"
+                            className="btn btn-sm btn-outline-primary navbar-button"
                             type="button"
                             onClick={props.findSingleStock}
                         >

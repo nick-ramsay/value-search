@@ -13,7 +13,9 @@ import vsLogo from "../../images/logo-png/logo-no-background.png";
 import finvizLogo from "../../images/finviz-logo.png";
 import iexCloudLogo from "../../images/iex-cloud-logo.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { sha256 } from "js-sha256";
 import "./style.css";
 
@@ -468,17 +470,16 @@ const Home = () => {
                 >
                   Value Search Parameters{" "}
                   {advancedOptionsOpen === true ? (
-                    <img
+                    <ExpandLessIcon
                       className="text-icon"
-                      src={expandLessIcon}
                       alt="expandLessIcon"
                     />
                   ) : (
-                    <img
+                    <ExpandMoreIcon
                       className="text-icon"
-                      src={expandMoreIcon}
                       alt="expandMoreIcon"
                     />
+
                   )}
                 </a>
                 <div
@@ -768,10 +769,10 @@ const Home = () => {
               {loading ? (
                 <div className="row h-100">
                   <BarLoader
-                    className="my-auto mx-auto"
+                    className="my-auto mx-auto loading-bar"
                     width="100%"
                     height="8px"
-                    color="#007bff"
+                    color={localStorage.getItem("vs-theme") === "dark" ? "#bb86fc":"#880085"}
                   />{" "}
                 </div>
               ) : (
@@ -782,7 +783,7 @@ const Home = () => {
                   {userID !== "" ? (
                     <button
                       type="button"
-                      className="btn btn-sm btn-outline-primary m-1"
+                      className="btn btn-sm btn-outline-primary standard-button m-1"
                       onClick={() => (window.location.href = "/portfolio")}
                     >
                       View Portfolio
@@ -792,7 +793,7 @@ const Home = () => {
                   )}
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-primary m-1"
+                    className="btn btn-sm btn-outline-primary standard-button m-1"
                     onClick={() => {
                       renderSearchResults();
                       setCurrentView((currentView) => "valueSearch");

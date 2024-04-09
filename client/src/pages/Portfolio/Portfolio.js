@@ -17,12 +17,14 @@ import finvizLogo from "../../images/finviz-logo.png";
 import iexCloudLogo from "../../images/iex-cloud-logo.png";
 import expandMoreIcon from "../../images/outline_expand_more_white_24dp.png";
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
 import analyticsIcon from "../../images/outline_analytics_white_24dp.png";
 import { sha256 } from "js-sha256";
 import "./style.css";
 
 import QuoteCard from "../../components/QuoteCard/QuoteCard";
 import Navbar from "../../components/Navbar/Navbar";
+import DonutSmall from "@mui/icons-material/DonutSmall";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Portfolio = () => {
@@ -591,8 +593,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "icebox"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm selected-status-button status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -608,8 +610,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "watch"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -625,8 +627,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "tradableOwn"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -642,8 +644,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "own"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -659,8 +661,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "hold"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -676,8 +678,8 @@ const Portfolio = () => {
                         type="button"
                         className={
                           selectedStatus === "speculative"
-                            ? loading === false ? "btn btn-sm btn-light status-button m-1" : "btn btn-sm btn-light status-button m-1 disabled"
-                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm btn-outline-light status-button m-1 disabled"
+                            ? loading === false ? "btn btn-sm btn-light status-button selected-status-button m-1" : "btn btn-sm status-button selected-status-button m-1 disabled"
+                            : loading === false ? "btn btn-sm btn-outline-light status-button m-1" : "btn btn-sm status-button m-1 disabled"
                         }
                         onClick={() => {
                           if (loading === false) {
@@ -691,16 +693,16 @@ const Portfolio = () => {
                           (portfolioStatusCounts.speculative != undefined ? portfolioStatusCounts.speculative : "-") +
                           ")"}
                       </button>
-                      <img
-                        id="portfolioAnalytics"
-                        className="medium-icon pointer-hover"
-                        src={analyticsIcon}
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#analyticsAccordion"
-                        aria-expanded="true"
-                        aria-controls="analyticsAccordion"
-                      ></img>
+                      <DonutSmall
+                      id="portfolioAnalytics"
+                      className="medium-icon pointer-hover"
+                      src={analyticsIcon}
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#analyticsAccordion"
+                      aria-expanded="true"
+                      aria-controls="analyticsAccordion"
+                      />
                     </div>
                   </div>
                   <div className="row mb-2">
