@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Routes, Switch } from "react-router-dom";
+import "./App.css";
 
 //import {(localStorage.getItem("vs-theme") === undefined || localStorage.getItem("vs-theme") === null || localStorage.getItem("vs-theme") === "dark") ? '/.App.css':'/.App.css'}
 
