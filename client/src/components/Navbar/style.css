@@ -4,6 +4,7 @@
 
 .nav-link:hover, .nav-link:active, .nav-link:focus {
     color: white;
+    cursor: pointer;
 }
 
 .navbar-brand {
