@@ -5,6 +5,12 @@ body {
     color: black;
 }
 
+canvas {
+  background-color: white;
+  border-radius: 5px;
+  margin: 4px;
+}
+
 .navbar {
     background-color: #880085;
 }
@@ -147,7 +153,7 @@ a:hover {
 }
 
 .badge-danger {
-  background-color: #cf6679;
+  background-color: red;
   color: white;
 }
 
@@ -157,9 +163,9 @@ a:hover {
 }
 
 .vs-score-badge-red {
-  background-color: #cf6679;
+  background-color: red;
   font-size: 11px;
-  border: #cf6679 1px solid;
+  border: red 1px solid;
   border-radius: 10%;
   color:white;
   padding: 2px;
@@ -220,6 +226,9 @@ a:hover {
   
   .modal-body {
     color: black;
+    background-color: white;
+    margin: 0px 10px 10px 10px;
+    border-radius: 20px;
   }
   
   button.close {

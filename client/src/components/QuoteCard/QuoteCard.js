@@ -9,6 +9,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
 import NotesIcon from '@mui/icons-material/Notes';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 import editIcon from "../../images/outline_edit_white_24dp.png";
 import commentsIcon from "../../images/outline_notes_white_24dp.png";
@@ -144,6 +145,7 @@ const QuoteCard = (props) => {
                 {Math.round(
                   stock.valueSearchScore.calculatedScorePercentage * 100
                 ) + "%"}
+                {stock.valueSearchScore.movingAverageSupport > 0 ? <TrendingUpIcon style={{"height":"15px"}} />:""}
               </span>
             ) : (
               ""
