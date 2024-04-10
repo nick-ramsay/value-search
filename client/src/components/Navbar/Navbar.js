@@ -29,7 +29,7 @@ function Navbar(props) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link" onClick={() => toggleTheme()}>{currentTheme === "dark" ? "Light Theme" : "Dark Theme"}</a>
+              <a className="nav-link p-2" onClick={() => toggleTheme()}>{currentTheme === "dark" ? "Light Theme" : "Dark Theme"}</a>
             </li>
             {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
               <li className="nav-item dropdown">
