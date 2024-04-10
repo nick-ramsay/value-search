@@ -5,11 +5,13 @@ body {
     color: black;
 }
 
+/*
 canvas {
   background-color: white;
   border-radius: 5px;
   margin: 4px;
 }
+*/
 
 .navbar {
     background-color: #880085;
