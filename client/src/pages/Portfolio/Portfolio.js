@@ -558,7 +558,7 @@ const Portfolio = () => {
                     </div>
                     <button
                       type="button"
-                      className="btn btn-sm btn-primary"
+                      className="btn btn-sm btn-primary standard-button"
                       onClick={login}
                     >
                       Sign In
@@ -751,7 +751,7 @@ const Portfolio = () => {
                         <div className="row">
                           <div className="col-md-12">
                             <button
-                              className="btn btn-sm btn-outline-primary mt-2 mb-1"
+                              className="btn btn-sm btn-outline-primary standard-button mt-2 mb-1"
                               onClick={() => syncWithEtrade()}
                             >
                               Sync Portfolio with Etrade

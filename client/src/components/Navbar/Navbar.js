@@ -57,7 +57,7 @@ function Navbar(props) {
             ) : (
               <button
                 type="button"
-                className="btn btn-sm m-2 btn-outline-primary"
+                className="btn btn-sm m-2 standard-button"
                 data-bs-toggle="modal"
                 data-bs-target="#signInModal"
               >

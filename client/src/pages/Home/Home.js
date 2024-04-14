@@ -424,14 +424,14 @@ const Home = () => {
                     </div>
                     <button
                       type="button"
-                      className="btn btn-sm btn-primary"
+                      className="btn btn-sm btn-primary standard-button"
                       onClick={login}
                     >
                       Sign In
                     </button>
                     <div className="row mt-2">
                       <a
-                        className="link-primary"
+                        className="link-primary link-primary-light"
                         href="./create-account-request"
                         data-bs-toggle="modal"
                       >
@@ -439,7 +439,7 @@ const Home = () => {
                       </a>
                     </div>
                     <div className="row">
-                      <a className="link-primary" href="./reset-password-request">
+                      <a className="link-primary link-primary-light" href="./reset-password-request">
                         Reset Password
                       </a>
                     </div>
