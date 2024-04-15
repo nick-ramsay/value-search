@@ -4,7 +4,8 @@ import {
 } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
 import ValueSearchIcon from "../../images/value_search_icon.png"
-
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 function Navbar(props) {
   let currentTheme = localStorage.getItem("vs-theme");
@@ -29,7 +30,7 @@ function Navbar(props) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link p-2" onClick={() => toggleTheme()}>{currentTheme === "dark" ? "Light Theme" : "Dark Theme"}</a>
+              <a className="nav-link p-2" onClick={() => toggleTheme()}>{currentTheme === "dark" ? <LightModeIcon title="Switch to light theme" style={{"height":"20px"}} /> : <DarkModeIcon title="Switch to dark theme" style={{"height":"20px"}} />}</a>
             </li>
             {getCookie("vs_id") !== "" && getCookie("vs_id") !== undefined ? (
               <li className="nav-item dropdown">
