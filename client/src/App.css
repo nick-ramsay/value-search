@@ -138,10 +138,14 @@ a:hover {
   font-size: 16px;
 }
 
+.input:focus {
+  --bs-focus-ring-color: rgba(var(--bs-success-rgb), .25)
+}
+
 .form-control, .form-control:focus, .form-select, .form-select:focus, .input-group-text {
   background-color: #202124;
   color: white;
-  border-color: grey;
+  border-color: red;
 }
 
 .close, .close:hover {

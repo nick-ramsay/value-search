@@ -371,7 +371,7 @@ const QuoteCard = (props) => {
                       <div className="col-md-3">
                         <button
                           type="button"
-                          className="btn btn-sm btn-primary"
+                          className="btn btn-sm btn-primary standard-button"
                           onClick={() => {
                             addLabel(
                               stock.symbol,
@@ -541,7 +541,7 @@ const QuoteCard = (props) => {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-sm btn-primary"
+                    className="btn btn-sm btn-primary standard-button"
                     data-bs-dismiss="modal"
                     onClick={() => updatePortfolio(stock.symbol, userID)}
                   >
@@ -580,7 +580,7 @@ const QuoteCard = (props) => {
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body" style={{"backgroundColor":"transparent"}}>
                   <div className="card">
                     <ul className="list-group list-group-flush">
                       {portfolioEntry !== undefined &&
