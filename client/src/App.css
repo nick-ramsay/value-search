@@ -145,7 +145,7 @@ a:hover {
 .form-control, .form-control:focus, .form-select, .form-select:focus, .input-group-text {
   background-color: #202124;
   color: white;
-  border-color: red;
+  border-color: grey;
 }
 
 .close, .close:hover {
