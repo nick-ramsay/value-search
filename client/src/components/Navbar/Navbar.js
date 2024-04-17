@@ -3,7 +3,7 @@ import {
   getCookie,
 } from "../../sharedFunctions/sharedFunctions";
 import "./style.css";
-import ValueSearchIcon from "../../images/value_search_icon.png"
+import ValueSearchIcon from "../../images/value_search_icon_1024.png"
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
