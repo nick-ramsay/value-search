@@ -145,7 +145,7 @@ const QuoteCard = (props) => {
                 {Math.round(
                   stock.valueSearchScore.calculatedScorePercentage * 100
                 ) + "%"}
-                {stock.valueSearchScore.movingAverageSupport > 0 ? <TrendingUpIcon style={{"height":"15px"}} />:""}
+                {stock.valueSearchScore.movingAverageSupport > 0 ? <TrendingUpIcon style={{ "height": "15px" }} /> : ""}
               </span>
             ) : (
               ""
@@ -167,14 +167,14 @@ const QuoteCard = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target={"#" + stock.symbol + "editModal"}
                 />
-                <NotesIcon 
-                className="ml-3 text-icon"
-                src={commentsIcon}
-                alt="commentIcon"
-                data-bs-toggle="modal"
-                data-bs-target={"#" + stock.symbol + "commentModal"}
+                <NotesIcon
+                  className="ml-3 text-icon"
+                  src={commentsIcon}
+                  alt="commentIcon"
+                  data-bs-toggle="modal"
+                  data-bs-target={"#" + stock.symbol + "commentModal"}
                 />
-                
+
               </span>
             ) : (
               ""
@@ -202,15 +202,6 @@ const QuoteCard = (props) => {
                 ""
               )}
             </div>
-            {portfolioEntry !== undefined &&
-              portfolioEntry.status !== "-" &&
-              portfolioEntry.queuedForPurchase === true ? (
-              <span>
-                <ShoppingBasketIcon className="text-icon ml-2" src={shoppingBasketIcon} />
-              </span>
-            ) : (
-              ""
-            )}
             {portfolioEntry !== undefined && portfolioEntry.labels !== undefined
               ? portfolioEntry.labels.map((label, i) => (
                 <img
@@ -353,38 +344,34 @@ const QuoteCard = (props) => {
                         aria-label="With textarea"
                       ></textarea>
                     </div>
-                    <form className="row mt-2">
-                      <div className="col-md-9">
-                        <select
-                          id={stock.symbol + "newSelectedLabel"}
-                          className="form-select"
-                          aria-label="Default select example"
-                        >
-                          <option value="-" selected>
-                            Select New Label
-                          </option>
-                          <option value="KPP">KPP</option>
-                          <option value="Motley Fool">Motley Fool</option>
-                          <option value="Value Search">Value Search</option>
-                        </select>
-                      </div>
-                      <div className="col-md-3">
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-primary standard-button"
-                          onClick={() => {
-                            addLabel(
-                              stock.symbol,
-                              document.getElementById(
-                                stock.symbol + "newSelectedLabel"
-                              ).value,
-                              portfolioEntry.labels
-                            );
-                          }}
-                        >
-                          Add +
-                        </button>
-                      </div>
+                    <form className="d-flex mt-2">
+                      <select
+                        id={stock.symbol + "newSelectedLabel"}
+                        className="form-select form-control form-control-small"
+                        aria-label="Default select example"
+                      >
+                        <option value="-" selected>
+                          Select New Label
+                        </option>
+                        <option value="KPP">KPP</option>
+                        <option value="Motley Fool">Motley Fool</option>
+                        <option value="Value Search">Value Search</option>
+                      </select>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary m-1 standard-button"
+                        onClick={() => {
+                          addLabel(
+                            stock.symbol,
+                            document.getElementById(
+                              stock.symbol + "newSelectedLabel"
+                            ).value,
+                            portfolioEntry.labels
+                          );
+                        }}
+                      >
+                        Add
+                      </button>
                     </form>
                     <div className="input-group mt-2">
                       {portfolioEntry !== undefined &&
@@ -403,31 +390,7 @@ const QuoteCard = (props) => {
                         ))
                         : ""}
                     </div>
-                    <div className="input-group mt-2">
-                      <div className="col-md-12 text-left">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            defaultChecked={
-                              portfolioEntry !== undefined &&
-                                portfolioEntry.queuedForPurchase !== undefined
-                                ? portfolioEntry.queuedForPurchase
-                                : false
-                            }
-                            id={"queued-for-purchase-" + stock.symbol}
-                          />
-                          <label
-                            className="form-check-label"
-                            style={{ fontSize: 14 }}
-                            htmlFor={"queued-for-purchase-" + stock.symbol}
-                          >
-                            Queued for Purchase
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none") : " d-none")}>
+                    <div className={"mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) === -1 ? "" : " d-none") : " d-none")}>
                       <div className="col-md-12 mb-3">
                         <label
                           className="form-check-label"
@@ -437,50 +400,47 @@ const QuoteCard = (props) => {
                           Price Target
                         </label>
                       </div>
-                      <div className="row">
-                        <div className="col-md-2">
-                          <div className="form-check">
-                            <input
-                              className="form-check-input"
-                              type="checkbox"
-                              defaultChecked={
-                                portfolioEntry !== undefined &&
-                                  portfolioEntry.priceTargetEnabled !== undefined
-                                  ? portfolioEntry.priceTargetEnabled
-                                  : false
-                              }
-                              id={"price-target-enabled-" + stock.symbol}
-                            />
-                          </div>
+                      <form className="d-flex">
+                        <div className="form-check">
+                          <input
+                            className="form-check-input pt-2"
+                            type="checkbox"
+                            defaultChecked={
+                              portfolioEntry !== undefined &&
+                                portfolioEntry.priceTargetEnabled !== undefined
+                                ? portfolioEntry.priceTargetEnabled
+                                : false
+                            }
+                            id={"price-target-enabled-" + stock.symbol}
+                          />
                         </div>
-                        <div className="col-md-9">
-                          <div className="input-group mb-3">
-                            <span className="input-group-text">$</span>
-                            <input
-                              id={"price-target-" + stock.symbol}
-                              defaultValue={
-                                portfolioEntry !== undefined &&
-                                  portfolioEntry.priceTarget !== undefined
-                                  ? Number(portfolioEntry.priceTarget)
-                                  : 0.00
-                              }
-                              placeholder={
 
-                                portfolioEntry !== undefined &&
-                                  portfolioEntry.priceTarget !== undefined
-                                  ? Number(portfolioEntry.priceTarget)
-                                  : 0.00
+                        <div className="input-group mb-3">
+                          <span className="input-group-text">$</span>
+                          <input
+                            id={"price-target-" + stock.symbol}
+                            defaultValue={
+                              portfolioEntry !== undefined &&
+                                portfolioEntry.priceTarget !== undefined
+                                ? Number(portfolioEntry.priceTarget)
+                                : 0.00
+                            }
+                            placeholder={
 
-                              }
-                              type="number"
-                              min="0.00"
-                              step="0.01"
-                              className="form-control"
-                              aria-label="Amount (to the nearest dollar)"
-                            />
-                          </div>
+                              portfolioEntry !== undefined &&
+                                portfolioEntry.priceTarget !== undefined
+                                ? Number(portfolioEntry.priceTarget)
+                                : 0.00
+
+                            }
+                            type="number"
+                            min="0.00"
+                            step="0.01"
+                            className="form-control"
+                            aria-label="Amount (to the nearest dollar)"
+                          />
                         </div>
-                      </div>
+                      </form>
                     </div>
                     <div className={"input-group mt-2 " + (portfolioEntry !== undefined ? (portfolioEntry.status !== undefined && ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !== -1 ? "" : " d-none") : " d-none")}>
                       <div className="col-md-12 mb-3">
@@ -580,13 +540,13 @@ const QuoteCard = (props) => {
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-                <div className="modal-body" style={{"backgroundColor":"transparent"}}>
+                <div className="modal-body" style={{ "backgroundColor": "transparent" }}>
                   <div className="card">
                     <ul className="list-group list-group-flush">
                       {portfolioEntry !== undefined &&
                         portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
-                          <li className="list-group-item" style={{"border-color":"black"}}>
+                          <li className="list-group-item" style={{ "border-color": "black" }}>
                             <p className="comment-content">
                               {'"' + comment.comment + '"'}
                             </p>
@@ -859,9 +819,9 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day200MovingAvg < stock.quote.latestPrice
-                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679":"green")
-                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6":"red"),
-                    fontWeight: "bold"
+                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
+                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
+                  fontWeight: "bold"
                 }}
               >
                 {stock.iexStats !== undefined
@@ -884,9 +844,9 @@ const QuoteCard = (props) => {
                   color:
                     stock.iexStats !== undefined &&
                       stock.iexStats.day50MovingAvg < stock.quote.latestPrice
-                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679":"green")
-                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6":"red"),
-                    fontWeight: "bold"
+                      ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
+                      : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
+                  fontWeight: "bold"
                 }}
               >
                 {stock.iexStats !== undefined
@@ -1048,7 +1008,7 @@ const QuoteCard = (props) => {
                       scales: {
                         y: {
                           min: stock.quote.week52Low,
-                          max: Math.round(stock.quote.week52High + 5),
+                          max: Math.round(stock.quote.week52High + (stock.quote.week52High * .05)),
                         },
                       },
                     }}
