@@ -8,6 +8,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
 import NotesIcon from '@mui/icons-material/Notes';
+import ThesisIcon from '@mui/icons-material/Explore';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
@@ -174,6 +175,16 @@ const QuoteCard = (props) => {
                   data-bs-toggle="modal"
                   data-bs-target={"#" + stock.symbol + "commentModal"}
                 />
+                {/*
+                 <ThesisIcon
+                  className="ml-3 text-icon"
+                  src={ThesisIcon}
+                  alt="thesisIcon"
+                  data-bs-toggle="modal"
+                  data-bs-target={"#" + stock.symbol + "ThesisModal"}
+                />
+            */}
+
 
               </span>
             ) : (
@@ -571,6 +582,57 @@ const QuoteCard = (props) => {
               </div>
             </div>
           </div>
+          {/*End: Comment Modal */}
+          {/*Start: Thesis Modal */}
+          <div
+            className="modal fade"
+            id={stock.symbol + "ThesisModal"}
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby={stock.symbol + "ThesisModalLabel"}
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5
+                    className="modal-title"
+                    id={stock.symbol + "ThesisModalLabel"}
+                  >
+                    Thesis for{" "}
+                    {stock.quote.companyName + " (" + stock.symbol + ")"}
+                  </h5>
+                  <button
+                    type="button"
+                    className="close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body" style={{ "backgroundColor": "transparent" }}>
+
+                  <form className="">
+
+                    <label for="exampleFormControlTextarea1" class="form-label">Thesis Statement</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1"></textarea>
+
+                  </form>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/*END: Thesis Modal*/}
         </h5>
         <div className="row">
           {stock.fundamentals !== undefined &&
