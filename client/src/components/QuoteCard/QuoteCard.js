@@ -8,7 +8,7 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
 import NotesIcon from '@mui/icons-material/Notes';
-import ThesisIcon from '@mui/icons-material/Explore';
+import ThesisIcon from '@mui/icons-material/MenuBook';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
@@ -38,6 +38,7 @@ const QuoteCard = (props) => {
   let stock = props.stock;
   let userID = props.userID;
   let updatePortfolio = props.updatePortfolio;
+  let updateThesis = props.updateThesis;
   //let addLabel = props.addLabel;
   let findPortfolio = props.findPortfolio;
   let selectedStatus = props.selectedStatus;
@@ -176,16 +177,14 @@ const QuoteCard = (props) => {
                   data-bs-target={"#" + stock.symbol + "commentModal"}
                 />
                 {/*
-                 <ThesisIcon
+                <ThesisIcon
                   className="ml-3 text-icon"
                   src={ThesisIcon}
                   alt="thesisIcon"
                   data-bs-toggle="modal"
                   data-bs-target={"#" + stock.symbol + "ThesisModal"}
                 />
-            */}
-
-
+                */}
               </span>
             ) : (
               ""
@@ -616,7 +615,7 @@ const QuoteCard = (props) => {
                   <form className="">
 
                     <label for="exampleFormControlTextarea1" class="form-label">Thesis Statement</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1"></textarea>
+                    <textarea class="form-control" id={stock.symbol + "ThesisInput"}></textarea>
 
                   </form>
                 </div>
@@ -627,6 +626,14 @@ const QuoteCard = (props) => {
                     data-bs-dismiss="modal"
                   >
                     Close
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-primary standard-button"
+                    data-bs-dismiss="modal"
+                    onClick={() => updateThesis(stock.symbol, userID)}
+                  >
+                    Save changes
                   </button>
                 </div>
               </div>

@@ -221,8 +221,8 @@ module.exports = {
         let currentAccountID = dbModel[0]._id.toString();
         let sessionAccessToken = sha256(
           Math.floor(Math.random() * 999999) +
-            currentAccountID +
-            Math.floor(Math.random() * 999999)
+          currentAccountID +
+          Math.floor(Math.random() * 999999)
         );
         db.Accounts.updateOne(
           { _id: dbModel[0]._id },
@@ -277,7 +277,7 @@ module.exports = {
         },
         { "valueSearchScore.movingAverageSupport": { $exists: false } },
       ],
-    }:"";
+    } : "";
     db.StockData.find({
       "fundamentals.Forward P/E": {
         $gte: Number(req.body.minPE),
@@ -353,6 +353,26 @@ module.exports = {
     )
       .then((dbModel) => res.json(dbModel))
       .catch((err) => console.log(err));
+  },
+  updateThesis: (req, res) => {
+    console.log(req.body);  
+
+    db.Portfolio.updateOne(
+      // Specify the condition to match the document
+      { account_id: req.body.account_id },
+    
+      // Use $set and arrayFilters to update the specific object in the items array
+      {
+        $set: {
+          "portfolio.$[elem].thesis": req.body.newThesis
+        }
+      },
+      
+      // Specify arrayFilters to match the specific object based on its key's value
+      {
+        arrayFilters: [{ "portfolio.symbol": req.body.symbol }]
+      }
+    );
   },
   addLabel: (req, res) => {
     db.Portfolio.updateOne(

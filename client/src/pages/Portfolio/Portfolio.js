@@ -376,6 +376,22 @@ const Portfolio = () => {
     });
   };
 
+  const updateThesis = (symbol, userID) => {
+    let newThesis = document.getElementById(
+      symbol + "ThesisInput"
+    ).value;
+
+    console.log(symbol)
+    console.log(newThesis)
+    console.log(userID)
+    
+    
+    API.updateThesis(userID, newThesis, symbol).then((res) => {
+      console.log(res);
+      //findPortfolio(userID, selectedStatus);
+    });
+  };
+
   //START: Login functions
 
   const renderAccountName = () => {
@@ -885,6 +901,7 @@ const Portfolio = () => {
                     stock={stock}
                     userID={userID}
                     updatePortfolio={updatePortfolio}
+                    updateThesis={updateThesis}
                     portfolio={portfolio}
                     selectedStatus={selectedStatus}
                     findPortfolio={findPortfolio}
@@ -897,6 +914,7 @@ const Portfolio = () => {
                       stock={stock}
                       userID={userID}
                       updatePortfolio={updatePortfolio}
+                      updateThesis={updateThesis}
                       portfolio={portfolio}
                       selectedStatus={selectedStatus}
                       findPortfolio={findPortfolio}
@@ -909,6 +927,7 @@ const Portfolio = () => {
                         stock={stock}
                         userID={userID}
                         updatePortfolio={updatePortfolio}
+                        updateThesis={updateThesis}
                         portfolio={portfolio}
                         selectedStatus={selectedStatus}
                         findPortfolio={findPortfolio}
@@ -919,6 +938,7 @@ const Portfolio = () => {
                         stock={stock}
                         userID={userID}
                         updatePortfolio={updatePortfolio}
+                        updateThesis={updateThesis}
                         portfolio={portfolio}
                         selectedStatus={selectedStatus}
                         findPortfolio={findPortfolio}

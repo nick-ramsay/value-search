@@ -306,6 +306,22 @@ const Home = () => {
     });
   };
 
+  const updateThesis = (symbol, userID) => {
+    let newThesis = document.getElementById(
+      symbol + "ThesisInput"
+    ).value;
+
+    console.log(symbol)
+    console.log(newThesis)
+    console.log(userID)
+    
+    /*
+    API.updatePortfolio(userID, tempPortfolio).then((res) => {
+      findPortfolio(userID, selectedStatus);
+    });
+    */
+  };
+
   //START: Login functions
 
   const renderAccountName = () => {
@@ -823,6 +839,7 @@ const Home = () => {
                     stock={stock}
                     userID={userID}
                     updatePortfolio={updatePortfolio}
+                    updateThesis={updateThesis}
                     portfolio={portfolio}
                     findPortfolio={findPortfolio}
                     page={"Home"}

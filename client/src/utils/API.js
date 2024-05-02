@@ -163,11 +163,18 @@ export default {
     });
   },
   //END: Account APIs...
-  updatePortfolio: (account_id, portfolio) => {
+  updatePortfolio: (account_id, portfolio, symbol) => {
     return axios({
       method: "post",
       url: apiURL + "/api/value-search/update-portfolio",
-      data: { account_id: account_id, portfolio: portfolio },
+      data: { account_id: account_id, portfolio: portfolio, symbol:symbol },
+    });
+  },
+  updateThesis: (account_id, newThesis, symbol) => {
+    return axios({
+      method: "post",
+      url: apiURL + "/api/value-search/update-thesis",
+      data: { account_id: account_id, newThesis: newThesis, symbol: symbol },
     });
   },
   addLabel: (account_id, labels) => {

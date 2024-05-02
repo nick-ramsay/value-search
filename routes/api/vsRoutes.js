@@ -85,6 +85,10 @@ router
   .post(vsControllers.updatePortfolio);
 
 router
+  .route("/update-thesis")
+  .post(vsControllers.updateThesis);
+
+router
   .route("/add-label")
   .post(vsControllers.addLabel);
 
