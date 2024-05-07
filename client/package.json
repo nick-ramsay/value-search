@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@datadog/browser-logs": "^4.30.0",
-    "@datadog/browser-rum": "^4.30.0",
+    "@datadog/browser-logs": "^5.16.0",
+    "@datadog/browser-rum": "^5.16.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.1",
