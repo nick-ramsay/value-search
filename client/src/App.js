@@ -22,15 +22,14 @@ datadogRum.init({
   clientToken: 'pub9fb08dd8420145635d6d85ef8ace47f7',
   site: 'datadoghq.com',
   service: 'value-search',
-
-  // Specify a version number to identify the deployed version of your application in Datadog 
-  // version: '1.0.0',
-  sampleRate: 100,
-  sessionReplaySampleRate: 20,
-  trackInteractions: true,
+  env: 'staging',
+  version: '1.0.0', 
+  sessionSampleRate: 100,
+  sessionReplaySampleRate: 100,
+  trackUserInteractions: true,
   trackResources: true,
   trackLongTasks: true,
-  defaultPrivacyLevel: 'mask-user-input'
+  defaultPrivacyLevel: 'mask-user-input',
 });
 
 datadogLogs.init({
