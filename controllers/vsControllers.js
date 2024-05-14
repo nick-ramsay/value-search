@@ -46,7 +46,6 @@ let useGmail = true;
 module.exports = {
   //START: User Account Controllers...
   sendEmail: function (req, res) {
-    console.log("Called send test e-mail controller...");
     //SENDGRID LOGIC BELOW...
 
     let messageParameters = req.body[0];
@@ -384,13 +383,13 @@ module.exports = {
       .catch((err) => console.log(err));
   },
   findPortfolio: (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     db.Portfolio.findOne({ account_id: req.body.account_id })
       .then((dbModel) => res.json(dbModel))
       .catch((err) => console.log(err));
   },
   findPortfolioQuotes: (req, res) => {
-    console.log(req.body.symbols);
+    //console.log(req.body.symbols);
     db.StockData.find({ symbol: { $in: req.body.symbols } })
       .then((dbModel) => res.json(dbModel))
       .catch((err) => console.log(err));

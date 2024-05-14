@@ -43,7 +43,6 @@ const ScoreSearch = () => {
     API.findScoreSearchResults(
       maSupportParameter
     ).then((res) => {
-      console.log(res.data);
       setValueSearchData((valueSearchData) => res.data);
       setLoading((loading) => false);
     });
@@ -467,9 +466,9 @@ const ScoreSearch = () => {
                       <div className="row">
                         <div className="col-md-6 mt-auto mb-auto">
                           <div className="form-group">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" id="maSupportCheckbox" defaultChecked="true" />
-                              <label class="form-check-label" for="maSupportCheckbox">
+                            <div className="form-check">
+                              <input className="form-check-input" type="checkbox" id="maSupportCheckbox" defaultChecked="true" />
+                              <label className="form-check-label" htmlFor="maSupportCheckbox">
                                 M/A Bottom Found
                               </label>
                             </div>

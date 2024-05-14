@@ -12,15 +12,11 @@ const Login = () => {
     var [submissionMessage, setSubmissionMessage] = useState("");
 
     const login = () => {
-        console.log("Called login")
         let cookieExpiryDate = moment().add("60", "minutes").format();
 
         if (email && password) {
-            console.log("Email and PW Exist")
             API.login(email, sha256(password)).then(
                 res => {
-                    console.log("Login response")
-                    console.log(res.data);
                     if (res.data) {
                         setSubmissionMessage(submissionMessage => "");
                         document.cookie = "auth_expiry=" + cookieExpiryDate + "; expires=" + moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");

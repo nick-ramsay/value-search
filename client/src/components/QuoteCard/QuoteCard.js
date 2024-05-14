@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import _ from 'lodash';
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
@@ -91,21 +92,21 @@ const QuoteCard = (props) => {
       className="card mb-3"
       style={{
         borderColor:
-          portfolioEntry === [] && portfolioEntry !== undefined
+          _.isEqual(portfolioEntry, []) && portfolioEntry !== undefined
             ? "transparent"
-            : portfolioEntry !== [] &&
+            : _.isEqual(portfolioEntry,[]) === false &&
               portfolioEntry !== undefined &&
               portfolioEntry.status === "avoid"
               ? "#cf6679"
-              : portfolioEntry !== [] &&
+              : _.isEqual(portfolioEntry,[]) === false &&
                 portfolioEntry !== undefined &&
                 portfolioEntry.status === "temporaryavoid"
                 ? "#fdfd96"
-                : portfolioEntry !== [] &&
+                : _.isEqual(portfolioEntry,[]) === false &&
                   portfolioEntry !== undefined &&
                   portfolioEntry.status === "-"
                   ? "transparent"
-                  : portfolioEntry !== [] &&
+                  : _.isEqual(portfolioEntry,[]) === false &&
                     portfolioEntry !== undefined &&
                     page === "Home" &&
                     (portfolioEntry.status === "watch" ||
@@ -556,7 +557,7 @@ const QuoteCard = (props) => {
                       {portfolioEntry !== undefined &&
                         portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
-                          <li className="list-group-item" style={{ "border-color": "black" }}>
+                          <li className="list-group-item" style={{ "borderColor": "black" }}>
                             <p className="comment-content">
                               {'"' + comment.comment + '"'}
                             </p>
@@ -614,8 +615,8 @@ const QuoteCard = (props) => {
 
                   <form className="">
 
-                    <label for="exampleFormControlTextarea1" class="form-label">Thesis Statement</label>
-                    <textarea class="form-control" id={stock.symbol + "ThesisInput"}></textarea>
+                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Thesis Statement</label>
+                    <textarea className="form-control" id={stock.symbol + "ThesisInput"}></textarea>
 
                   </form>
                 </div>

@@ -319,10 +319,6 @@ const Portfolio = () => {
       "new-comment-input-" + symbol
     ).value;
 
-    let newQueuedForPurchase = document.getElementById(
-      "queued-for-purchase-" + symbol
-    ).checked;
-
     let newPriceTargetEnabled = document.getElementById(
       "price-target-enabled-" + symbol
     ).checked;
@@ -352,7 +348,6 @@ const Portfolio = () => {
     if (symbolIndex !== -1) {
       tempPortfolio[symbolIndex].status = newStatus;
       tempPortfolio[symbolIndex].comments = updatedComments;
-      tempPortfolio[symbolIndex].queuedForPurchase = newQueuedForPurchase;
       tempPortfolio[symbolIndex].priceTargetEnabled = newPriceTargetEnabled;
       tempPortfolio[symbolIndex].priceTarget = Number(newPriceTarget);
       tempPortfolio[symbolIndex].sellTargetEnabled = newSellTargetEnabled;
@@ -363,7 +358,6 @@ const Portfolio = () => {
         symbol: symbol,
         status: newStatus,
         comments: updatedComments,
-        queuedForPurchase: newQueuedForPurchase,
         priceTargetEnabled: newPriceTargetEnabled,
         priceTarget: Number(newPriceTarget),
         sellTargetEnabled: newSellTargetEnabled,
@@ -877,7 +871,6 @@ const Portfolio = () => {
                   <div className="form-check">
                     <input className="form-check-input" type="checkbox" defaultChecked={sellTargetMet} checked={sellTargetMet} id="sellTargetMetTickbox" onClick={() => {
                       let currentlyChecked = document.getElementById("sellTargetMetTickbox").checked;
-                      console.log(sellTargetMet);
                       sellTargetMet === true && sellTargetMet === true ? setSellTargetMet(sellTargetMet => currentlyChecked) : setSellTargetMet(sellTargetMet => false);
                       setSellTargetMet(sellTargetMet => currentlyChecked);
                     }} />

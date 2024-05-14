@@ -95,12 +95,9 @@ const Home = () => {
       minProfitMargin = -100;
     }
 
-    console.log(profitabilityParameter);
-
     let potentialBottomParameterChecked = document.getElementById(
       "potentialBottomCheckbox"
     ).checked;
-    console.log(potentialBottomParameterChecked);
 
     API.findSearchResults(
       minPE,
@@ -115,7 +112,6 @@ const Home = () => {
       selectedMarketCapMax,
       minProfitMargin,
     ).then((res) => {
-      console.log(res.data);
       let tempValueSearchData = [];
       if (potentialBottomParameterChecked === true) {
         for (let i = 0; i < res.data.length; i++) {
@@ -335,14 +331,10 @@ const Home = () => {
 
   const login = () => {
     let cookieExpiryDate = moment().add("24", "hours").format();
-    console.log(cookieExpiryDate);
-
-    console.log("Called login");
 
     if (loginEmail && loginPassword) {
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
         if (res.data) {
-          console.log(res.data);
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =
             "auth_expiry=" +
@@ -702,16 +694,16 @@ const Home = () => {
                         <div className="row pr-3 pl-3">
                           <div className="col-md-6 mt-auto mb-auto">
                             <div className="form-group">
-                              <div class="form-check">
+                              <div className="form-check">
                                 <input
-                                  class="form-check-input"
+                                  className="form-check-input"
                                   type="checkbox"
                                   id="profitableCheckbox"
                                   defaultChecked={true}
                                 />
                                 <label
-                                  class="form-check-label"
-                                  for="profitableCheckbox"
+                                  className="form-check-label"
+                                  htmlFor="profitableCheckbox"
                                 >
                                   Company Profitable
                                 </label>
@@ -721,16 +713,16 @@ const Home = () => {
                           </div>
                           <div className="col-md-6 mt-auto mb-auto">
                             <div className="form-group">
-                              <div class="form-check">
+                              <div className="form-check">
                                 <input
-                                  class="form-check-input"
+                                  className="form-check-input"
                                   type="checkbox"
                                   id="potentialBottomCheckbox"
                                   defaultChecked={true}
                                 />
                                 <label
-                                  class="form-check-label"
-                                  for="potentialBottomCheckbox"
+                                  className="form-check-label"
+                                  htmlFor="potentialBottomCheckbox"
                                 >
                                   Potential Bottom
                                 </label>
