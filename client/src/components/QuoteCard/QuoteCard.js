@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import _ from 'lodash';
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { useInput } from "../../sharedFunctions/sharedFunctions";
@@ -91,21 +92,21 @@ const QuoteCard = (props) => {
       className="card mb-3"
       style={{
         borderColor:
-          portfolioEntry === [] && portfolioEntry !== undefined
+          _.isEqual(portfolioEntry, []) && portfolioEntry !== undefined
             ? "transparent"
-            : portfolioEntry !== [] &&
+            : _.isEqual(portfolioEntry,[]) === false &&
               portfolioEntry !== undefined &&
               portfolioEntry.status === "avoid"
               ? "#cf6679"
-              : portfolioEntry !== [] &&
+              : _.isEqual(portfolioEntry,[]) === false &&
                 portfolioEntry !== undefined &&
                 portfolioEntry.status === "temporaryavoid"
                 ? "#fdfd96"
-                : portfolioEntry !== [] &&
+                : _.isEqual(portfolioEntry,[]) === false &&
                   portfolioEntry !== undefined &&
                   portfolioEntry.status === "-"
                   ? "transparent"
-                  : portfolioEntry !== [] &&
+                  : _.isEqual(portfolioEntry,[]) === false &&
                     portfolioEntry !== undefined &&
                     page === "Home" &&
                     (portfolioEntry.status === "watch" ||
@@ -556,7 +557,7 @@ const QuoteCard = (props) => {
                       {portfolioEntry !== undefined &&
                         portfolioEntry.comments !== undefined ? (
                         portfolioEntry.comments.map((comment, i) => (
-                          <li className="list-group-item" style={{ "border-color": "black" }}>
+                          <li className="list-group-item" style={{ "borderColor": "black" }}>
                             <p className="comment-content">
                               {'"' + comment.comment + '"'}
                             </p>
@@ -614,8 +615,8 @@ const QuoteCard = (props) => {
 
                   <form className="">
 
-                    <label for="exampleFormControlTextarea1" class="form-label">Thesis Statement</label>
-                    <textarea class="form-control" id={stock.symbol + "ThesisInput"}></textarea>
+                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Thesis Statement</label>
+                    <textarea className="form-control" id={stock.symbol + "ThesisInput"}></textarea>
 
                   </form>
                 </div>
@@ -733,7 +734,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <p>
               <strong>Target Price: </strong>
-              {stock.fundamentals !== undefined
+              {stock.fundamentals["Target Price"] !== undefined
                 ? "$" + Number(stock.fundamentals["Target Price"]).toFixed(2)
                 : "-"}
             </p>
@@ -749,7 +750,7 @@ const QuoteCard = (props) => {
                   100
                 ).toFixed(2) + "% Undervalued"}
               </p>
-            ) : stock.fundamentals === undefined ? (
+            ) : stock.fundamentals["Target Price"] === undefined ? (
               ""
             ) : (
               <p className="badge badge-danger py-1 px-1">
@@ -814,7 +815,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Index: </strong>
-              {stock.symbolData !== undefined
+              {stock.symbolData.exchangeName !== undefined
                 ? stock.symbolData.exchangeName
                 : "-"}
             </span>
@@ -822,7 +823,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Forward P/E: </strong>
-              {stock.fundamentals !== undefined
+              {stock.fundamentals["Forward P/E"] !== undefined
                 ? Number(stock.fundamentals["Forward P/E"]).toFixed(2)
                 : "-"}
             </span>
@@ -830,10 +831,9 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Profit Margin: </strong>
-              {stock.fundamentals !== undefined
-                ? Number(stock.fundamentals["Profit Margin (%)"]).toFixed(2)
+              {stock.fundamentals["Profit Margin (%)"] !== undefined
+                ? Number(stock.fundamentals["Profit Margin (%)"]).toFixed(2) + "%"
                 : "-"}
-              %
             </span>
           </div>
         </div>
@@ -847,7 +847,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Debt/Equity: </strong>
-              {stock.fundamentals !== undefined
+              {stock.fundamentals["Debt/Eq"] !== undefined
                 ? stock.fundamentals["Debt/Eq"]
                 : "-"}{" "}
             </span>
@@ -855,7 +855,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Price-to-Sales: </strong>
-              {stock.fundamentals !== undefined
+              {stock.fundamentals["P/S"] !== undefined
                 ? stock.fundamentals["P/S"]
                 : "-"}{" "}
             </span>
@@ -865,13 +865,13 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Current P/E: </strong>
-              {stock.quote.peRatio}
+              {stock.quote.peRatio ? stock.quote.peRatio:"-"}
             </span>
           </div>
           <div className="col-md-4">
             <span>
               <strong>Price-to-Book: </strong>
-              {stock.fundamentals !== undefined
+              {stock.fundamentals["P/B"] !== undefined
                 ? stock.fundamentals["P/B"]
                 : "-"}{" "}
             </span>
@@ -893,7 +893,7 @@ const QuoteCard = (props) => {
                   fontWeight: "bold"
                 }}
               >
-                {stock.iexStats !== undefined
+                {stock.iexStats.day200MovingAvg !== undefined
                   ? "$" + stock.iexStats.day200MovingAvg.toFixed(2)
                   : "-"}{" "}
               </span>
@@ -918,7 +918,7 @@ const QuoteCard = (props) => {
                   fontWeight: "bold"
                 }}
               >
-                {stock.iexStats !== undefined
+                {stock.iexStats.day50MovingAvg !== undefined
                   ? "$" + stock.iexStats.day50MovingAvg.toFixed(2)
                   : "-"}{" "}
               </span>
@@ -928,7 +928,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>Current EPS: </strong>
               <span>
-                {stock.fundamentals !== undefined && stock.fundamentals !== null
+                {stock.fundamentals["EPS (ttm)"] !== undefined && stock.fundamentals["EPS (ttm)"] !== null
                   ? Number(stock.fundamentals["EPS (ttm)"]).toFixed(2)
                   : "-"}{" "}
               </span>
@@ -938,7 +938,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>Next Year EPS: </strong>
               <span>
-                {stock.fundamentals !== undefined
+                {stock.fundamentals["EPS next Y"] !== undefined && stock.fundamentals["EPS next Y"] !== undefined
                   ? Number(stock.fundamentals["EPS next Y"]).toFixed(2) +
                   (stock.fundamentals["EPS (ttm)"] <
                     stock.fundamentals["EPS next Y"]
@@ -954,7 +954,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>EPS Q/Q: </strong>
               <span>
-                {stock.fundamentals !== undefined
+                {stock.fundamentals["EPS Q/Q (%)"] !== undefined
                   ? Number(stock.fundamentals["EPS Q/Q (%)"]).toFixed(2) + "%"
                   : "-"}{" "}
               </span>
@@ -964,7 +964,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>EPS next Y: </strong>
               <span>
-                {stock.fundamentals !== undefined
+                {stock.fundamentals["EPS next Y (%)"] !== undefined
                   ? Number(stock.fundamentals["EPS next Y (%)"]).toFixed(2) +
                   "%"
                   : "-"}{" "}
@@ -975,7 +975,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>EPS next 5Y: </strong>
               <span>
-                {stock.fundamentals !== undefined &&
+                {stock.fundamentals["EPS next 5Y (%)"] !== undefined &&
                   isNaN(Number(stock.fundamentals["EPS next 5Y (%)"])) === false
                   ? Number(stock.fundamentals["EPS next 5Y (%)"]).toFixed(2) +
                   "%"
@@ -989,7 +989,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>Price to Earnings Growth (PEG): </strong>
               <span>
-                {stock.fundamentals !== undefined && isNaN(stock.fundamentals["PEG"]) === false
+                {stock.fundamentals["PEG"] !== undefined && isNaN(stock.fundamentals["PEG"]) === false
                   ? Number(stock.fundamentals["PEG"]).toFixed(2)
                   : "-"}{" "}
               </span>
@@ -999,7 +999,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>Return on Equity (ROE): </strong>
               <span>
-                {stock.fundamentals !== undefined && isNaN(stock.fundamentals["ROE (%)"]) === false
+                {stock.fundamentals["ROE (%)"] !== undefined && isNaN(stock.fundamentals["ROE (%)"]) === false
                   ? Number(stock.fundamentals["ROE (%)"]).toFixed(2) +
                   "%"
                   : "-"}{" "}
@@ -1010,7 +1010,7 @@ const QuoteCard = (props) => {
             <span>
               <strong>Relative Strength Index (RSI): </strong>
               <span>
-                {stock.fundamentals !== undefined &&
+                {stock.fundamentals["RSI (14)"] !== undefined &&
                   isNaN(Number(stock.fundamentals["RSI (14)"])) === false
                   ? Number(stock.fundamentals["RSI (14)"]).toFixed(2) +
                   "%"

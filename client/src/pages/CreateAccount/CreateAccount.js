@@ -42,13 +42,10 @@ const CreateAccount = () => {
             API.checkEmailVerificationToken(email, emailVerificationToken).then(
                 res => {
                     if (res.data !== "") {
-                        console.log(res.data)
                         API.checkExistingAccountEmails(currentAccountInfo.email)
                             .then(res => {
                                 if (res.data === "") {
                                     API.createAccount(currentAccountInfo).then(createAccountRes => {
-                                        console.log("Account ID Info Below:")
-                                        console.log(createAccountRes.data._id)
                                         API.updatePortfolio(createAccountRes.data._id, [])
                                         API.deleteEmailVerificationToken(email).then(res =>
                                             window.location.href = "/"
