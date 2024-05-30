@@ -158,7 +158,7 @@ const QuoteCard = (props) => {
                 src={TimelineIcon}
                 alt="TimelineIcon"
                 data-bs-toggle="modal"
-                data-bs-target={"#" + stock.symbol + "valueSearchHistoryModal"}
+                data-bs-target={"#" + stock.symbol.replace(".","-") + "valueSearchHistoryModal"}
               />
             </span>
             {userID !== undefined && userID !== "" ? (
@@ -168,14 +168,14 @@ const QuoteCard = (props) => {
                   src={editIcon}
                   alt="editIcon"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + stock.symbol + "editModal"}
+                  data-bs-target={"#" + stock.symbol.replace(".","-") + "editModal"}
                 />
                 <NotesIcon
                   className="ml-3 text-icon"
                   src={commentsIcon}
                   alt="commentIcon"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + stock.symbol + "commentModal"}
+                  data-bs-target={"#" + stock.symbol.replace(".","-") + "commentModal"}
                 />
                 {/*
                 <ThesisIcon
@@ -234,16 +234,16 @@ const QuoteCard = (props) => {
           {/*Start: Edit Symbol Modal*/}
           <div
             className="modal fade"
-            id={stock.symbol + "editModal"}
+            id={stock.symbol.replace(".","-") + "editModal"}
             tabIndex="-1"
             role="dialog"
-            aria-labelledby={stock.symbol + "editModalLabel"}
+            aria-labelledby={stock.symbol.replace(".","-") + "editModalLabel"}
             aria-hidden="true"
           >
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title" id={stock.symbol + "editModalLabel"}>
+                  <h5 className="modal-title" id={stock.symbol.replace(".","-") + "editModalLabel"}>
                     Edit {stock.quote.companyName + " (" + stock.symbol + ")"}
                   </h5>
                   <button
@@ -526,10 +526,10 @@ const QuoteCard = (props) => {
           {/*Start: Comment Modal */}
           <div
             className="modal fade"
-            id={stock.symbol + "commentModal"}
+            id={stock.symbol.replace(".","-") + "commentModal"}
             tabIndex="-1"
             role="dialog"
-            aria-labelledby={stock.symbol + "commentModalLabel"}
+            aria-labelledby={stock.symbol.replace(".","-") + "commentModalLabel"}
             aria-hidden="true"
           >
             <div className="modal-dialog" role="document">
@@ -537,7 +537,7 @@ const QuoteCard = (props) => {
                 <div className="modal-header">
                   <h5
                     className="modal-title"
-                    id={stock.symbol + "commentModalLabel"}
+                    id={stock.symbol.replace(".","-") + "commentModalLabel"}
                   >
                     Comments for{" "}
                     {stock.quote.companyName + " (" + stock.symbol + ")"}
@@ -659,7 +659,7 @@ const QuoteCard = (props) => {
                       src={infoIcon}
                       className="text-icon mb-1"
                       data-bs-toggle="modal"
-                      data-bs-target={"#" + stock.symbol + "company-bio-modal"}
+                      data-bs-target={"#" + stock.symbol.replace(".","-") + "company-bio-modal"}
                     />
                   </span>
                 ) : (
@@ -673,9 +673,9 @@ const QuoteCard = (props) => {
         </div>
         <div
           className="modal fade"
-          id={stock.symbol + "company-bio-modal"}
+          id={stock.symbol.replace(".","-") + "company-bio-modal"}
           tabIndex="-1"
-          aria-labelledby={stock.symbol + "company-bio-modal-label"}
+          aria-labelledby={stock.symbol.replace(".","-") + "company-bio-modal-label"}
           aria-hidden="true"
         >
           <div className="modal-dialog">
@@ -683,7 +683,7 @@ const QuoteCard = (props) => {
               <div className="modal-header">
                 <h5
                   className="modal-title"
-                  id={stock.symbol + "company-bio-modal-label"}
+                  id={stock.symbol.replace(".","-") + "company-bio-modal-label"}
                 >
                   {stock.quote.companyName + " (" + stock.symbol + ")"}
                 </h5>
@@ -768,10 +768,10 @@ const QuoteCard = (props) => {
           <div
             id={"fiftyTwoWeekPricebar" + stock.symbol}
             className="progress bg-dark collapsed"
-            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol}
+            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
             data-bs-toggle="collapse"
             aria-expanded="false"
-            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol}
+            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
           >
             <div
               className="progress-bar"
@@ -793,10 +793,10 @@ const QuoteCard = (props) => {
           </div>
         </div>
         <div
-          id={"fiftyTwoWeekPriceValues" + stock.symbol}
+          id={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
           className="accordion-collapse collapse"
-          aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol}
-          data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol}
+          aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol.replace(".","-")}
+          data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol.replace(".","-")}
         >
           <div className="row">
             <div className="col-md-6">
@@ -1092,9 +1092,9 @@ const QuoteCard = (props) => {
         {/* START: Value Search History Modal */}
         <div
           className="modal fade"
-          id={stock.symbol + "valueSearchHistoryModal"}
+          id={stock.symbol.replace(".","-") + "valueSearchHistoryModal"}
           tabIndex="-1"
-          aria-labelledby={stock.symbol + "valueSearchHistoryLabel"}
+          aria-labelledby={stock.symbol.replace(".","-") + "valueSearchHistoryLabel"}
           aria-hidden="true"
         >
           <div className="modal-dialog">
@@ -1102,7 +1102,7 @@ const QuoteCard = (props) => {
               <div className="modal-header">
                 <h5
                   className="modal-title"
-                  id={stock.symbol + "valueSearchHistoryModalLabel"}
+                  id={stock.symbol.replace(".","-") + "valueSearchHistoryModalLabel"}
                 >
                   {"Value Search Score Trend for " + stock.symbol}
                 </h5>
