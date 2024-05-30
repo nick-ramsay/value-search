@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Switch } from "react-router-dom
 import "./App.css";
 
 import Home from "../src/pages/Home/Home";
+import HomeBeta from "../src/pages/HomeBeta/Home";
 import ScoreSearch from "../src/pages/ScoreSearch/ScoreSearch";
 import Portfolio from "../src/pages/Portfolio/Portfolio";
 import PortfolioBeta from './pages/PortfolioBeta/PortfolioBeta';
@@ -59,6 +60,7 @@ class App extends Component {
       <Router>
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/home-beta" element={<HomeBeta />} />
           <Route exact path="/score-search" element={<ScoreSearch />} />
           <Route exact path="/portfolio" element={<Portfolio />} />
           <Route exact path="/portfolio-beta" element={<PortfolioBeta />} />

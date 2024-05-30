@@ -389,12 +389,15 @@ const Portfolio = () => {
   //START: Login functions
 
   const renderAccountName = () => {
-    setUserID((userID) => getCookie("vs_id"));
-    API.findUserName(getCookie("vs_id")).then((res) => {
-      setFirstname((firstname) => res.data.firstname);
-      setLastname((lastname) => res.data.lastname);
-      findPortfolio(getCookie("vs_id"), selectedStatus);
-    });
+    let vsIdCookie = getCookie("vs_id");
+    if (vsIdCookie) {
+      setUserID((userID) => vsIdCookie);
+      API.findUserName(getCookie("vs_id")).then((res) => {
+        setFirstname((firstname) => res.data.firstname);
+        setLastname((lastname) => res.data.lastname);
+        findPortfolio(getCookie("vs_id"));
+      });
+    }
   };
 
   const login = () => {

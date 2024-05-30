@@ -310,7 +310,7 @@ const Home = () => {
     console.log(symbol)
     console.log(newThesis)
     console.log(userID)
-
+    
     /*
     API.updatePortfolio(userID, tempPortfolio).then((res) => {
       findPortfolio(userID, selectedStatus);
@@ -777,7 +777,7 @@ const Home = () => {
                     className="my-auto mx-auto loading-bar"
                     width="100%"
                     height="8px"
-                    color={localStorage.getItem("vs-theme") === "dark" ? "#bb86fc" : "#880085"}
+                    color={localStorage.getItem("vs-theme") === "dark" ? "#bb86fc":"#880085"}
                   />{" "}
                 </div>
               ) : (
