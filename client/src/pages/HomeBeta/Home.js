@@ -44,26 +44,17 @@ const Home = () => {
   var [currentView, setCurrentView] = useState("valueSearch");
   var [loading, setLoading] = useState(true);
   var [portfolio, setPortfolio] = useState([]);
+  var [submissionMessage, setSubmissionMessage] = useState("");
 
   const setMarketCapSize = (event) => { };
   const selectedInvestmentType = (event) => { };
 
   var [loginEmail, setLoginEmail] = useInput("");
   var [loginPassword, setLoginPassword] = useInput("");
-  var [submissionMessage, setSubmissionMessage] = useState("");
-
-  var [email, setEmail] = useInput("");
-  var [submissionMessage, setSubmissionMessage] = useState("");
 
   var [firstname, setFirstname] = useState("");
   var [lastname, setLastname] = useState("");
-  var [phone, setPhone] = useInput("");
-  var [email, setEmail] = useInput("");
-  var [emailVerificationToken, setEmailVerficationToken] = useInput("");
-  var [password, setPassword] = useInput("");
-  var [confirmPassword, setConfirmPassword] = useInput("");
-  var [submissionMessage, setSubmissionMessage] = useState("");
-
+/*
   const renderValueSearchResults = () => {
     let selectedMarketCapInput =
       document.getElementById("marketCapSizeInput").value;
@@ -126,6 +117,12 @@ const Home = () => {
       setLoading((loading) => false);
     });
   };
+  */
+
+  const renderValueSearchResults = () => {
+    console.log("Render Value Search Results");
+    setLoading((loading) => false);
+  }
 
   const renderSearchResults = () => {
     setLoading((loading) => true);
@@ -154,170 +151,6 @@ const Home = () => {
     }
   };
 
-  //START: Account Creation Functions
-  const checkEmailAvailability = () => {
-    if (email !== "") {
-      API.checkExistingAccountEmails(email.toLowerCase()).then((res) => {
-        if (res.data !== "") {
-          setSubmissionMessage(
-            (submissionMessage) =>
-              "Looks like an account already exists with this e-mail. Try logging in."
-          );
-        } else {
-          API.setEmailVerificationToken(email).then((res) => { });
-        }
-      });
-    } else {
-      setSubmissionMessage(
-        (submissionMessage) => "Please enter an email address"
-      );
-    }
-  };
-
-  const createNewAccount = () => {
-    let currentAccountInfo = {
-      email: email,
-      phone: phone,
-      firstname: firstname,
-      lastname: lastname,
-      password: sha256(password),
-      sessionAccessToken: null,
-      passwordResetToken: null,
-    };
-
-    if (
-      firstname !== "" &&
-      lastname !== "" &&
-      email !== "" &&
-      password !== "" &&
-      emailVerificationToken !== "" &&
-      confirmPassword !== "" &&
-      password === confirmPassword
-    ) {
-      setSubmissionMessage((submissionMessage) => "");
-      API.checkEmailVerificationToken(email, emailVerificationToken).then(
-        (res) => {
-          if (res.data !== "") {
-            API.checkExistingAccountEmails(currentAccountInfo.email).then(
-              (res) => {
-                if (res.data === "") {
-                  API.createAccount(currentAccountInfo).then((res) => {
-                    API.deleteEmailVerificationToken(email).then(
-                      (res) => (window.location.href = "/")
-                    );
-                  });
-                } else {
-                  setSubmissionMessage(
-                    (submissionMessage) =>
-                      "Sorry... an account already exists for this email."
-                  );
-                }
-              }
-            );
-          } else {
-            setSubmissionMessage(
-              (submissionMessage) =>
-                "Hmm... reset code doesn't appear correct for email. Please make sure you've properly entered the email and reset code."
-            );
-          }
-        }
-      );
-    } else if (password !== confirmPassword) {
-      setSubmissionMessage(
-        (submissionMessage) =>
-          "Password and confirm password fields don't match..."
-      );
-    } else {
-      setSubmissionMessage((submissionMessage) => "Not enough info entered...");
-    }
-  };
-  //END: User Account Creation Functions
-
-  const findPortfolio = (user, selectedStatus) => {
-    API.findPortfolio(user).then((res) => {
-      if (res.data !== null) {
-        setPortfolio((portfolio) => res.data.portfolio);
-      }
-    });
-  };
-
-  const updatePortfolio = (symbol, userID) => {
-    let newStatus = document.getElementById(
-      symbol + "PortfolioStatusInput"
-    ).value;
-
-    let newComment = document.getElementById(
-      "new-comment-input-" + symbol
-    ).value;
-
-    let newPriceTargetEnabled = document.getElementById(
-      "price-target-enabled-" + symbol
-    ).checked;
-
-    let newPriceTarget = document.getElementById(
-      "price-target-" + symbol
-    ).value;
-
-    let newSellTargetEnabled = document.getElementById(
-      "sell-target-enabled-" + symbol
-    ).checked;
-
-    let newSellTarget = document.getElementById("sell-target-" + symbol).value;
-
-    let tempPortfolio = portfolio;
-    let symbolIndex = portfolio.map((object) => object.symbol).indexOf(symbol);
-    let currentComments =
-      tempPortfolio[symbolIndex] !== undefined &&
-        tempPortfolio[symbolIndex].comments !== undefined
-        ? tempPortfolio[symbolIndex].comments
-        : [];
-
-    let updatedComments = currentComments;
-    if (newComment !== "") {
-      updatedComments.unshift({ date: new Date(), comment: newComment });
-    }
-
-    if (symbolIndex !== -1) {
-      tempPortfolio[symbolIndex].status = newStatus;
-      tempPortfolio[symbolIndex].comments = updatedComments;
-      tempPortfolio[symbolIndex].priceTargetEnabled = newPriceTargetEnabled;
-      tempPortfolio[symbolIndex].priceTarget = Number(newPriceTarget);
-      tempPortfolio[symbolIndex].sellTargetEnabled = newSellTargetEnabled;
-      tempPortfolio[symbolIndex].sellTarget = Number(newSellTarget);
-      document.getElementById("new-comment-input-" + symbol).value = "";
-    } else {
-      tempPortfolio.push({
-        symbol: symbol,
-        status: newStatus,
-        comments: updatedComments,
-        priceTargetEnabled: newPriceTargetEnabled,
-        priceTarget: Number(newPriceTarget),
-        sellTargetEnabled: newSellTargetEnabled,
-        sellTarget: Number(newSellTarget),
-      });
-      document.getElementById("new-comment-input-" + symbol).value = "";
-    }
-    API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID);
-    });
-  };
-
-  const updateThesis = (symbol, userID) => {
-    let newThesis = document.getElementById(
-      symbol + "ThesisInput"
-    ).value;
-
-    console.log(symbol)
-    console.log(newThesis)
-    console.log(userID)
-    
-    /*
-    API.updatePortfolio(userID, tempPortfolio).then((res) => {
-      findPortfolio(userID, selectedStatus);
-    });
-    */
-  };
-
   //START: Login functions
 
   const renderAccountName = () => {
@@ -327,7 +160,7 @@ const Home = () => {
       API.findUserName(getCookie("vs_id")).then((res) => {
         setFirstname((firstname) => res.data.firstname);
         setLastname((lastname) => res.data.lastname);
-        findPortfolio(getCookie("vs_id"));
+        //findPortfolio(getCookie("vs_id"));
       });
     }
   };
@@ -829,17 +662,7 @@ const Home = () => {
                 </span>
               </div>
               {!loading
-                ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    updateThesis={updateThesis}
-                    portfolio={portfolio}
-                    findPortfolio={findPortfolio}
-                    page={"Home"}
-                  />
-                ))
+                ? "Finished Loading"
                 : ""}
               <button
                 onClick={() => topFunction()}
