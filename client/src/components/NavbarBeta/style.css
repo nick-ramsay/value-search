@@ -1,0 +1,16 @@
+.nav-link {
+    color: whitesmoke;
+}
+
+.nav-link:hover, .nav-link:active, .nav-link:focus {
+    color: white;
+    cursor: pointer;
+}
+
+.navbar-brand {
+    color: #bb86fc;
+}
+
+.navbar-brand:hover {
+    font-weight: normal;
+}

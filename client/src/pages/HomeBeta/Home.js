@@ -17,206 +17,31 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import expandLessIcon from "../../images/outline_expand_less_white_24dp.png";
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { sha256 } from "js-sha256";
-import "./style.css";
+//import "./style.css";
 
-import Navbar from "../../components/Navbar/Navbar";
 import QuoteCard from "../../components/QuoteCard/QuoteCard";
+import NavbarBeta from "../../components/NavbarBeta/Navbar";
 
 const Home = () => {
-  var [valueSearchData, setValueSearchData] = useState([]);
-  var [userID, setUserID] = useState("");
-  var [advancedOptionsOpen, setAdvancedOptionsOpen] = useState(false);
-  var [minPE, setMinPE] = useInput(5);
-  var [maxPE, setMaxPE] = useInput(15);
-  var [minDebtEquity, setMinDebtEquity] = useInput(0.0);
-  var [maxDebtEquity, setMaxDebtEquity] = useInput(2.0);
-  var [minPriceSales, setMinPriceSales] = useInput(0.0);
-  var [maxPriceSales, setMaxPriceSales] = useInput(2.0);
-  var [minPriceToBook, setMinPriceToBook] = useInput(0.95);
-  var [maxPriceToBook, setMaxPriceToBook] = useInput(1.1);
-  var [minCap, setMinCap] = useState(0);
-  var [maxCap, setMaxCap] = useState(10000000000);
-  var [metricVariationPercentage, setMetricVariationPercentage] = useState(0);
-  var [metricVariationMultiple, setMetricVariationMultiple] = useState(1);
-  var [investmentType, setInvestmentType] = useState("cs");
-  var [valueSearchResultCount, setValueSearchResultCount] = useState(-1);
-  var [currentSort, setCurrentSort] = useState("");
-  var [currentView, setCurrentView] = useState("valueSearch");
-  var [loading, setLoading] = useState(true);
-  var [portfolio, setPortfolio] = useState([]);
-  var [submissionMessage, setSubmissionMessage] = useState("");
 
-  const setMarketCapSize = (event) => { };
-  const selectedInvestmentType = (event) => { };
+  let [searchSymbol, setSearchSymbol] = useState("");
+  let [advancedOptionsOpen, setAdvancedOptionsOpen] = useState(false);
+  let [metricVariationPercentage, setMetricVariationPercentage] = useState(0);
+  let [metricVariationMultiple, setMetricVariationMultiple] = useState(1);
 
-  var [loginEmail, setLoginEmail] = useInput("");
-  var [loginPassword, setLoginPassword] = useInput("");
-
-  var [firstname, setFirstname] = useState("");
-  var [lastname, setLastname] = useState("");
-/*
-  const renderValueSearchResults = () => {
-    let selectedMarketCapInput =
-      document.getElementById("marketCapSizeInput").value;
-    let selectedMarketCapMin = 0;
-    let selectedMarketCapMax = 1000000000000000000;
-    if (selectedMarketCapInput === "all") {
-      selectedMarketCapMin = 0;
-      selectedMarketCapMax = 1000000000000000000;
-    } else if (selectedMarketCapInput === "small") {
-      selectedMarketCapMin = 0;
-      selectedMarketCapMax = 1999999999;
-    } else if (selectedMarketCapInput === "mid") {
-      selectedMarketCapMin = 2000000000;
-      selectedMarketCapMax = 99999999999;
-    } else if (selectedMarketCapInput === "large") {
-      selectedMarketCapMin = 10000000000;
-      selectedMarketCapMax = 199999999999;
-    } else if (selectedMarketCapInput === "mega") {
-      selectedMarketCapMin = 200000000000;
-      selectedMarketCapMax = 1000000000000000000;
-    }
-
-    let profitabilityParameter =
-      document.getElementById("profitableCheckbox").checked;
-    let minProfitMargin;
-    if (profitabilityParameter === true) {
-      minProfitMargin = 0;
-    } else {
-      minProfitMargin = -100;
-    }
-
-    let potentialBottomParameterChecked = document.getElementById(
-      "potentialBottomCheckbox"
-    ).checked;
-
-    API.findSearchResults(
-      minPE,
-      maxPE,
-      minDebtEquity,
-      maxDebtEquity,
-      minPriceSales,
-      maxPriceSales,
-      minPriceToBook,
-      maxPriceToBook,
-      selectedMarketCapMin,
-      selectedMarketCapMax,
-      minProfitMargin,
-    ).then((res) => {
-      let tempValueSearchData = [];
-      if (potentialBottomParameterChecked === true) {
-        for (let i = 0; i < res.data.length; i++) {
-          if (res.data[i].valueSearchScore.movingAverageSupport === 1) {
-            tempValueSearchData.push(res.data[i])
-          }
-        }
-      } else (
-        tempValueSearchData = res.data
-      )
-      setValueSearchData((valueSearchData) => tempValueSearchData);
-      setLoading((loading) => false);
-    });
+  const handleChange = (event) => {
+    setSearchSymbol(event.target.value);
   };
-  */
-
-  const renderValueSearchResults = () => {
-    console.log("Render Value Search Results");
-    setLoading((loading) => false);
-  }
-
-  const renderSearchResults = () => {
-    setLoading((loading) => true);
-    renderValueSearchResults();
-  };
-
-  const findSingleStock = () => {
-    let selectedSymbol = document.getElementById("searchSymbol").value;
-    if (selectedSymbol !== "") {
-      setLoading((loading) => true);
-      API.findSingleStock(selectedSymbol.toUpperCase()).then((res) => {
-        document.getElementById("searchSymbol").value = "";
-        let resultSymbol = res.data[0].symbol;
-        let portfolioEntry = portfolio.find((element) => element.symbol === res.data[0].symbol);
-
-        if (resultSymbol !== undefined && portfolioEntry !== undefined) {
-          console.log(resultSymbol);
-          console.log(portfolioEntry.status);
-        }
-
-        setValueSearchData((valueSearchData) => res.data);
-        setLoading((loading) => false);
-      });
-    } else if (selectedSymbol === "") {
-      renderSearchResults();
-    }
-  };
-
-  //START: Login functions
-
-  const renderAccountName = () => {
-    let vsIdCookie = getCookie("vs_id");
-    if (vsIdCookie) {
-      setUserID((userID) => vsIdCookie);
-      API.findUserName(getCookie("vs_id")).then((res) => {
-        setFirstname((firstname) => res.data.firstname);
-        setLastname((lastname) => res.data.lastname);
-        //findPortfolio(getCookie("vs_id"));
-      });
-    }
-  };
-
-  const login = () => {
-    let cookieExpiryDate = moment().add("24", "hours").format();
-
-    if (loginEmail && loginPassword) {
-      API.login(loginEmail, sha256(loginPassword)).then((res) => {
-        if (res.data) {
-          setSubmissionMessage((submissionMessage) => "");
-          document.cookie =
-            "auth_expiry=" +
-            cookieExpiryDate +
-            "; expires=" +
-            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-          document.cookie =
-            "vs_id=" +
-            res.data._id +
-            "; expires=" +
-            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-          document.cookie =
-            "session_access_token=" +
-            res.data.sessionAccessToken +
-            "; expires=" +
-            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-          setUserID((userID) => res.data._id);
-          document.location = "/";
-          renderAccountName();
-        } else {
-          setSubmissionMessage(
-            (submissionMessage) =>
-              "Hmm... this is incorrect. Enter your username and password again."
-          );
-        }
-      });
-    } else {
-      setSubmissionMessage((submissionMessage) => "Please complete all fields");
-    }
-  };
-
-  //END: Login functions
-
+  
   useEffect(() => {
-    renderSearchResults();
-    renderAccountName();
-    topOfPage();
+
   }, []);
 
   return (
     <div>
-      <Navbar
-        firstname={firstname}
-        lastname={lastname}
-        findSingleStock={findSingleStock}
-        logout={logout}
+      <NavbarBeta 
+      handleChange={handleChange} 
+      searchSymbol={searchSymbol}
       />
       <div className="container">
         <div className="container text-center">
@@ -240,7 +65,6 @@ const Home = () => {
                         className="form-control form-control-sm"
                         id="exampleInputEmail1"
                         aria-describedby="emailHelp"
-                        onChange={setLoginEmail}
                       />
                       <div id="emailHelp" className="form-text">
                         We'll never share your email with anyone else.
@@ -257,13 +81,11 @@ const Home = () => {
                         type="password"
                         className="form-control form-control-sm"
                         id="exampleInputPassword1"
-                        onChange={setLoginPassword}
                       />
                     </div>
                     <button
                       type="button"
-                      className="btn btn-sm btn-primary standard-button"
-                      onClick={login}
+                      className="btn btn-sm btn-primary"
                     >
                       Sign In
                     </button>
@@ -604,49 +426,22 @@ const Home = () => {
               </div>
             </div>
             <div className="col-md-12">
-              {loading ? (
-                <div className="row h-100">
-                  <BarLoader
-                    className="my-auto mx-auto loading-bar"
-                    width="100%"
-                    height="8px"
-                    color={localStorage.getItem("vs-theme") === "dark" ? "#bb86fc":"#880085"}
-                  />{" "}
-                </div>
-              ) : (
-                ""
-              )}
               <div className="row mb-1 mt-2">
                 <div className="col-md-12">
-                  {userID !== "" ? (
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-outline-primary standard-button m-1"
-                      onClick={() => (window.location.href = "/portfolio")}
-                    >
-                      View Portfolio
-                    </button>
-                  ) : (
-                    ""
-                  )}
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-primary standard-button m-1"
-                    onClick={() => {
-                      renderSearchResults();
-                      setCurrentView((currentView) => "valueSearch");
-                    }}
+                    className="btn btn-sm btn-outline-primary m-1"
+                    onClick={() => (window.location.href = "/portfolio-beta")}
+                  >
+                    View Portfolio
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary m-1"
                   >
                     Run Value Search
                   </button>
                 </div>
-              </div>
-              <div className="row">
-                {!loading ? (
-                  <span>{valueSearchData.length} Results Found</span>
-                ) : (
-                  ""
-                )}
               </div>
               <div className="row mb-2 mt-1">
                 <span style={{ fontSize: 10 }}>
@@ -661,9 +456,6 @@ const Home = () => {
                   </a>
                 </span>
               </div>
-              {!loading
-                ? "Finished Loading"
-                : ""}
               <button
                 onClick={() => topFunction()}
                 className="btn btn btn-danger"
