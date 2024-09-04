@@ -892,6 +892,7 @@ const Portfolio = () => {
                   && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget !== undefined
                   && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= 0
                   && (watchOnlyPriceTargetsMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= stock.quote.latestPrice : true)
+                  && stock.fundamentals.currentPrice !== undefined 
                   ?
                   <QuoteCard
                     stock={stock}
@@ -905,7 +906,7 @@ const Portfolio = () => {
                     page={"Portfolio"}
                   />
                   : selectedStatus === "own"
-                    && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) : true) ?
+                    && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) && stock.fundamentals.currentPrice !== undefined : true) ?
                     < QuoteCard
                       stock={stock}
                       userID={userID}
@@ -918,7 +919,7 @@ const Portfolio = () => {
                       page={"Portfolio"}
                     />
                     : selectedStatus === "tradableOwn"
-                      && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) : true) ?
+                      && (sellTargetMet === true ? ((portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTarget <= stock.quote.latestPrice) && stock.fundamentals.currentPrice !== undefined && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].sellTargetEnabled === true) : true) ?
                       < QuoteCard
                         stock={stock}
                         userID={userID}
@@ -930,7 +931,7 @@ const Portfolio = () => {
                         watchOnlyPriceTargets={watchOnlyPriceTargets}
                         page={"Portfolio"}
                       /> :
-                      (watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1 ? <QuoteCard
+                      ((watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1) && stock.fundamentals.currentPrice !== undefined  ? <QuoteCard
                         stock={stock}
                         userID={userID}
                         updatePortfolio={updatePortfolio}

@@ -710,12 +710,12 @@ const QuoteCard = (props) => {
         <div className="row">
           <div className="col-md-4">
             <p>
-              <strong>Price: </strong> ${stock.quote.latestPrice.toFixed(2)}
+              <strong>Price: </strong> ${stock.fundamentals.currentPrice}
               {portfolioEntry !== undefined &&
                 ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) ===
                 -1 &&
                 portfolioEntry.priceTargetEnabled === true ? (
-                portfolioEntry.priceTarget >= stock.quote.latestPrice ?
+                portfolioEntry.priceTarget >= stock.fundamentals.currentPrice ?
                   <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.priceTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.priceTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
@@ -724,7 +724,7 @@ const QuoteCard = (props) => {
                 ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !==
                 -1 &&
                 portfolioEntry.sellTargetEnabled === true ? (
-                portfolioEntry.sellTarget <= stock.quote.latestPrice ?
+                portfolioEntry.sellTarget <= stock.fundamentals.currentPrice ?
                   <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.sellTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.sellTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
@@ -741,11 +741,11 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-              stock.fundamentals["Target Price"] >= stock.quote.latestPrice ? (
+              stock.fundamentals["Target Price"] >= stock.fundamentals.currentPrice ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
-                    stock.quote.latestPrice /
+                    stock.fundamentals.currentPrice /
                     stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
@@ -755,7 +755,7 @@ const QuoteCard = (props) => {
             ) : (
               <p className="badge badge-danger py-1 px-1">
                 {(
-                  (stock.quote.latestPrice /
+                  (stock.fundamentals.currentPrice /
                     stock.fundamentals["Target Price"] -
                     1) *
                   100
@@ -779,7 +779,7 @@ const QuoteCard = (props) => {
               style={{
                 width:
                   Math.round(
-                    ((stock.quote.latestPrice - stock.quote.week52Low) /
+                    ((stock.fundamentals.currentPrice - stock.quote.week52Low) /
                       (stock.quote.week52High - stock.quote.week52Low)) *
                     100
                   ) + "%",
@@ -788,7 +788,7 @@ const QuoteCard = (props) => {
               aria-valuemin="0"
               aria-valuemax="100"
             >
-              {"$" + stock.quote.latestPrice.toFixed(2)}
+              {"$" + stock.fundamentals.currentPrice}
             </div>
           </div>
         </div>
@@ -841,7 +841,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Market Cap: </strong>$
-              {(stock.quote.marketCap / 1000000000).toFixed(2)} billion
+              {(stock.fundamentals["Market Cap"]).toFixed(2)} billion
             </span>
           </div>
           <div className="col-md-4">
@@ -865,7 +865,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Current P/E: </strong>
-              {stock.quote.peRatio ? stock.quote.peRatio:"-"}
+              {stock.fundamentals["P/E"] ? stock.fundamentals["P/E"]:"-"}
             </span>
           </div>
           <div className="col-md-4">
@@ -886,15 +886,15 @@ const QuoteCard = (props) => {
               <span
                 style={{
                   color:
-                    stock.iexStats !== undefined &&
-                      stock.iexStats.day200MovingAvg < stock.quote.latestPrice
+                    stock.fundamentals !== undefined &&
+                      stock.fundamentals.mva200 < stock.fundamentals.currentPrice
                       ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
                       : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
                   fontWeight: "bold"
                 }}
               >
-                {stock.iexStats.day200MovingAvg !== undefined
-                  ? "$" + stock.iexStats.day200MovingAvg.toFixed(2)
+                {stock.fundamentals.mva200 !== undefined
+                  ? "$" + stock.fundamentals.mva200.toFixed(2)
                   : "-"}{" "}
               </span>
             </span>
@@ -911,15 +911,15 @@ const QuoteCard = (props) => {
               <span
                 style={{
                   color:
-                    stock.iexStats !== undefined &&
-                      stock.iexStats.day50MovingAvg < stock.quote.latestPrice
+                    stock.fundamentals !== undefined &&
+                      stock.fundamentals.mva50 < stock.fundamentals.currentPrice
                       ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
                       : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
                   fontWeight: "bold"
                 }}
               >
-                {stock.iexStats.day50MovingAvg !== undefined
-                  ? "$" + stock.iexStats.day50MovingAvg.toFixed(2)
+                {stock.fundamentals.mva50 !== undefined
+                  ? "$" + stock.fundamentals.mva50.toFixed(2)
                   : "-"}{" "}
               </span>
             </span>
@@ -1053,16 +1053,16 @@ const QuoteCard = (props) => {
                         "52 Week High (" + stock.quote.week52High + ")",
                         "200d MA",
                         "50d MA",
-                        "Current Price (" + stock.quote.latestPrice + ")",
+                        "Current Price (" + stock.fundamentals.currentPrice + ")",
                       ],
                       datasets: [
                         {
                           label: "Moving Average Trend",
                           data: [
                             stock.quote.week52High,
-                            stock.iexStats.day200MovingAvg,
-                            stock.iexStats.day50MovingAvg,
-                            stock.quote.latestPrice,
+                            stock.fundamentals.mva200,
+                            stock.fundamentals.mva50,
+                            stock.fundamentals.currentPrice,
                           ],
                           fill: false,
                           backgroundColor: "blue",

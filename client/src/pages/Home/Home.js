@@ -68,22 +68,22 @@ const Home = () => {
     let selectedMarketCapInput =
       document.getElementById("marketCapSizeInput").value;
     let selectedMarketCapMin = 0;
-    let selectedMarketCapMax = 1000000000000000000;
+    let selectedMarketCapMax = 100000;
     if (selectedMarketCapInput === "all") {
       selectedMarketCapMin = 0;
-      selectedMarketCapMax = 1000000000000000000;
+      selectedMarketCapMax = 100000;
     } else if (selectedMarketCapInput === "small") {
       selectedMarketCapMin = 0;
-      selectedMarketCapMax = 1999999999;
+      selectedMarketCapMax = 1.9;
     } else if (selectedMarketCapInput === "mid") {
-      selectedMarketCapMin = 2000000000;
-      selectedMarketCapMax = 99999999999;
+      selectedMarketCapMin = 2.0;
+      selectedMarketCapMax = 9.99;
     } else if (selectedMarketCapInput === "large") {
-      selectedMarketCapMin = 10000000000;
-      selectedMarketCapMax = 199999999999;
+      selectedMarketCapMin = 10;
+      selectedMarketCapMax = 199;
     } else if (selectedMarketCapInput === "mega") {
-      selectedMarketCapMin = 200000000000;
-      selectedMarketCapMax = 1000000000000000000;
+      selectedMarketCapMin = 200;
+      selectedMarketCapMax = 100000;
     }
 
     let profitabilityParameter =
@@ -830,15 +830,16 @@ const Home = () => {
               </div>
               {!loading
                 ? valueSearchData.map((stock, i) => (
-                  <QuoteCard
-                    stock={stock}
-                    userID={userID}
-                    updatePortfolio={updatePortfolio}
-                    updateThesis={updateThesis}
-                    portfolio={portfolio}
-                    findPortfolio={findPortfolio}
-                    page={"Home"}
-                  />
+                  stock.fundamentals.currentPrice !== undefined ?
+                    <QuoteCard
+                      stock={stock}
+                      userID={userID}
+                      updatePortfolio={updatePortfolio}
+                      updateThesis={updateThesis}
+                      portfolio={portfolio}
+                      findPortfolio={findPortfolio}
+                      page={"Home"}
+                    /> : ""
                 ))
                 : ""}
               <button

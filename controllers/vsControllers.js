@@ -294,7 +294,7 @@ module.exports = {
         $gte: Number(req.body.minPriceToBook),
         $lte: Number(req.body.maxPriceToBook),
       },
-      "quote.marketCap": {
+      "fundamentals.Market Cap": {
         $gte: Number(req.body.minCap),
         $lte: Number(req.body.maxCap),
       },
