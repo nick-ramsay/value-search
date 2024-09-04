@@ -841,7 +841,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Market Cap: </strong>$
-              {(stock.fundamentals["Market Cap"]).toFixed(2)} billion
+              {stock.fundamentals["Market Cap"]} billion
             </span>
           </div>
           <div className="col-md-4">
