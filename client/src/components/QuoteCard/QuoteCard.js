@@ -918,7 +918,7 @@ const QuoteCard = (props) => {
                   fontWeight: "bold"
                 }}
               >
-                {stock.fundamentals.mva50 !== undefined
+                {stock.fundamentals.mva50 !== undefined && stock.fundamentals.mva50 !== null
                   ? "$" + stock.fundamentals.mva50.toFixed(2)
                   : "-"}{" "}
               </span>
