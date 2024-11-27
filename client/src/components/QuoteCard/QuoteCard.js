@@ -779,8 +779,8 @@ const QuoteCard = (props) => {
               style={{
                 width:
                   Math.round(
-                    ((stock.fundamentals.currentPrice - stock.quote.week52Low) /
-                      (stock.quote.week52High - stock.quote.week52Low)) *
+                    ((stock.fundamentals.currentPrice - stock.fundamentals.low52week) /
+                      (stock.fundamentals.high52week - stock.fundamentals.low52week)) *
                     100
                   ) + "%",
               }}
@@ -801,12 +801,12 @@ const QuoteCard = (props) => {
           <div className="row">
             <div className="col-md-6">
               <span className="badge badge-danger">
-                {"52 Week Low: $" + stock.quote.week52Low.toFixed(2)}
+                {"52 Week Low: $" + stock.fundamentals.low52week.toFixed(2)}
               </span>
             </div>
             <div className="col-md-6">
               <span className="badge badge-success">
-                {"52 Week High: $" + stock.quote.week52High.toFixed(2)}
+                {"52 Week High: $" + stock.fundamentals.high52week.toFixed(2)}
               </span>
             </div>
           </div>
@@ -1050,7 +1050,7 @@ const QuoteCard = (props) => {
                   <Line
                     data={{
                       labels: [
-                        "52 Week High (" + stock.quote.week52High + ")",
+                        "52 Week High (" + stock.fundamentals.high52week + ")",
                         "200d MA",
                         "50d MA",
                         "Current Price (" + stock.fundamentals.currentPrice + ")",
@@ -1059,7 +1059,7 @@ const QuoteCard = (props) => {
                         {
                           label: "Moving Average Trend",
                           data: [
-                            stock.quote.week52High,
+                            stock.fundamentals.high52week,
                             stock.fundamentals.mva200,
                             stock.fundamentals.mva50,
                             stock.fundamentals.currentPrice,
@@ -1076,8 +1076,8 @@ const QuoteCard = (props) => {
                     options={{
                       scales: {
                         y: {
-                          min: stock.quote.week52Low,
-                          max: Math.round(stock.quote.week52High + (stock.quote.week52High * .05)),
+                          min: stock.fundamentals.low52week,
+                          max: Math.round(stock.fundamentals.high52week + (stock.fundamentals.high52week * .05)),
                         },
                       },
                     }}
