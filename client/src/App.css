@@ -1,3 +1,13 @@
+
+
+.navbar-logo {
+  height: 16px;
+}
+
+.navbar-brand {
+  font-family: Prompt;
+}
+
 body {
   background-color: #121212;
   color: #e1e1e1;
@@ -12,13 +22,12 @@ body {
   cursor: pointer;
 }
 
-.navbar-logo {
-  height: 16px;
-}
+
 
 .card {
   background-color: #1e1e1e;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-family: "IBM Plex Mono", monospace;
 }
 
 .btn-primary, .btn-primary:hover {
