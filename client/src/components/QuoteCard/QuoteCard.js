@@ -801,12 +801,12 @@ const QuoteCard = (props) => {
           <div className="row">
             <div className="col-md-6">
               <span className="badge badge-danger">
-                {"52 Week Low: $" + stock.fundamentals.low52week.toFixed(2)}
+                {"52 Week Low: $" + (stock.fundamentals.low52week !== null ? stock.fundamentals.low52week.toFixed(2):" - ")}
               </span>
             </div>
             <div className="col-md-6">
               <span className="badge badge-success">
-                {"52 Week High: $" + stock.fundamentals.high52week.toFixed(2)}
+                {"52 Week High: $" + (stock.fundamentals.high52week !== null ? stock.fundamentals.high52week.toFixed(2):" - ")}
               </span>
             </div>
           </div>
