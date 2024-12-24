@@ -223,6 +223,7 @@ module.exports = {
           currentAccountID +
           Math.floor(Math.random() * 999999)
         );
+        console.log(sessionAccessToken);
         db.Accounts.updateOne(
           { _id: dbModel[0]._id },
           { sessionAccessToken: sessionAccessToken }
@@ -238,6 +239,15 @@ module.exports = {
           .catch((err) => res.status(422).json(err));
       })
       .catch((err) => res.status(422).json(err));
+  },
+  fetchUserId: (req, res) => {
+    db.Accounts.find(
+      { sessionAccessToken: req.body.sessionAccessToken },
+      { _id: 1 }
+    )
+      .then((dbModel) => {
+        res.json(dbModel[0])
+      })
   },
   findUserName: (req, res) => {
     db.Accounts.find(
@@ -354,19 +364,19 @@ module.exports = {
       .catch((err) => console.log(err));
   },
   updateThesis: (req, res) => {
-    console.log(req.body);  
+    console.log(req.body);
 
     db.Portfolio.updateOne(
       // Specify the condition to match the document
       { account_id: req.body.account_id },
-    
+
       // Use $set and arrayFilters to update the specific object in the items array
       {
         $set: {
           "portfolio.$[elem].thesis": req.body.newThesis
         }
       },
-      
+
       // Specify arrayFilters to match the specific object based on its key's value
       {
         arrayFilters: [{ "portfolio.symbol": req.body.symbol }]

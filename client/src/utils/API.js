@@ -144,8 +144,15 @@ export default {
   login: function (email, password) {
     return axios({
       method: "post",
-      url: apiURL + "/api/value-search/reset-login",
+      url: apiURL + "/api/value-search/login",
       data: { email: email, password: password },
+    });
+  },
+  fetchUserId: function (sessionAccessToken) {
+    return axios({
+      method: "post",
+      url: apiURL + "/api/value-search/fetch-user-id",
+      data: { sessionAccessToken: sessionAccessToken },
     });
   },
   setSessionAccessToken: function (id, sessionAccessToken) {

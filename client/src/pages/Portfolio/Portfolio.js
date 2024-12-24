@@ -378,8 +378,8 @@ const Portfolio = () => {
     console.log(symbol)
     console.log(newThesis)
     console.log(userID)
-    
-    
+
+
     API.updateThesis(userID, newThesis, symbol).then((res) => {
       console.log(res);
       //findPortfolio(userID, selectedStatus);
@@ -389,13 +389,14 @@ const Portfolio = () => {
   //START: Login functions
 
   const renderAccountName = () => {
-    let vsIdCookie = getCookie("vs_id");
-    if (vsIdCookie) {
-      setUserID((userID) => vsIdCookie);
-      API.findUserName(getCookie("vs_id")).then((res) => {
-        setFirstname((firstname) => res.data.firstname);
-        setLastname((lastname) => res.data.lastname);
-        findPortfolio(getCookie("vs_id"));
+    let sessionAccessToken = getCookie("session_access_token");
+    if (sessionAccessToken) {
+      API.fetchUserId(sessionAccessToken).then((fuiRes) => {
+        API.findUserName(fuiRes.data._id).then((res) => {
+          setFirstname((firstname) => res.data.firstname);
+          setLastname((lastname) => res.data.lastname);
+          findPortfolio(fuiRes.data._id);
+        })
       });
     }
   };
@@ -413,8 +414,8 @@ const Portfolio = () => {
             "; expires=" +
             moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
           document.cookie =
-            "vs_id=" +
-            res.data._id +
+            "session_access_token=" +
+            res.data.sessionAccessToken +
             "; expires=" +
             moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
           setUserID((userID) => res.data._id);
@@ -431,6 +432,16 @@ const Portfolio = () => {
       setSubmissionMessage((submissionMessage) => "Please complete all fields");
     }
   };
+
+  const fetchUserId = () => {
+    let sessionAccessToken = getCookie("session_access_token");
+    if (sessionAccessToken !== "") {
+      API.fetchUserId(sessionAccessToken).then((fuiRes) => {
+        setUserID((userID) => fuiRes.data._id);
+        return fuiRes.data._id;
+      })
+    }
+  }
 
   //END: Login functions
 
@@ -515,6 +526,7 @@ const Portfolio = () => {
   };
 
   useEffect(() => {
+    fetchUserId();
     renderAccountName();
     topOfPage();
   }, []);
@@ -707,14 +719,14 @@ const Portfolio = () => {
                           ")"}
                       </button>
                       <DonutSmall
-                      id="portfolioAnalytics"
-                      className="medium-icon pointer-hover"
-                      src={analyticsIcon}
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#analyticsAccordion"
-                      aria-expanded="true"
-                      aria-controls="analyticsAccordion"
+                        id="portfolioAnalytics"
+                        className="medium-icon pointer-hover"
+                        src={analyticsIcon}
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#analyticsAccordion"
+                        aria-expanded="true"
+                        aria-controls="analyticsAccordion"
                       />
                     </div>
                   </div>
@@ -892,7 +904,7 @@ const Portfolio = () => {
                   && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget !== undefined
                   && portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= 0
                   && (watchOnlyPriceTargetsMet === true ? portfolio[portfolio.findIndex((portfolio) => portfolio.symbol === stock.symbol)].priceTarget >= stock.quote.latestPrice : true)
-                  && stock.fundamentals.currentPrice !== undefined 
+                  && stock.fundamentals.currentPrice !== undefined
                   ?
                   <QuoteCard
                     stock={stock}
@@ -931,7 +943,7 @@ const Portfolio = () => {
                         watchOnlyPriceTargets={watchOnlyPriceTargets}
                         page={"Portfolio"}
                       /> :
-                      ((watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1) && stock.fundamentals.currentPrice !== undefined  ? <QuoteCard
+                      ((watchOnlyPriceTargets === false && selectedStatus === "watch") || ["hold", "speculative", "icebox"].indexOf(selectedStatus) !== -1) && stock.fundamentals.currentPrice !== undefined ? <QuoteCard
                         stock={stock}
                         userID={userID}
                         updatePortfolio={updatePortfolio}

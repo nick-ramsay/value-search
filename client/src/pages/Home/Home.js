@@ -320,14 +320,17 @@ const Home = () => {
 
   //START: Login functions
 
+
+
   const renderAccountName = () => {
-    let vsIdCookie = getCookie("vs_id");
-    if (vsIdCookie) {
-      setUserID((userID) => vsIdCookie);
-      API.findUserName(getCookie("vs_id")).then((res) => {
-        setFirstname((firstname) => res.data.firstname);
-        setLastname((lastname) => res.data.lastname);
-        findPortfolio(getCookie("vs_id"));
+    let sessionAccessToken = getCookie("session_access_token");
+    if (sessionAccessToken) {
+      API.fetchUserId(sessionAccessToken).then((fuiRes) => {
+        API.findUserName(fuiRes.data._id).then((res) => {
+          setFirstname((firstname) => res.data.firstname);
+          setLastname((lastname) => res.data.lastname);
+          findPortfolio(fuiRes.data._id);
+        })
       });
     }
   };
@@ -338,6 +341,7 @@ const Home = () => {
     if (loginEmail && loginPassword) {
       API.login(loginEmail, sha256(loginPassword)).then((res) => {
         if (res.data) {
+          setUserID((userID) => res.data._id)
           setSubmissionMessage((submissionMessage) => "");
           document.cookie =
             "auth_expiry=" +
@@ -345,16 +349,10 @@ const Home = () => {
             "; expires=" +
             moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
           document.cookie =
-            "vs_id=" +
-            res.data._id +
-            "; expires=" +
-            moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-          document.cookie =
             "session_access_token=" +
             res.data.sessionAccessToken +
             "; expires=" +
             moment(cookieExpiryDate).format("ddd, DD MMM YYYY HH:mm:ss UTC");
-          setUserID((userID) => res.data._id);
           document.location = "/";
           renderAccountName();
         } else {
@@ -364,14 +362,26 @@ const Home = () => {
           );
         }
       });
+      console.log(userID);
     } else {
       setSubmissionMessage((submissionMessage) => "Please complete all fields");
     }
   };
 
+  const fetchUserId = () => {
+    let sessionAccessToken = getCookie("session_access_token");
+    if (sessionAccessToken !== "") {
+      API.fetchUserId(sessionAccessToken).then((fuiRes) => {
+        setUserID((userID) => fuiRes.data._id);
+        return fuiRes.data._id;
+      })
+    }
+  }
+
   //END: Login functions
 
   useEffect(() => {
+    fetchUserId()
     renderSearchResults();
     renderAccountName();
     topOfPage();

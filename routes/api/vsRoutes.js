@@ -47,8 +47,12 @@ router
   .post(vsControllers.resetPassword);
 
 router
-  .route("/reset-login")
+  .route("/login")
   .post(vsControllers.login);
+
+router
+  .route("/fetch-user-id")
+  .post(vsControllers.fetchUserId);
 
 router
   .route("/set-session-access-token")

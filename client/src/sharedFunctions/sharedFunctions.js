@@ -32,7 +32,7 @@ export const commaFormat = (num) => {
 
 
 export const logout = () => {
-    document.cookie = "vs_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "session_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     document.cookie = "auth_expiry=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     window.location.href = "/";
 };
