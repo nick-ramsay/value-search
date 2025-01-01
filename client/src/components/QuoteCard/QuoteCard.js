@@ -94,19 +94,19 @@ const QuoteCard = (props) => {
         borderColor:
           _.isEqual(portfolioEntry, []) && portfolioEntry !== undefined
             ? "transparent"
-            : _.isEqual(portfolioEntry,[]) === false &&
+            : _.isEqual(portfolioEntry, []) === false &&
               portfolioEntry !== undefined &&
               portfolioEntry.status === "avoid"
               ? "#cf6679"
-              : _.isEqual(portfolioEntry,[]) === false &&
+              : _.isEqual(portfolioEntry, []) === false &&
                 portfolioEntry !== undefined &&
                 portfolioEntry.status === "temporaryavoid"
                 ? "#fdfd96"
-                : _.isEqual(portfolioEntry,[]) === false &&
+                : _.isEqual(portfolioEntry, []) === false &&
                   portfolioEntry !== undefined &&
                   portfolioEntry.status === "-"
                   ? "transparent"
-                  : _.isEqual(portfolioEntry,[]) === false &&
+                  : _.isEqual(portfolioEntry, []) === false &&
                     portfolioEntry !== undefined &&
                     page === "Home" &&
                     (portfolioEntry.status === "watch" ||
@@ -158,7 +158,7 @@ const QuoteCard = (props) => {
                 src={TimelineIcon}
                 alt="TimelineIcon"
                 data-bs-toggle="modal"
-                data-bs-target={"#" + stock.symbol.replace(".","-") + "valueSearchHistoryModal"}
+                data-bs-target={"#" + stock.symbol.replace(".", "-") + "valueSearchHistoryModal"}
               />
             </span>
             {userID !== undefined && userID !== "" ? (
@@ -168,14 +168,14 @@ const QuoteCard = (props) => {
                   src={editIcon}
                   alt="editIcon"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + stock.symbol.replace(".","-") + "editModal"}
+                  data-bs-target={"#" + stock.symbol.replace(".", "-") + "editModal"}
                 />
                 <NotesIcon
                   className="ml-3 text-icon"
                   src={commentsIcon}
                   alt="commentIcon"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + stock.symbol.replace(".","-") + "commentModal"}
+                  data-bs-target={"#" + stock.symbol.replace(".", "-") + "commentModal"}
                 />
                 {/*
                 <ThesisIcon
@@ -234,16 +234,16 @@ const QuoteCard = (props) => {
           {/*Start: Edit Symbol Modal*/}
           <div
             className="modal fade"
-            id={stock.symbol.replace(".","-") + "editModal"}
+            id={stock.symbol.replace(".", "-") + "editModal"}
             tabIndex="-1"
             role="dialog"
-            aria-labelledby={stock.symbol.replace(".","-") + "editModalLabel"}
+            aria-labelledby={stock.symbol.replace(".", "-") + "editModalLabel"}
             aria-hidden="true"
           >
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title" id={stock.symbol.replace(".","-") + "editModalLabel"}>
+                  <h5 className="modal-title" id={stock.symbol.replace(".", "-") + "editModalLabel"}>
                     Edit {stock.quote.companyName + " (" + stock.symbol + ")"}
                   </h5>
                   <button
@@ -526,10 +526,10 @@ const QuoteCard = (props) => {
           {/*Start: Comment Modal */}
           <div
             className="modal fade"
-            id={stock.symbol.replace(".","-") + "commentModal"}
+            id={stock.symbol.replace(".", "-") + "commentModal"}
             tabIndex="-1"
             role="dialog"
-            aria-labelledby={stock.symbol.replace(".","-") + "commentModalLabel"}
+            aria-labelledby={stock.symbol.replace(".", "-") + "commentModalLabel"}
             aria-hidden="true"
           >
             <div className="modal-dialog" role="document">
@@ -537,7 +537,7 @@ const QuoteCard = (props) => {
                 <div className="modal-header">
                   <h5
                     className="modal-title"
-                    id={stock.symbol.replace(".","-") + "commentModalLabel"}
+                    id={stock.symbol.replace(".", "-") + "commentModalLabel"}
                   >
                     Comments for{" "}
                     {stock.quote.companyName + " (" + stock.symbol + ")"}
@@ -659,7 +659,7 @@ const QuoteCard = (props) => {
                       src={infoIcon}
                       className="text-icon mb-1"
                       data-bs-toggle="modal"
-                      data-bs-target={"#" + stock.symbol.replace(".","-") + "company-bio-modal"}
+                      data-bs-target={"#" + stock.symbol.replace(".", "-") + "company-bio-modal"}
                     />
                   </span>
                 ) : (
@@ -673,9 +673,9 @@ const QuoteCard = (props) => {
         </div>
         <div
           className="modal fade"
-          id={stock.symbol.replace(".","-") + "company-bio-modal"}
+          id={stock.symbol.replace(".", "-") + "company-bio-modal"}
           tabIndex="-1"
-          aria-labelledby={stock.symbol.replace(".","-") + "company-bio-modal-label"}
+          aria-labelledby={stock.symbol.replace(".", "-") + "company-bio-modal-label"}
           aria-hidden="true"
         >
           <div className="modal-dialog">
@@ -683,7 +683,7 @@ const QuoteCard = (props) => {
               <div className="modal-header">
                 <h5
                   className="modal-title"
-                  id={stock.symbol.replace(".","-") + "company-bio-modal-label"}
+                  id={stock.symbol.replace(".", "-") + "company-bio-modal-label"}
                 >
                   {stock.quote.companyName + " (" + stock.symbol + ")"}
                 </h5>
@@ -710,12 +710,12 @@ const QuoteCard = (props) => {
         <div className="row">
           <div className="col-md-4">
             <p>
-              <strong>Price: </strong> ${stock.fundamentals.currentPrice}
+              <strong>Price: </strong> ${(stock.fmpQuote !== undefined ? stock.fmpQuote.price:stock.fundamentals.currentPrice).toFixed(2)}
               {portfolioEntry !== undefined &&
                 ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) ===
                 -1 &&
                 portfolioEntry.priceTargetEnabled === true ? (
-                portfolioEntry.priceTarget >= stock.fundamentals.currentPrice ?
+                portfolioEntry.priceTarget >= (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice) ?
                   <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.priceTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.priceTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
@@ -724,7 +724,7 @@ const QuoteCard = (props) => {
                 ["own", "tradableOwn", "hold", "speculative"].indexOf(portfolioEntry.status) !==
                 -1 &&
                 portfolioEntry.sellTargetEnabled === true ? (
-                portfolioEntry.sellTarget <= stock.fundamentals.currentPrice ?
+                portfolioEntry.sellTarget <= (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) ?
                   <span className="ml-2 badge badge-primary-outline">{"✅ $" + portfolioEntry.sellTarget.toFixed(2) + "  ✅"}</span> : <span className="ml-2 badge badge-primary-outline">{"🎯 $" + portfolioEntry.sellTarget.toFixed(2) + "  🎯"}</span>
               ) : (
                 ""
@@ -741,11 +741,11 @@ const QuoteCard = (props) => {
           </div>
           <div className="col-md-4">
             {stock.fundamentals !== undefined &&
-              stock.fundamentals["Target Price"] >= stock.fundamentals.currentPrice ? (
+              stock.fundamentals["Target Price"] >= (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) ? (
               <p className="badge badge-success py-1 px-1">
                 {(
                   (1 -
-                    stock.fundamentals.currentPrice /
+                    (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) /
                     stock.fundamentals["Target Price"]) *
                   100
                 ).toFixed(2) + "% Undervalued"}
@@ -755,7 +755,7 @@ const QuoteCard = (props) => {
             ) : (
               <p className="badge badge-danger py-1 px-1">
                 {(
-                  (stock.fundamentals.currentPrice /
+                  ((stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) /
                     stock.fundamentals["Target Price"] -
                     1) *
                   100
@@ -768,10 +768,10 @@ const QuoteCard = (props) => {
           <div
             id={"fiftyTwoWeekPricebar" + stock.symbol}
             className="progress bg-dark collapsed"
-            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
+            data-bs-target={"#fiftyTwoWeekPriceValues" + stock.symbol.replace(".", "-")}
             data-bs-toggle="collapse"
             aria-expanded="false"
-            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
+            aria-controls={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".", "-")}
           >
             <div
               className="progress-bar"
@@ -779,7 +779,7 @@ const QuoteCard = (props) => {
               style={{
                 width:
                   Math.round(
-                    ((stock.fundamentals.currentPrice - stock.fundamentals.low52week) /
+                    (((stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) - stock.fundamentals.low52week) /
                       (stock.fundamentals.high52week - stock.fundamentals.low52week)) *
                     100
                   ) + "%",
@@ -788,25 +788,25 @@ const QuoteCard = (props) => {
               aria-valuemin="0"
               aria-valuemax="100"
             >
-              {"$" + stock.fundamentals.currentPrice}
+              {"$" + (stock.fmpQuote !== undefined ? stock.fmpQuote.price:stock.fundamentals.currentPrice).toFixed(2)}
             </div>
           </div>
         </div>
         <div
-          id={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".","-")}
+          id={"fiftyTwoWeekPriceValues" + stock.symbol.replace(".", "-")}
           className="accordion-collapse collapse"
-          aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol.replace(".","-")}
-          data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol.replace(".","-")}
+          aria-labelledby={"fiftyTwoWeekPricebar" + stock.symbol.replace(".", "-")}
+          data-bs-parent={"#fiftyTwoWeekPricebar" + stock.symbol.replace(".", "-")}
         >
           <div className="row">
             <div className="col-md-6">
               <span className="badge badge-danger">
-                {"52 Week Low: $" + (stock.fundamentals.low52week !== null ? stock.fundamentals.low52week.toFixed(2):" - ")}
+                {"52 Week Low: $" + ((stock.fundamentals.low52week !== null && stock.fundamentals.low52week !== undefined) ? stock.fundamentals.low52week.toFixed(2) : " - ")}
               </span>
             </div>
             <div className="col-md-6">
               <span className="badge badge-success">
-                {"52 Week High: $" + (stock.fundamentals.high52week !== null ? stock.fundamentals.high52week.toFixed(2):" - ")}
+                {"52 Week High: $" + ((stock.fundamentals.high52week !== null && stock.fundamentals.high52week !== undefined) ? stock.fundamentals.high52week.toFixed(2) : " - ")}
               </span>
             </div>
           </div>
@@ -865,7 +865,7 @@ const QuoteCard = (props) => {
           <div className="col-md-4">
             <span>
               <strong>Current P/E: </strong>
-              {stock.fundamentals["P/E"] ? stock.fundamentals["P/E"]:"-"}
+              {stock.fundamentals["P/E"] ? stock.fundamentals["P/E"] : "-"}
             </span>
           </div>
           <div className="col-md-4">
@@ -887,7 +887,7 @@ const QuoteCard = (props) => {
                 style={{
                   color:
                     stock.fundamentals !== undefined &&
-                      stock.fundamentals.mva200 < stock.fundamentals.currentPrice
+                      stock.fundamentals.mva200 < (stock.fmpQuote !== undefined ? stock.fmpQuote.price:stock.fundamentals.currentPrice).toFixed(2)
                       ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
                       : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
                   fontWeight: "bold"
@@ -912,7 +912,7 @@ const QuoteCard = (props) => {
                 style={{
                   color:
                     stock.fundamentals !== undefined &&
-                      stock.fundamentals.mva50 < stock.fundamentals.currentPrice
+                      stock.fundamentals.mva50 < (stock.fmpQuote !== undefined ? stock.fmpQuote.price:stock.fundamentals.currentPrice).toFixed(2)
                       ? (localStorage.getItem("vs-theme") === "dark" ? "#cf6679" : "green")
                       : (localStorage.getItem("vs-theme") === "dark" ? "#03DAC6" : "red"),
                   fontWeight: "bold"
@@ -1053,7 +1053,7 @@ const QuoteCard = (props) => {
                         "52 Week High (" + stock.fundamentals.high52week + ")",
                         "200d MA",
                         "50d MA",
-                        "Current Price (" + stock.fundamentals.currentPrice + ")",
+                        "Current Price (" + (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2) + ")",
                       ],
                       datasets: [
                         {
@@ -1062,7 +1062,7 @@ const QuoteCard = (props) => {
                             stock.fundamentals.high52week,
                             stock.fundamentals.mva200,
                             stock.fundamentals.mva50,
-                            stock.fundamentals.currentPrice,
+                            (stock.fmpQuote !== undefined ? stock.fmpQuote.price : stock.fundamentals.currentPrice).toFixed(2),
                           ],
                           fill: false,
                           backgroundColor: "blue",
@@ -1092,9 +1092,9 @@ const QuoteCard = (props) => {
         {/* START: Value Search History Modal */}
         <div
           className="modal fade"
-          id={stock.symbol.replace(".","-") + "valueSearchHistoryModal"}
+          id={stock.symbol.replace(".", "-") + "valueSearchHistoryModal"}
           tabIndex="-1"
-          aria-labelledby={stock.symbol.replace(".","-") + "valueSearchHistoryLabel"}
+          aria-labelledby={stock.symbol.replace(".", "-") + "valueSearchHistoryLabel"}
           aria-hidden="true"
         >
           <div className="modal-dialog">
@@ -1102,7 +1102,7 @@ const QuoteCard = (props) => {
               <div className="modal-header">
                 <h5
                   className="modal-title"
-                  id={stock.symbol.replace(".","-") + "valueSearchHistoryModalLabel"}
+                  id={stock.symbol.replace(".", "-") + "valueSearchHistoryModalLabel"}
                 >
                   {"Value Search Score Trend for " + stock.symbol}
                 </h5>

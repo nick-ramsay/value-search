@@ -840,7 +840,7 @@ const Home = () => {
               </div>
               {!loading
                 ? valueSearchData.map((stock, i) => (
-                  stock.fundamentals.currentPrice !== undefined ?
+                  (stock.fundamentals.currentPrice !== undefined || stock.fmpQuote.price !== undefined) ?
                     <QuoteCard
                       stock={stock}
                       userID={userID}
